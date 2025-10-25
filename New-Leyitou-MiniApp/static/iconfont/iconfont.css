@@ -1,0 +1,23 @@
+@font-face {
+  font-family: "wd-icons"; /* Project id 5049520 */
+  src: url('iconfont.woff2?t=1761386353688') format('woff2'),
+       url('iconfont.woff?t=1761386353688') format('woff'),
+       url('iconfont.ttf?t=1761386353688') format('truetype');
+}
+
+.wd-icons {
+  font-family: "wd-icons" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.wd-icon-shouji:before {
+  content: "\e8c6";
+}
+
+.wd-icon-date:before {
+  content: "\e637";
+}
+

@@ -1,0 +1,15 @@
+// 高度
+.uni-h-full{
+	height: 100%;
+}
+.uni-h-vh{
+	height: 100vh;
+}
+.uni-h-1-2{
+	height: 50%;
+}
+@for $i from 1 through 600 {
+  .uni-h-#{$i} {
+    height: 1rpx * $i ;
+  }
+}

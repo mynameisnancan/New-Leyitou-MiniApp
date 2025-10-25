@@ -1,0 +1,28 @@
+//边框圆角
+.uni-border-radius-sm{
+	border-radius: 10rpx;
+}
+.uni-border-radius-lg{
+	border-radius: 20rpx;
+}
+.uni-border-radius-xl{
+	border-radius: 30rpx;
+}
+.uni-border-radius-xxl{
+	border-radius: 40rpx;
+}
+.uni-border-radius-xxxl{
+	border-radius: 50rpx;
+}
+.uni-border-radius-circle{
+	border-radius: 50%;
+}
+.uni-border-radius-oval{
+	border-radius: 999px;
+}
+
+@for $i from 1 through 50 {
+  .uni-border-radius-#{$i} {
+    border-radius:1% * $i;
+  }
+}

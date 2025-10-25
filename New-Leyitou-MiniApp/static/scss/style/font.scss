@@ -1,0 +1,55 @@
+// 字体大小
+.uni-text-sm{
+	font-size: 20rpx;
+}
+.uni-text-lg{
+	font-size: 32rpx;
+}
+.uni-text-xl{
+	font-size: 50rpx;
+}
+@for $i from 1 through 50 {
+  .uni-text-#{$i} {
+    font-size:1rpx * $i;
+  }
+}
+// 显示文本下划线
+.uni-font-underline{
+	text-decoration: underline;
+}
+
+.uni-text-center{
+	text-align: center;
+}
+.uni-text-left{
+	text-align: left;
+}
+.uni-text-right{
+	text-align: right;
+}
+.uni-text-nowarp{
+	white-space: nowrap;
+}
+
+// 文本换行
+@for $i from 1 through 10 {
+  .uni-text-warp-#{$i} {
+    overflow: hminiden;      	          // 溢出内容隐藏
+    text-overflow: ellipsis;         // 文本溢出部分用省略号表示
+    display: -webkit-box;	        // 特别显示模式
+    -webkit-line-clamp: $i;	
+    -webkit-box-orient: vertical;
+  }
+}
+
+// 字体粗细
+.uni-text-bold{
+	font-weight: bold;
+}
+
+// 文本间距
+@for $i from 1 through 20 {
+  .uni-letter-spacing-#{$i} {
+	letter-spacing: 1rpx * $i;
+  }
+}

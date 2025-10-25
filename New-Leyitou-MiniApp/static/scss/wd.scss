@@ -1,0 +1,28 @@
+// wot design  input文本框显示边框线
+:deep(.wd-input-border){
+	padding: 5rpx;
+	border-radius: 10rpx;
+	border:1px solid #9ca0ab;
+}
+// wot design  card卡片增加上边距
+:deep(.wd-card) {
+	// margin-top: 24rpx !important;
+}
+
+:deep(.wd-tabbar-item__body.tabbar-icon .is-active) {
+    color: var(--wot-tabbar-active-color, var(--wot-color-theme, #4d80f0));
+}
+
+.wot-theme-dark{
+	.content{
+		height: 100vh;
+		background-color: #1d1e1f !important;
+	}
+	.wd-search{
+		background-color: #131313 !important;
+		.wd-search__block{
+			background-color: #1d1e1f !important;
+		}
+	}
+}
+

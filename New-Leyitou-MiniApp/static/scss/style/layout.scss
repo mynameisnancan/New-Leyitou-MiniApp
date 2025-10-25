@@ -1,0 +1,71 @@
+// flex布局
+.uni-flex{
+	display: flex;
+}
+.uni-flex-column{
+	display: flex;
+	flex-direction: column;
+}
+.uni-flex-row-reverse{
+	flex-direction: row-reverse;
+}
+.uni-flex-nowrap{
+	display: flex;
+	flex-wrap: nowrap;
+}
+.uni-flex-wrap{
+	display: flex;
+	flex-wrap: wrap;
+}
+// align-items
+.uni-items-center{
+	align-items: center;
+}
+.uni-items-start{
+	align-items: start
+}
+.uni-items-end{
+	align-items: end;
+}
+.uni-align-baseline {
+  align-items: baseline;
+}
+// justify-around
+.uni-justify-around{
+	justify-content: space-around;
+}
+.uni-justify-between{
+	justify-content: space-between;
+}
+.uni-justify-center{
+	justify-content: center;
+}
+.uni-justify-end{
+	justify-content: flex-end;
+}
+.uni-flex-center{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.uni-flex-1{
+	flex:1;
+}
+
+
+// 相对布局
+.uni-relative{
+	position: relative;
+}
+//绝对布局
+.uni-absolute{
+	position: absolute;
+}
+//绝对布局
+.uni-fixed{
+	position: fixed;
+}
+
+.uni-sticky{
+	position: sticky;
+}

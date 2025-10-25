@@ -1,0 +1,114 @@
+// margin 外边距
+.uni-m-sm{
+	margin: 10rpx;
+}
+.uni-m-lg{
+	margin: 20rpx;
+}
+.uni-m-xl{
+	margin: 30rpx;
+}
+@for $i from 1 through 50 {
+  .uni-m-#{$i} {
+    margin: 1rpx * $i ;
+  }
+}
+
+.uni-ml-sm{
+	margin-left: 10rpx;
+}
+.uni-mt-sm{
+	margin-top: 10rpx;
+}
+.uni-mr-sm{
+	margin-right: 10rpx;
+}
+.uni-mb-sm{
+	margin-bottom: 10rpx;
+}
+
+
+.uni-ml-lg{
+	margin-left: 20rpx;
+}
+.uni-mt-lg{
+	margin-top: 20rpx;
+}
+.uni-mr-lg{
+	margin-right: 20rpx;
+}
+.uni-mb-lg{
+	margin-bottom: 20rpx;
+}
+
+
+.uni-ml-xl{
+	margin-left: 30rpx;
+}
+.uni-mt-xl{
+	margin-top: 30rpx;
+}
+.uni-mr-xl{
+	margin-right: 30rpx;
+}
+.uni-mb-xl{
+	margin-bottom: 30rpx;
+}
+
+@for $i from 1 through 50 {
+  .uni-ml-#{$i} {
+    margin-left: 1rpx * $i ;
+  }
+}
+@for $i from 1 through 50 {
+  .uni-mt-#{$i} {
+    margin-top: 1rpx * $i ;
+  }
+}
+@for $i from 1 through 50 {
+  .uni-mr-#{$i} {
+    margin-right: 1rpx * $i ;
+  }
+}
+@for $i from 1 through 50 {
+  .uni-mb-#{$i} {
+    margin-bottom: 1rpx * $i ;
+  }
+}
+
+
+// X轴外边距
+.uni-mx-sm{
+	margin: 0rpx 10rpx;
+}
+.uni-mx-lg{
+	margin: 0rpx 20rpx;
+}
+.uni-mx-xl{
+	margin: 0rpx 30rpx;
+}
+@for $i from 1 through 50 {
+  .uni-mx-#{$i} {
+    margin: 0rpx 1rpx * $i ;
+  }
+}
+
+// Y轴外边距
+.uni-my-sm{
+	margin: 10rpx 0rpx;
+}
+.uni-my-lg{
+	margin: 20rpx 0rpx;
+}
+.uni-my-xl{
+	margin: 30rpx 0rpx;
+}
+@for $i from 1 through 50 {
+  .uni-my-#{$i} {
+    margin:1rpx * $i  0rpx ;
+  }
+}
+
+.uni-margin-auto{
+	margin:0px auto;
+}

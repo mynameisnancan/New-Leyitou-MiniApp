@@ -1,0 +1,119 @@
+.uni-theme-dark {
+	background: #000;
+	color: #ffffff;
+}
+
+.uni-theme-light {
+	background: #ffffff;
+	color: #333;
+}
+
+
+// 暗黑模式下的组件背景颜色和字体颜色 样式覆盖 
+.uni-theme-dark{
+	// checkout组件 
+	.uni-data-checklist .checklist-group .checklist-box .checklist-content .checklist-text {
+		background: #000;
+		color: #ffffff !important;
+	}
+	// 导航栏 
+	.uniui-left{
+		color: #ffffff !important;
+	}
+	//  section组件 
+	.uni-section{
+		background: #000 !important;
+	}
+	.uni-section .uni-section-header__content .distraction {
+		color: #ffffff !important;
+	}	
+	// uni-data-picker级联选择组件
+	.uni-data-tree-dialog{
+		background: #1b1b1b !important;
+		.cancel{
+			color: #ffffff !important;
+		}
+		.dialog-title{
+			color: #ffffff !important;
+		}
+		.dialog-close-plus{
+			background-color: #fff !important;
+		}
+		.item-text{
+			color: #ffffff !important;
+		}
+		.selected-list{
+			border-bottom:1px solid #323233 !important;
+		}
+	}
+	// base-tree-picker 树形层级组件
+	.base-tree-picker .tree-dialog{
+		background: #1b1b1b !important;
+		color:#fff !important;
+		.tree-bar-title {
+			color: #fff !important;
+		}
+		.tree-bar-cancel {
+			color: #fff !important;
+		}
+		.itemBorder{
+			border-bottom: 1px solid #323233  !important;
+		}
+		.tree-bar{
+			border-bottom: 1px solid #323233  !important;
+		}
+	}
+	
+	// base-select 下拉框组件
+	.base-select-picker{
+		.base-select-picker-header{
+			.cancel-btn{
+				color: #fff !important;
+			}
+		}
+		.picker-view-column-active-item{
+			background-color: #323233 !important;
+			z-index: -1;
+		}
+		.picker-view-column{
+			background-color:  #1b1b1b !important;
+		}
+	}
+	// base-popup
+	.uni-popup__wrapper{
+		background-color: #1b1b1b !important;
+	}
+	// base-nav-bar
+	.base-nav-bar{
+		background-color:var(--uni-dark-theme-color,#ffffff);
+	}
+}
+
+
+
+// 白天模式下的组件背景颜色和字体颜色 样式覆盖 
+.uni-theme-light{
+	// checkout组件 
+	.uni-data-checklist .checklist-group .checklist-box .checklist-content .checklist-text {
+		background:  #ffffff;
+		color: #666 !important;
+	}
+	// 导航栏 左侧
+	.uniui-left{
+		color: #000 !important;
+	}
+	//  section组件 
+	.uni-section{
+		background:  #ffffff !important;
+	}
+	.uni-section .uni-section-header__content .distraction {
+		color: #000 !important;
+	}	
+}
+
+// 覆盖插件中的样式为当前主题色
+
+// uni-section
+.uni-section .uni-section-header__decoration{
+	background-color: var(--uni-color-theme) !important;
+}

@@ -1,0 +1,72 @@
+@import '../variable.scss' ;
+@import '@/uni_modules/uni-scss/variables.scss';
+
+// 背景颜色
+.uni-bg-color-theme{
+	background-color:$uni-color-theme ;
+}
+.uni-bg-color-white{
+	background-color:$bg-color-white ;
+}
+.uni-bg-color-blue{
+	background-color: $bg-color-blue;
+}
+.uni-bg-color-black{
+	background-color: $bg-color-black;
+}
+
+.uni-bg-color-primary{
+	background-color: $uni-color-primary;
+}
+.uni-bg-color-success{
+	background-color: $uni-color-success;
+}
+.uni-bg-color-warning{
+	background-color: $uni-color-warning;
+}
+.uni-bg-color-danger{
+	background-color: $uni-color-danger;
+}
+.uni-bg-color-info{
+	background-color: $uni-color-info;
+}
+
+// 字体颜色
+.uni-font-color-theme{
+	color: $uni-color-theme;
+}
+.uni-font-color-gray{
+	color: $font-color-gray;
+}
+.uni-font-color-red{
+	color: $font-color-red ;
+}
+.uni-font-color-blue{
+	color: $font-color-blue ;
+}
+.uni-font-color-black{
+	color: $font-color-black;
+}
+.uni-font-color-orange{
+	color: $font-color-orange;
+}
+.uni-font-color-white{
+	color: $font-color-white;
+}
+//暗黑模式下的字体颜色
+.wot-theme-dark{
+	.uni-font-color-black{
+		color: var(--wot-dark-color, var(--wot-color-white, white));
+	}
+}
+
+// 阴影
+.uni-shadow-sm{
+	box-shadow: $uni-shadow-sm;
+}
+.uni-shadow-lg{
+	box-shadow:$uni-shadow-base;
+}
+.uni-shadow-xl{
+	box-shadow:$uni-shadow-lg;
+}

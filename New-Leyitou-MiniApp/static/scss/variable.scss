@@ -1,0 +1,34 @@
+
+// 主题色
+$uni-color-theme:var(--uni-color-theme);
+
+// 背景颜色
+$bg-color-blue:var(--uni-bg-color-blue,#144fe9);
+$bg-color-white:var(--uni-bg-color-white,#ffffff);
+$bg-color-black:var(--uni-bg-color-black,#000);
+
+//字体颜色
+$font-color-blue:var(--uni-font-blue,#144fe9);
+$font-color-gray:var(--uni-font-gray,#909399) ;
+$font-color-red:var(--uni-font-red,#f56c6c);
+$font-color-black:var(--uni-font-black,#000);
+$font-color-orange:var(--uni-font-orange,#e6a23c);
+$font-color-white:var(--uni-font-white,#ffffff);
+
+/* 辅助色 */
+$uni-color-primary:var(--uni-button-primary-color,#144fe9); // 默认
+$uni-color-success:var(--uni-button-success-color,#67c23a);//成功色
+$uni-color-warning:var(--uni-button-warning-color,#e6a23c);//警告色
+$uni-color-danger:var(--uni-button-danger-color,#f56c6c);//红色
+$uni-color-info:var(--uni-button-info-color,#909399);//灰色
+
+// button
+$button-primary-color:var(--uni-color-theme,$uni-color-primary);
+$button-success-color:var(--uni-color-theme,$uni-color-success);
+$button-warning-color:var(--uni-color-theme,$uni-color-warning);
+$button-danger-color:var(--uni-color-theme,$uni-color-danger);
+$button-info-color:var(--uni-color-theme,$uni-color-info);
+$button-disabled-opacity: 0.6; // 禁用状态 透明度
+
+
+

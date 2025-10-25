@@ -1,0 +1,98 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/index/index", // 首页
+			"style": {
+				"navigationBarTitleText": "",
+				"navigationBarBackgroundColor": "#144fe9",
+				"navigationStyle":"custom",
+				"enablePullDownRefresh": true,
+				"backgroundColorTop": "#144fe9"
+			}
+		},
+		{
+			"path": "pages/tools/index",
+			"style": {
+				"navigationBarTitleText": "工具箱"
+			}
+		},
+		{
+			"path": "pages/personalCenter/index",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		}
+	],
+	"subPackages":[{
+		"root": "sub_page",
+		"pages": [
+			{
+				"path": "pages/loginModePage/index", // 快捷登录页面
+				"style": {
+					"navigationStyle": "custom"
+				}
+			},
+			{
+				"path": "pages/quickLoginPage/index", // 账号密码登录页面
+				"style": {
+					"navigationStyle": "custom"
+				}
+			},
+			{
+				"path": "pages/centerSetting/index", // 个人中心-设置页面
+				"style": {
+					"navigationStyle": "custom"
+				}
+			}
+		]
+	}],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	},
+	"uniIdRouter": {},
+	"easycom": {
+		"autoscan": true,
+		"custom": {
+			"^wd-(.*)": "wot-design-uni/components/wd-$1/wd-$1.vue"
+		}
+	},
+	"tabBar": {
+		// 字体颜色
+				"color": "#cdcdcd",
+				// 选中字体颜色
+				"selectedColor": "#0055ff",
+				"borderStyle": "black",
+				"backgroundColor": "#fff",
+				"fontSize": "16px",
+				"iconWidth": "18px",
+				"list": [
+					{
+						"pagePath": "pages/index/index",
+						"text": "订单列表",
+						// 图标路径
+						"iconPath": "static/img/dingdan.png",
+						// 选中图标路径
+						"selectedIconPath": "static/img/selectDingdan.png"
+					},
+					{
+						"pagePath": "pages/tools/index",
+						"text": "工具箱",
+						// 图标路径
+						"iconPath": "static/img/tools.png",
+						// 选中图标路径
+						"selectedIconPath": "static/img/selectTools.png"
+					},
+					{
+						"pagePath": "pages/personalCenter/index",
+						"text": "个人中心",
+						// 图标路径
+						"iconPath": "static/img/personalCenter.png",
+						// 选中图标路径
+						"selectedIconPath": "static/img/selectPersonalCenter.png"
+					}
+				]
+	}
+}

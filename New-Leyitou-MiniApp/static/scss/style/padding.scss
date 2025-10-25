@@ -1,0 +1,109 @@
+// padding 内边距
+.uni-p-sm{
+	padding: 10rpx;
+}
+.uni-p-lg{
+	padding: 20rpx;
+}
+.uni-p-xl{
+	padding: 30rpx;
+}
+@for $i from 1 through 50 {
+  .uni-p-#{$i} {
+    padding: 1rpx * $i ;
+  }
+}
+
+.uni-pl-sm{
+	padding-left: 10rpx;
+}
+.uni-pt-sm{
+	padding-top: 10rpx;
+}
+.uni-pr-sm{
+	padding-right: 10rpx;
+}
+.uni-pb-sm{
+	padding-bottom: 10rpx;
+}
+
+
+.uni-pl-lg{
+	padding-left: 20rpx;
+}
+.uni-pt-lg{
+	padding-top: 20rpx;
+}
+.uni-pr-lg{
+	padding-right: 20rpx;
+}
+.uni-pb-lg{
+	padding-bottom: 20rpx;
+}
+
+
+.uni-pl-xl{
+	padding-left: 30rpx;
+}
+.uni-pt-xl{
+	padding-top: 30rpx;
+}
+.uni-pr-xl{
+	padding-right: 30rpx;
+}
+.uni-pb-xl{
+	padding-bottom: 30rpx;
+}
+
+@for $i from 1 through 50 {
+  .uni-pl-#{$i} {
+    padding-left: 1rpx * $i ;
+  }
+}
+@for $i from 1 through 50 {
+  .uni-pt-#{$i} {
+    padding-top: 1rpx * $i ;
+  }
+}
+@for $i from 1 through 50 {
+  .uni-pr-#{$i} {
+    padding-right: 1rpx * $i ;
+  }
+}
+@for $i from 1 through 50 {
+  .uni-pb-#{$i} {
+    padding-bottom: 1rpx * $i ;
+  }
+}
+
+// X轴内边距
+.uni-px-sm{
+	padding: 0rpx 10rpx;
+}
+.uni-px-lg{
+	padding: 0rpx 20rpx;
+}
+.uni-px-xl{
+	padding: 0rpx 30rpx;
+}
+@for $i from 1 through 50 {
+  .uni-px-#{$i} {
+    padding: 0rpx 1rpx * $i;
+  }
+}
+
+// Y轴内边距
+.uni-py-sm{
+	padding: 10rpx 0rpx;
+}
+.uni-py-lg{
+	padding: 20rpx 0rpx;
+}
+.uni-py-xl{
+	padding: 30rpx 0rpx;
+}
+@for $i from 1 through 50 {
+  .uni-py-#{$i} {
+    padding: 1rpx * $i  0rpx ;
+  }
+}
