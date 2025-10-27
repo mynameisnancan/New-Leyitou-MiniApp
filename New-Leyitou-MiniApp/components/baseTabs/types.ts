@@ -11,7 +11,8 @@ export interface BaseTabsType {
 	inactiveColor?:string;// 非活动标签文字颜色
 	animated?:boolean; // 是否开启切换标签内容时的转场动画
 	duration?:number; // 切换动画过渡时间，单位毫秒
-	slidable?:boolean; // 是否开启滚动导航
+	slidable?:string; // 是否开启滚动导航
+	slidableNum:number;// 可滑动的标签数阈值，slidable设置为auto时生效
 	badgeProps?:any; // 自定义徽标的属性
 }
 

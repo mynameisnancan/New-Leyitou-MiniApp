@@ -1,6 +1,14 @@
 import {getToken} from './auth'
+import {
+	computed
+}from 'vue'
 
-
+// 计算ROI
+export const sumRoiFun = (amount: number, cost: number) => {
+  return amount > 0 && cost > 0
+    ? Number.parseFloat((amount / cost).toFixed(2))
+    : 0;
+};
 
 //根据value获取枚举的type值
 export const getEnumValue = (enums: any[], value: any) => {
@@ -90,33 +98,24 @@ export const toFixedNoRound = (num: number, decimals: number = 2) => {
   }
 };
 
-//路由处理： 判断当前有没有登录， 没有登录 则返回固定两个路由，首页，个人中心 ,登录则返回接口路由
-export const getRoutes = () => {
-	if(getToken()){
-		const routes = uni.getStorageSync('routes')
-		return routes
-	}else{
-		return [
-			{
-				component:'/pages/index/index',
-				hidden:false,
-				meta:{
-					title:'首页',
-					icon:'category',
-				},
-				name:'home',
-				path:'home'
-			},
-			{
-				component:'/pages/personalCenter/index',
-				hidden:false,
-				meta:{
-					title:'请登录',
-					icon:'user',
-				},
-				name:'personalCenter',
-				path:'personalCenter'
+/**
+* 权限判断
+* @param moduleName 模块名称
+* @param operationName 操作名称， 如 lsit(查看) update(修改) add(新增) delete(删除)
+*/
+export const lookPermissions = computed(() => {
+	return (permission:any) => {
+		const permissions = uni.getStorageSync('permissions');
+		if(permissions == '*:*:*') return true;
+		if(permissions && permission){
+			let str =`system:${permission}`
+			if(permissions.indexOf(str) != -1) {
+				return true
+			}else{
+				return false
 			}
-		]
+		}else{
+			return true
+		}
 	}
-}
+})

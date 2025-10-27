@@ -24,8 +24,10 @@
   "include": [
     "components/**/*",
 		"pages/**/*",
+		"api/**/*",
 		"sub_page/**/*",
 		"types/**/*.ts",
+		"types/**/*d.ts",
 		"vite.config.ts"
   ],
   "exclude": [

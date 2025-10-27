@@ -261,7 +261,6 @@
 			font-size: 12px;
 			margin: 7px 0px;
 			color: var(--wot-text-primary-color, var(--wot-color-theme, #4d80f0));
-			;
 		}
 
 		.phone-login {

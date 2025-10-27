@@ -37,8 +37,35 @@
 .uni-w-4-5{
 	width: 80%;
 }
+
+.uni-w-1-10{
+	width: 10%;
+}
+.uni-w-2-10{
+	width: 20%;
+}
+.uni-w-3-10{
+	width: 30%;
+}
+.uni-w-4-10{
+	width: 40%;
+}
+.uni-w-6-10{
+	width: 60%;
+}
+.uni-w-7-10{
+	width: 70%;
+}
+.uni-w-8-10{
+	width: 80%;
+}
+.uni-w-9-10{
+	width: 90%;
+}
+
 @for $i from 1 through 300 {
   .uni-w-#{$i} {
     width: 1rpx * $i ;
   }
 }
+

@@ -36,4 +36,4 @@ declare global {
   }
   
 }
-export {};
+export const a = 1;
