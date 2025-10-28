@@ -34,7 +34,7 @@
 // 文本换行
 @for $i from 1 through 10 {
   .uni-text-warp-#{$i} {
-    overflow: hminiden;      	          // 溢出内容隐藏
+    overflow: hidden;      	          // 溢出内容隐藏
     text-overflow: ellipsis;         // 文本溢出部分用省略号表示
     display: -webkit-box;	        // 特别显示模式
     -webkit-line-clamp: $i;	

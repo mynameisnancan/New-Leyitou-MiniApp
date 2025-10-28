@@ -15,4 +15,7 @@
 <style  lang="scss">
 	@import '@/static/scss/index.scss';
 	@import '@/static/iconfont/iconfont.css';
+	button, cover-view, image, input, label, navigator, scroll-view, swiper, textarea, view {
+	   box-sizing: border-box;
+	}
 </style>

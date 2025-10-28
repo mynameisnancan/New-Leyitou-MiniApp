@@ -1,11 +1,11 @@
 
 <template>
-		<view class="commoditys-item" v-for="(item,index) in list" :key="index" >
-			<view class="accout-img uni-flex uni-justify-between uni-items-center">
-				<view class="uni-flex  uni-items-center author-info"  @click.stop="toIssuedAccount(item.dyAuthorInfo)">
+		<view class="commoditys-item" v-for="(item,index) in list" :key="index"   >
+			<view class="accout-img uni-flex uni-justify-between uni-items-center" @click.stop="toMessage(item)">
+				<view class="uni-flex  uni-items-center author-info">
 					<image :src="hiddenAuthorImgComputed(item.dyAuthorInfo?.avatar)" class="image"/>
 					<text class="user-name">{{hiddenAuthorComputed(item.dyAuthorInfo?.nickName)}}</text>
-					<text class="user-name">运营人: {{hiddenAuthorComputed(item.dyAuthorInfo?.userNickName)}}</text>
+					<text class="user-name">运营人: {{hiddenAuthorComputed(item.dyAuthorInfo?.userInfo?.nickName)}}</text>
 				</view>
 				<view class="uni-flex  uni-items-center">
 					<view class="look-msg">
@@ -14,28 +14,25 @@
 					</view>
 				</view>
 			</view>			
-			 <view class="data-top"  >
-				<view class="uni-flex  uni-justify-between uni-w-9-10"  @click.stop="toIssuedShop(item.dyProductInfo)">
+			<view class="data-top"  >
+				<view class="uni-flex  uni-justify-between uni-w-9-10" >
 					 <image v-if="hiddenMessageImgComputed(item.dyProductInfo?.cover)" :src="item.dyProductInfo?.cover" class="image" ></image>
 					 <view v-else class="hidden-message-img">图片已隐藏</view>
 					 <view class="title-item">
 						<view class="title">{{hiddenMessageComputed(item.dyProductInfo?.title)}}</view>
 						<view class="remark">
 							<view class="info ">
-								<!-- 付款时间:{{item.paySuccessTime}} -->
+								订单创建时间：{{item.orderCreateTime}}
 							</view>
-							<view class="media-type uni-ml-sm uni-border-radius-sm uni-p-sm">
-								<!-- {{mediaTypeComputed(item.mediaType)}} -->
-							</view>
-							<view v-if="item.isStop" class="danger">
-								终止中
-							</view>
-							<view v-else :class="orderStatusComputed(item.status).elTagType" class="uni-ml-sm uni-border-radius-sm uni-p-sm">
+							<view :class="orderStatusComputed(item.status).elTagType" class="uni-ml-sm uni-border-radius-sm uni-p-sm">
 								{{orderStatusComputed(item.status).label}}
 							</view>
 						 </view>
 						 <view class="order-code">
 							订单号：{{item.orderId}}
+						 </view>
+						 <view class="uni-text-sm uni-ml-sm  ">
+						 	已成交：{{item.orderDataInfo.totalPayOrderCountForRoi2 || 0}}单
 						 </view>
 					 </view>
 				</view>
@@ -43,8 +40,8 @@
 					<wd-icon v-if="hiddenMessage" name="view" color="#848794" size="32rpx"   @click.stop="hiddenMessageFun"  />
 					<wd-icon v-else name="eye-close" color="#848794" size="32rpx" @click.stop="hiddenMessageFun"  />
 				 </view>
-			 </view>
-			  <view class="data-bottom"  @click.stop="toIssuedShop(item.productInfo)">
+			</view>
+			<view class="data-bottom">
 					<view class="item">
 						<view>投放金额</view>
 						<view>{{item.amount || 0}}</view>
@@ -64,34 +61,37 @@
 							item.orderDataInfo.statCostForRoi2 || 0)}}</view>
 						</view>
 			  </view>
-			  <view class="shop uni-flex  uni-justify-between uni-items-center">
-					<view class="uni-flex uni-items-center uni-w-9-10 uni-justify-between" @click.stop="toIssuedStore(item.shopInfo)">
-						<!-- <view class="uni-flex  uni-items-center">
+			<!--<view class="shop uni-flex  uni-justify-between uni-items-center">
+					 <view class="uni-flex uni-items-center uni-w-9-10 uni-justify-between">
+						 <view class="uni-flex  uni-items-center">
 							<image v-if="hiddenShopImgComputed(item.shopInfo?.shopImg)" :src="item.shopInfo?.shopImg" class="image" ></image>
 							<image v-else src="https://image.doulaoban.com/xpin/no_shop.png" class="image" ></image>
 							<text class="shop-name">{{hiddenShopComputed(item.shopInfo?.shopName)}}</text>
-						</view> -->
+						</view>
 					</view>
 					
-					<view class="uni-flex uni-items-center">
+					<!-- <view class="uni-flex uni-items-center">
 						<view class="look-msg">
 							<wd-icon v-if="hiddenShop" name="view" color="#848794" size="32rpx" @click.stop="hiddenShopNameFun"  />
 							<wd-icon v-else name="eye-close" color="#848794" size="32rpx" @click.stop="hiddenShopNameFun"  />
 						</view>
-					</view>
-			  </view>
+					</view> 
+				</view>-->
 		</view>
 		<baseLoading v-if="loading"></baseLoading>
 		 <baseNoData v-if="noData && list.length>0"/>
 		<template v-if="list.length==0 && !loading">
 			<view class="uni-pt-xl uni-pb-xl">
-				<!-- <tn-empty mode="data"  size="lg"  color="#7a7f94" /> -->
-				暂无数据
+				<wd-status-tip image="content" tip="暂无数据" />
 			</view>
 		</template>
 </template>
 
 <script setup lang="ts">
+	import type {
+		SxtUinOrderQuery,
+		SxtUniOrderMergeVo
+	}from '@/api/index/types'
 	import {onReachBottom} from '@dcloudio/uni-app'
 	import {getUniOrderlist} from '@/api/index/index'
 	import {ref,defineModel,computed,defineExpose,watch,toRefs} from 'vue'
@@ -102,7 +102,7 @@
 		sumRoiFun
 	}from '@/utils/utils'
 	
-	const orderQuery =defineModel("orderQuery",{
+	const orderQuery =defineModel<SxtUinOrderQuery>("orderQuery",{
 		type:Object,
 		default:{}
 	})
@@ -116,36 +116,19 @@
 	})
 	
 	
-	const hiddenMessage = ref(true)
-	const hiddenShop = ref(true)
-	const hiddenAuthor = ref(true)
+	const hiddenMessage = ref<boolean>(true)
+	const hiddenShop = ref<boolean>(true)
+	const hiddenAuthor = ref<boolean>(true)
 	const {leyitou_order_status} = toRefs(useDict('leyitou_order_status'))
-	const mediaTypeEnum = [
-		{
-			label: '橱窗',
-			value: 'shop_list'
-		},
-		{
-			label: '视频',
-			value: 'video'
-		},
-		{
-			label: '直播',
-			value: 'live'
-		},
-		{
-			label: '其他',
-			value: 'others'
-		},
-	]
+	
 	const pageParams= ref({
 		pageNum:1,
 		pageSize:10,
 		total: 0
 	})
-	const loading = ref(false)
-	const noData = ref(false)
-	const list = ref([])
+	const loading = ref<boolean>(false)
+	const noData = ref<boolean>(false)
+	const list = ref<SxtUniOrderMergeVo[]>([])
 	
 	defineExpose({
 		refreshList,
@@ -199,11 +182,7 @@
 	}
 	 
 	 
-	const mediaTypeComputed = computed(() => {
-		return (type) => {
-			return mediaTypeEnum.filter(item => item.value == type)[0].label
-		}
-	})
+
 	const orderStatusComputed = computed(() => {
 		return (status:string) => {
 			console.log(leyitou_order_status.value)
@@ -211,22 +190,22 @@
 		}
 	})
 	const hiddenMessageComputed = computed(() => {
-		return (data) => hiddenMessage.value ? data : '内容已隐藏'
+		return (data:any) => hiddenMessage.value ? data : '内容已隐藏'
 	})
 	const hiddenShopComputed = computed(() => {
-		return (data) => hiddenShop.value ? data : '***'
+		return (data:any) => hiddenShop.value ? data : '***'
 	})
 	const hiddenMessageImgComputed = computed(() => {
-		return (data) => hiddenMessage.value ? data : ''
+		return (data:any) => hiddenMessage.value ? data : ''
 	})
 	const hiddenShopImgComputed = computed(() => {
-		return (data) =>  hiddenShop.value ? data : ''
+		return (data:any) =>  hiddenShop.value ? data : ''
 	})
 	const hiddenAuthorImgComputed = computed(() => {
-		return (data) => hiddenAuthor.value ? data : 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
+		return (data:any) => hiddenAuthor.value ? data : 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
 	})
 	const hiddenAuthorComputed = computed(() => {
-		return (data) =>  hiddenAuthor.value ? data : '***'
+		return (data:any) =>  hiddenAuthor.value ? data : '***'
 	})
 	
 	function hiddenMessageFun(){
@@ -242,24 +221,13 @@
 	}
 	
 	
-	function toIssuedShop(item) {
+	function toMessage(item:SxtUniOrderMergeVo) {
 		uni.navigateTo({
-			url: `/functionPage/indexPage/IssuedShop/index?productId=${item.productId}`,
+			url: `/sub_page/index/message?orderId=${item.orderId}`,
 			animationType: 'slide-in-right'
 		})
 	}
-	function toIssuedAccount(item) {
-		uni.navigateTo({
-			url: `/functionPage/indexPage/IssuedAccount/index?dyOpenId=${item.openId}`,
-			animationType: 'slide-in-right'
-		})	
-	}
-	function toIssuedStore(item) {
-		uni.navigateTo({
-			url: `/functionPage/indexPage/IssuedStore/index?shopId=${item.shopId}`,
-			animationType: 'slide-in-right'
-		})	
-	}
+	
 	
 </script>
 
@@ -329,11 +297,6 @@
 					 .look-msg{
 						 position: absolute;
 						 right:3%;
-					 }
-					 .media-type{
-						background-color: #409eff;
-						color: white;
-						padding: 5rpx;
 					 }
 					 .success{
 						background-color: #79c25c;

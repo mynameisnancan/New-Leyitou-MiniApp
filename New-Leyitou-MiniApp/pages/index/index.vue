@@ -28,37 +28,37 @@
 						<view class="money-item">
 							<view class="uni-text-26">投放中订单数</view>
 							<view class="uni-text-bold uni-text-36">
-								<wd-count-to :endVal="1"  color="#ffffff"></wd-count-to> 
+								<wd-count-to :endVal="statisticsData.allOrderNum || 0"  color="#ffffff"></wd-count-to> 
 							</view>
 						</view>
 						<view class="money-item">
 							<view class="uni-text-26">累计投放金额</view>
 							<view class="uni-text-bold uni-text-36">
-								<wd-count-to :endVal="1"  color="#ffffff"></wd-count-to> 
+								<wd-count-to :endVal="statisticsData.allAmount || 0"  color="#ffffff"></wd-count-to> 
 							</view>
 						</view>
 						<view class="money-item">
 							<view class="uni-text-26">累计消耗金额</view>
 							<view class="uni-text-bold uni-text-36">
-								<wd-count-to :endVal="1"  color="#ffffff"></wd-count-to> 
+								<wd-count-to :endVal="statisticsData.allStatCost || 0"  color="#ffffff"></wd-count-to> 
 							</view>
 						</view>
 						<view class="money-item">
 							<view class="uni-text-26">成交订单数</view>
 							<view class="uni-text-bold uni-text-36">
-								<wd-count-to :endVal="1"  color="#ffffff"></wd-count-to> 
+								<wd-count-to :endVal="statisticsData.allPayOrderCount || 0"  color="#ffffff"></wd-count-to> 
 							</view>
 						</view>
 						<view class="money-item">
 							<view class="uni-text-26">成交订单金额</view>
 							<view class="uni-text-bold uni-text-36">
-								<wd-count-to :endVal="1"  color="#ffffff"></wd-count-to> 
+								<wd-count-to :endVal="statisticsData.allPayOrderAmount || 0"  color="#ffffff"></wd-count-to> 
 							</view>
 						</view>
 						<view class="money-item">
 							<view class="uni-text-26">成交ROI</view>
 							<view class="uni-text-bold uni-text-36">
-								<wd-count-to :endVal="1"  color="#ffffff"></wd-count-to> 
+								<wd-count-to :endVal="sumRoiFun(statisticsData.allAmount||0,statisticsData.allStatCost||0)"  color="#ffffff"></wd-count-to> 
 							</view>
 						</view>
 					</view>
@@ -68,7 +68,7 @@
 				<view class="options">
 					<view class="item-container">
 						 <template v-for="(item,index) in optionsItems" :key="index">
-							<view class="options-item" v-if="lookPermissions(item.permission)"  @click="skipPage(item)">
+							<view class="options-item" v-if="lookPermissions(item.permission)">
 								<view class="icon">
 									<text :class="item.icon"></text>
 								</view>
@@ -82,18 +82,26 @@
 	</view>
 	
 	<!-- 列表类型切换 -->
-	<view class="uni-p-lg">
-		<wd-tabs  v-model="listType" @click="listTabChange">
+	<view class="uni-m-lg uni-px-sm uni-flex uni-items-center uni-bg-color-white">
+		<wd-tabs v-model="listType" @click="listTabChange">
 			<wd-tab title="商品全域" name="商品全域">
 			</wd-tab>
 			<wd-tab title="直播带货" name="直播带货">
 			</wd-tab>
 		</wd-tabs>
+		<view class="uni-w-1-5 uni-flex uni-items-center" @click="openFilter">
+			<wd-icon name="search" size="32rpx" color="#848794"></wd-icon>
+		</view>
 	</view>
 	<!-- 列表 -->
 	<view class="uni-p-lg">
-		<orderList></orderList>
+		<view>
+			<orderList></orderList>
+		</view>
 	</view>
+	
+	<!-- 筛选条件弹出框 -->
+	<tableQuery v-model:visible="queryVisible" />
 	
 	<view class="register" v-if="showLogin">
 		<view>当前尚未登录，登录后可正常使用</view>
@@ -103,17 +111,42 @@
 </template>
 
 <script setup lang="ts">
+	import type {
+		SxtUinOrderQuery,
+		SxtUniOrderStatisticsVo
+	}from '@/api/index/types'
+	import {
+		getUniOrderStatistics
+	}from '@/api/index/index'
 	import {onShow} from '@dcloudio/uni-app'
 	import { ref } from 'vue'
 	import {
-		lookPermissions
+		lookPermissions,
+		sumRoiFun
 	}from '@/utils/utils.ts'
 	
+	import tableQuery from './components/tableQuery.vue'
 	import orderList from './components/orderList.vue'
 	
 	// 是否显示 未登录弹出框
 	const showLogin = ref<boolean>(true)
-	
+	const queryFormRef = ref()
+	const queryForm = ref<SxtUinOrderQuery>({
+		orderId: undefined,
+		status: undefined,
+		productId: undefined,
+		userId: undefined,
+		authorId: undefined,
+		timeStart: undefined,
+		timeEnd: undefined
+	})
+	const statisticsData = ref<SxtUniOrderStatisticsVo>({
+		allOrderNum:0,
+		allAmount:0,
+		allStatCost:0,
+		allPayOrderAmount:0,
+		allPayOrderCount:0
+	})
 	// 快捷入口页面
 	const optionsItems = [
 		{
@@ -147,6 +180,8 @@
 			permission:''
 		},
 	]
+	// 筛选弹窗
+	const queryVisible = ref<boolean>(false)
 	
 	// 列表类型
 	const listType = ref<'uniOrder' | 'order'>('uniOrder')
@@ -161,6 +196,12 @@
 		console.log(event)
 	}
 	
+	// 打开筛选弹窗
+	const openFilter = () => {
+		console.log(123)
+		queryVisible.value = true
+	}
+	
 	// 跳转登录页
 	function login(){
 		uni.navigateTo({
@@ -169,10 +210,22 @@
 		})
 	}
 	
+	// 获取统计数据
+	const getUniOrderStatisticsApi = () => {
+		getUniOrderStatistics({
+			sort:1,
+			...queryForm.value
+		}).then(res => {
+			statisticsData.value = res.data
+		})
+	}
+	
 	onShow(() => {
 		console.log(uni.getStorageSync('userInfo'))
 		showLogin.value = uni.getStorageSync('userInfo').userName ? false : true
 	})
+	
+	getUniOrderStatisticsApi()
 </script>
 
 <style lang="scss">
