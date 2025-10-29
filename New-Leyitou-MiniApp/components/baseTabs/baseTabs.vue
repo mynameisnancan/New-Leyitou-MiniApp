@@ -87,7 +87,7 @@
 	const tabName = ref<string>()
 
 	// 已选择日期value值
-	const dateValue = ref<number>(Date.now())
+	const dateValue = ref<number|number[]>(Date.now())
 	const calendar = ref()
 	
 	const change = (event:any) => {
@@ -106,10 +106,17 @@
 			 calendar.value?.open()
 			 return ;
 		}
+		// 给时间选择弹出框赋值
+		if(date && date.length === 2){
+			dateValue.value = [dayjs(date[0]).valueOf(),dayjs(date[1]).valueOf()]
+		}
+		
 		if(date){
 			emits("change",date)
 			return;
 		}
+		
+		
 		
 		// 打开日期选择弹出框
 		// const item = props.tabs.find((item,index) => index === event.index && item.date);

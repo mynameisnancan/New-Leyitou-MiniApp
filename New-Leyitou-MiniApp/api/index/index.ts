@@ -4,7 +4,9 @@ import type {
 	UniProductQuery,
 	SxtUniOrderMergeVo,
 	QcUniProductVo,
-	SxtUniOrderStatisticsVo
+	SxtUniOrderStatisticsVo,
+	DyAuthorAuthListQuery,
+	DyAuthorAuthVo
 }from './types'
 
 // 获取全域订单列表
@@ -34,3 +36,11 @@ export const getUniOrderStatistics = (data:SxtUinOrderQuery) :Promise<ResultType
 	})
 }
 
+// 抖音达人授权信息列表
+export const getDyAuthorList = (data:DyAuthorAuthListQuery) :Promise<ResultType<DyAuthorAuthVo>> => {
+	return request({
+		url: '/data/dy_author/list',
+		method:'post',
+		data
+	})
+}

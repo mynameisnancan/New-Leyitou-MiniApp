@@ -38,7 +38,7 @@ export const getCode = (): Promise<ResultType<VerifyCodeResult>> => {
 // 获取用户详细信息
 export function getInfo(): Promise<ResultType<UserInfo>> {
   return request({
-    url: '/core/user/getInfo',
+    url: '/core/sys/user/get_info',
     method: 'get'
   });
 }

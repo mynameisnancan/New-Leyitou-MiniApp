@@ -1,6 +1,6 @@
 <template>
 	<!-- 顶部logo -->
-	<wd-navbar custom-class="custom-wd-navbar" safeAreaInsetTop>
+	<wd-navbar custom-class="custom-wd-navbar" fixed  safeAreaInsetTop>
 		<template #title>
 			<view class="uni-flex-center">
 				<image class="logo-img" src="https://pick.idoutech.com/uploadPath/image/logo.png"></image>
@@ -8,18 +8,20 @@
 			</view>
 		</template>
 	</wd-navbar>
-	
-	<!-- 日期筛选 -->
-	<baseTabs 
-		class="base-wd-tabs" 
-		@change="dateTabChange" 
-		sticky 
-		slidable="always" 
-		inactiveColor="#acd9fe"
-		color="#ffffff"
-	>
-	</baseTabs>
-	
+	<view :style="{paddingTop:offsetTop+'px',backgroundColor:'#144fe9'}">
+		<wd-sticky :offset-top="offsetTop" custom-class="uni-w-full">
+			<!-- 日期筛选 -->
+			<baseTabs 
+				sticky
+				class="base-wd-tabs uni-w-full" 
+				@change="dateTabChange" 
+				slidable="always" 
+				inactiveColor="#acd9fe"
+				color="#ffffff"
+			>
+			</baseTabs>
+		</wd-sticky>
+	</view>
 	<view class="body">
 		<view class="data-overview">
 			<swiper class="swiper" :indicator-dots="false" indicator-active-color="#5f9ffe">
@@ -28,31 +30,31 @@
 						<view class="money-item">
 							<view class="uni-text-26">投放中订单数</view>
 							<view class="uni-text-bold uni-text-36">
-								<wd-count-to :endVal="statisticsData.allOrderNum || 0"  color="#ffffff"></wd-count-to> 
+								<wd-count-to :endVal="Number(statisticsData.allOrderNum) || 0"  color="#ffffff"></wd-count-to> 
 							</view>
 						</view>
 						<view class="money-item">
 							<view class="uni-text-26">累计投放金额</view>
 							<view class="uni-text-bold uni-text-36">
-								<wd-count-to :endVal="statisticsData.allAmount || 0"  color="#ffffff"></wd-count-to> 
+								<wd-count-to :endVal="Number(statisticsData.allAmount) || 0"  color="#ffffff"></wd-count-to> 
 							</view>
 						</view>
 						<view class="money-item">
 							<view class="uni-text-26">累计消耗金额</view>
 							<view class="uni-text-bold uni-text-36">
-								<wd-count-to :endVal="statisticsData.allStatCost || 0"  color="#ffffff"></wd-count-to> 
+								<wd-count-to :endVal="Number(statisticsData.allStatCost) || 0"  color="#ffffff"></wd-count-to> 
 							</view>
 						</view>
 						<view class="money-item">
 							<view class="uni-text-26">成交订单数</view>
 							<view class="uni-text-bold uni-text-36">
-								<wd-count-to :endVal="statisticsData.allPayOrderCount || 0"  color="#ffffff"></wd-count-to> 
+								<wd-count-to :endVal="Number(statisticsData.allPayOrderCount) || 0"  color="#ffffff"></wd-count-to> 
 							</view>
 						</view>
 						<view class="money-item">
 							<view class="uni-text-26">成交订单金额</view>
 							<view class="uni-text-bold uni-text-36">
-								<wd-count-to :endVal="statisticsData.allPayOrderAmount || 0"  color="#ffffff"></wd-count-to> 
+								<wd-count-to :endVal="Number(statisticsData.allPayOrderAmount) || 0"  color="#ffffff"></wd-count-to> 
 							</view>
 						</view>
 						<view class="money-item">
@@ -94,20 +96,23 @@
 		</view>
 	</view>
 	<!-- 列表 -->
-	<view class="uni-p-lg">
-		<view>
-			<orderList></orderList>
+	<view class="list-content">
+		<view v-if="listType === '商品全域'">
+			<orderList 
+				v-model:orderQuery="queryForm" 
+				v-model:timeQuery="timeQuery"
+				ref="orderListRef"
+			></orderList>
 		</view>
 	</view>
 	
 	<!-- 筛选条件弹出框 -->
-	<tableQuery v-model:visible="queryVisible" />
+	<tableQuery v-model:visible="queryVisible" v-model:queryForm="queryForm"  />
 	
 	<view class="register" v-if="showLogin">
 		<view>当前尚未登录，登录后可正常使用</view>
 		<wd-button @click="login" size="small">立即登录</wd-button>
 	</view>
-	
 </template>
 
 <script setup lang="ts">
@@ -118,8 +123,11 @@
 	import {
 		getUniOrderStatistics
 	}from '@/api/index/index'
-	import {onShow} from '@dcloudio/uni-app'
-	import { ref } from 'vue'
+	import {onShow, onPullDownRefresh} from '@dcloudio/uni-app'
+	import {
+		getRect
+	} from 'wot-design-uni/components/common/util'
+	import { ref,  onMounted } from 'vue'
 	import {
 		lookPermissions,
 		sumRoiFun
@@ -130,6 +138,7 @@
 	
 	// 是否显示 未登录弹出框
 	const showLogin = ref<boolean>(true)
+	const orderListRef = ref()
 	const queryFormRef = ref()
 	const queryForm = ref<SxtUinOrderQuery>({
 		orderId: undefined,
@@ -137,8 +146,10 @@
 		productId: undefined,
 		userId: undefined,
 		authorId: undefined,
-		timeStart: undefined,
-		timeEnd: undefined
+	})
+	const timeQuery = ref({
+		timeStart:undefined,
+		timeEnd:undefined
 	})
 	const statisticsData = ref<SxtUniOrderStatisticsVo>({
 		allOrderNum:0,
@@ -182,23 +193,32 @@
 	]
 	// 筛选弹窗
 	const queryVisible = ref<boolean>(false)
-	
+	const offsetTop = ref<number>(0)
 	// 列表类型
 	const listType = ref<'uniOrder' | 'order'>('uniOrder')
 	
 	// 时间tab修改事件
 	const dateTabChange = (date:any) => {
-		console.log(date)
+		if(date.length === 2){
+			timeQuery.value = {
+				timeStart:date[0],
+				timeEnd:date[1]
+			}
+		}else{
+			timeQuery.value = {
+				timeStart:date[0],
+				timeEnd:date[0]
+			}
+		}
+		
 	}
 	
 	// 列表类型修改事件
 	const listTabChange = (event:any) => {
-		console.log(event)
 	}
 	
 	// 打开筛选弹窗
 	const openFilter = () => {
-		console.log(123)
 		queryVisible.value = true
 	}
 	
@@ -220,12 +240,38 @@
 		})
 	}
 	
+	const refreshList = () => {
+		queryForm.value = {
+			orderId: undefined,
+			status: undefined,
+			productId: undefined,
+			userId: undefined,
+			authorId: undefined,
+		}
+		getUniOrderStatisticsApi()
+	}
+	
 	onShow(() => {
-		console.log(uni.getStorageSync('userInfo'))
-		showLogin.value = uni.getStorageSync('userInfo').userName ? false : true
+		if(uni.getStorageSync('userInfo')){
+			showLogin.value = uni.getStorageSync('userInfo').userName ? false : true
+			orderListRef.value.loadData()
+			getUniOrderStatisticsApi()
+		}
+		
 	})
 	
-	getUniOrderStatisticsApi()
+ 
+	onMounted(() => {
+		const { statusBarHeight } = uni.getSystemInfoSync()
+		offsetTop.value = 44 + (statusBarHeight||0)
+	})
+	
+	onPullDownRefresh(() => {
+		if(!showLogin.value){
+			refreshList()
+		}
+	})
+	
 </script>
 
 <style lang="scss">
@@ -284,7 +330,10 @@
 	}
 	
 	.custom-wd-navbar{
-		background-color: #144fe9 !important;
+		background: #144fe9 !important;
+	}
+	:deep(.wd-navbar.is-border::after){
+		background: #144fe9 !important;
 	}
 	
 	.options-module{
@@ -327,6 +376,10 @@
 		background-color: white;
 		border-radius: 10rpx;
 		padding: 5px;
+	}
+	
+	.list-content{
+		padding: 0rpx 20rpx 20rpx 20rpx;
 	}
 	
 	.logo-img{

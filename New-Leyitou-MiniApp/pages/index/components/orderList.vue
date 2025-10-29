@@ -24,8 +24,8 @@
 							<view class="info ">
 								订单创建时间：{{item.orderCreateTime}}
 							</view>
-							<view :class="orderStatusComputed(item.status).elTagType" class="uni-ml-sm uni-border-radius-sm uni-p-sm">
-								{{orderStatusComputed(item.status).label}}
+							<view :class="orderStatusComputed(item.status)?.elTagType" class="uni-ml-sm uni-border-radius-sm uni-p-sm">
+								{{orderStatusComputed(item.status)?.label}}
 							</view>
 						 </view>
 						 <view class="order-code">
@@ -79,7 +79,7 @@
 				</view>-->
 		</view>
 		<baseLoading v-if="loading"></baseLoading>
-		 <baseNoData v-if="noData && list.length>0"/>
+		<baseNoData v-if="noData && list.length>0"/>
 		<template v-if="list.length==0 && !loading">
 			<view class="uni-pt-xl uni-pb-xl">
 				<wd-status-tip image="content" tip="暂无数据" />
@@ -137,8 +137,6 @@
 	
 
 	
-	loadData()
-	
 	// 获取订单列表
 	async function getUniOrderlistApi(){
 		const res = await getUniOrderlist({
@@ -150,7 +148,7 @@
 			uni.stopPullDownRefresh()
 		})
 		if(res.rows){
-			list.value = list.value.concat(res.rows) 
+			list.value = list.value.concat(res.rows,res.rows,res.rows,res.rows,res.rows,res.rows,res.rows,res.rows) 
 			pageParams.value.total = res.total
 		}
 		if(list.value.length == res.total || res.rows.length == 0){
@@ -185,7 +183,6 @@
 
 	const orderStatusComputed = computed(() => {
 		return (status:string) => {
-			console.log(leyitou_order_status.value)
 			return leyitou_order_status.value.find(item => item.value === status)
 		}
 	})
@@ -228,6 +225,13 @@
 		})
 	}
 	
+	watch(() => orderQuery.value,() => {
+		refreshList()
+	},{deep:true})
+	
+	watch(() => timeQuery.value, () => {
+		refreshList()
+	},{deep:true})
 	
 </script>
 

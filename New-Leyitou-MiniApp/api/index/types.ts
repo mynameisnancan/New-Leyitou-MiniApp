@@ -184,7 +184,7 @@ export interface SxtUniOrderDataInfo {
  *
  * SxtUniOrderDataInfo
  */
-export interface UniProductQuery {
+export interface UniProductQuery extends PageQuery{
     /**
      * 账户id
      */
@@ -218,8 +218,6 @@ export interface UniProductQuery {
     id?: number;
     isAsc?: string;
     orderByColumn?: string;
-    pageNum?: number;
-    pageSize?: number;
     /**
      * 商品id
      */
@@ -228,6 +226,7 @@ export interface UniProductQuery {
      * 租户id
      */
     tenantId?: string;
+	title?:string;
 }
 
 
@@ -311,4 +310,109 @@ export interface SxtUniOrderStatisticsVo {
      * 累计消耗金额
      */
     allStatCost?: number;
+}
+
+
+/**
+ * 抖音达人授权信息列表查询参数
+ */
+export interface DyAuthorAuthListQuery {
+    /**
+     * 部门id
+     */
+    deptId?: number;
+    /**
+     * 抖音授权状态 0未授权 1已授权 2即将到期 3授权过期 4 取消授权
+     */
+    dyAuthStatus?: number;
+    /**
+     * 抖音账号昵称
+     */
+    dyNickName?: string;
+    isAsc?: string;
+    orderByColumn?: string;
+    pageNum?: number;
+    pageSize?: number;
+    /**
+     * 千川随心推授权状态 0未授权 1已授权 2授权过期
+     */
+    qcPcAuthStatus?: number;
+    /**
+     * 千川随心推授权状态 0未授权 1已授权 2授权过期
+     */
+    qcSxtAuthStatus?: number;
+    /**
+     * 用户id
+     */
+    userId?: number;
+}
+
+
+
+/**
+ * 抖音达人授权信息
+ *
+ * DyAuthorAuthVo
+ */
+export interface DyAuthorAuthVo {
+    /**
+     * 平台达人id
+     */
+    authorId?: number;
+    /**
+     * 运营人部门id
+     */
+    deptId?: number;
+    /**
+     * 抖音达人信息
+     */
+    dyAuthorInfo?: DyAuthorInfo;
+    /**
+     * 抖音授权状态 0授权成功 1授权异常 2即将到期
+     */
+    dyAuthStatus?: number;
+    /**
+     * 抖音授权时间
+     */
+    dyAuthTime?: string;
+    /**
+     * 抖音授权过期时间
+     */
+    dyExpireTime?: string;
+    /**
+     * 千川授权可投放抖音uid
+     */
+    qcAwemeId?: number;
+    /**
+     * 千川pc权抖音号关联的千川账户ID：唯一值、不可修改
+     */
+    qcPcAdvertiserId?: number;
+    /**
+     * 千川pc授权状态 0未授权 1已授权 2授权过期
+     */
+    qcPcAuthStatus?: number;
+    /**
+     * 千川pc授权时间
+     */
+    qcPcAuthTime?: string;
+    /**
+     * 千川随心推授权抖音号关联的千川账户ID：唯一值、不可修改
+     */
+    qcSxtAdvertiserId?: number;
+    /**
+     * 千川随心推授权状态 0未授权 1已授权 2授权过期
+     */
+    qcSxtAuthStatus?: number;
+    /**
+     * 千川随心推授权时间
+     */
+    qcSxtAuthTime?: string;
+    /**
+     * 租户id
+     */
+    tenantId?: string;
+    /**
+     * 运营人id
+     */
+    userId?: number;
 }

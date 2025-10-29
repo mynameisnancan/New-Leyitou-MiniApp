@@ -1,7 +1,7 @@
 <template>
 	<view class="uni-flex uni-items-center uni-justify-center">
 		<wd-loading :type="type" :size="size" />
-		<view>{{title}}</view>
+		<view class="uni-text-sm uni-ml-sm uni-font-color-theme">{{title}}</view>
 	</view>
 </template>
 
@@ -17,7 +17,7 @@
 	const props = withDefaults(defineProps<BaseLoadingTypes>(),{
 		type:'outline',
 		title:'正在加载中...',
-		size:'30rpx'
+		size:'38rpx'
 	})
 </script>
 

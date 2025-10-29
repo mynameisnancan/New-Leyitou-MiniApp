@@ -27,13 +27,36 @@
 			:lower-threshold="100" 
 			@scrolltolower="scrolltolower"
 		>
-			<commodity 
-				v-if="type === 'commodity'" 
-				v-model:selectedData="selectedData"
-				:list="listData"
-			/>
+			<wd-radio-group v-model="selectedValue" @change="change">
+				<wd-radio :value="item.userId"  v-for="(item,index) in listData"  :key="index" shape="dot">
+					<view class="uni-flex  uni-items-center underline uni-w-full">
+						<view>
+							<wd-img  v-if="item.avatar" width="120rpx" height="120rpx" round  :src="config.baseUrl+item.avatar" />
+							<wd-img  v-else width="150rpx" height="150rpx" round  src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
+						</view>
+						<view class="uni-ml-lg uni-text-left uni-w-4-5 uni-font-color-black">
+							<view class="uni-flex uni-items-center">
+								<view class="uni-text-lg">
+									{{item?.nickName}}
+								</view>
+								<view class="uni-text-sm uni-ml-lg">
+									<wd-tag v-if="item?.status == '0'" type="primary">启用</wd-tag>
+									<wd-tag v-else  type="danger">禁用</wd-tag>
+								</view>
+							</view>
+							<view class="uni-text-sm">
+								所在部门：{{item?.deptName || '暂无'}}
+							</view>
+							<view class="uni-text-sm">
+								手机号：{{item?.phonenumber || '暂无'}}
+							</view>
+						</view>
+					</view>
+				</wd-radio>
+			</wd-radio-group> 
 		</scroll-view>
-		<baseLoading v-if="loading"></baseLoading>
+		<baseNoData v-if="noData && listData.length>0"/>
+		<baseLoading v-show="loading"></baseLoading>
 	</view>
 	
 	</wd-popup>
@@ -41,8 +64,12 @@
 
 <script setup lang="ts">
 	import type {
-		BasePopupTypes
+		PropTypes
 	}from './types'
+	import type {
+		SysUserVo
+	}from '@/api/user/types'
+	import config from '@/config'
 	import {
 		defineModel,
 		ref,
@@ -51,7 +78,10 @@
 		defineProps,
 		defineEmits
 	}from 'vue'
-	import commodity from './components/commodity.vue'
+	import {
+		getUserList
+	}from '@/api/user/index'
+
 	
 	const emits = defineEmits(['confirm'])
 	
@@ -60,16 +90,14 @@
 	})
 	// 筛选框值
 	const searchValue = defineModel<any>('searchValue')
+	const selectedValue = defineModel('selectedValue')
 	// 已选择的数据
-	const selectedData = ref<any>({
+	const selectedData = ref({
 		label:'',
 		value:''
 	})
-	// 列表查询参数
-	const queryData = ref<any>()
 	
-	const props = withDefaults(defineProps<BasePopupTypes>(),{
-		apiUrl: () => Promise.resolve([]),
+	const props = withDefaults(defineProps<PropTypes>(),{
 		multiple:false,
 	})
 	
@@ -80,7 +108,7 @@
 		pageSize:10,
 		total: 0
 	})
-	const listData = ref([])
+	const listData = ref<SysUserVo[]>([])
 	
 	// 筛选文本框改变事件
 	const searchChange = () => {
@@ -98,9 +126,13 @@
 		visible.value = false
 	}
 	const confirm = () => {
-		console.log(selectedData.value)
 		emits('confirm',selectedData.value)
 		visible.value = false
+	}
+	
+	const change = ({ value }:any) => {
+		selectedData.value.value = value;
+		selectedData.value.label = listData.value.find(item => item.userId === value)?.nickName
 	}
 	
 	function scrolltolower(){
@@ -121,20 +153,10 @@
 	}
 	
 	async function 	apiList(){
-		// 根据弹窗类型 切换查询参数
-		if(props.type === 'commodity'){
-			queryData.value = {
-				title: searchValue.value
-			}
-		}else if(props.type === 'douYin'){
-			queryData.value = {
-				dyNickName: searchValue.value
-			}
-		}
-		const res = await props.apiUrl({
+		const res = await getUserList({
 			...pageParams.value,
-			...queryData.value,
-			noLoading:true
+			nickName: searchValue.value,
+			noLoading: true,
 		})
 		if(res.rows){
 			listData.value = listData.value.concat(res.rows) 
