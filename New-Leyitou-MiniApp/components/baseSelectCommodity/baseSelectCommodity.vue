@@ -15,7 +15,6 @@
 			</view>
 			<wd-search 
 				v-model="searchValue" 
-				@change="searchChange" 
 				:maxlength="20" 
 				hide-cancel
 			/>
@@ -33,7 +32,7 @@
 						<view>
 							<wd-img width="150rpx" height="150rpx" :radius="10" :src="item?.dyProductInfo?.cover" />
 						</view>
-						<view class="uni-ml-lg uni-text-left  uni-w-3-5">
+						<view class="uni-ml-lg uni-text-left  ">
 							<view class="uni-text-warp-2 uni-font-color-black">
 								{{item?.dyProductInfo?.title}}
 							</view>
@@ -52,9 +51,14 @@
 					</view>
 				</wd-radio>
 			</wd-radio-group> 
+			<baseLoading v-show="loading"></baseLoading>
+			<template v-if="listData.length==0 && !loading">
+				<view class="uni-pt-xl uni-pb-xl">
+					<wd-status-tip image="content" tip="暂无数据" />
+				</view>
+			</template>
 		</scroll-view>
-		<baseNoData v-if="noData && listData.length>0"/>
-		<baseLoading v-show="loading"></baseLoading>
+		
 	</view>
 	
 	</wd-popup>
@@ -73,8 +77,12 @@
 		toRefs,
 		withDefaults,
 		defineProps,
-		defineEmits
+		defineEmits,
+		watch
 	}from 'vue'
+	import {
+		debounce
+	}from '@/utils/utils'
 	import {
 		getUniProductList
 	}from '@/api/index/index'
@@ -167,8 +175,21 @@
 		searchValue.value = ''
 		searchChange()
 	}
+	
+	watch(() => searchValue.value, () => {
+		debounce(searchChange,300)()
+	})
+	
+	// 允许当前文件样式穿透
+	defineOptions({
+		options: {
+			styleIsolation: 'shared'
+		}
+	})
 </script>
 
-<style>
-	
+<style lang="scss" scoped>
+	:deep(.wd-radio__label){
+		width: 80%;
+	}
 </style>

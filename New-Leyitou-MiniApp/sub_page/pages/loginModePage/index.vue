@@ -32,7 +32,7 @@
 					<wd-text text="其他方式登录"></wd-text>
 				</view>
 				<view class="phone-icon">
-					<wd-icon name="shouji" size="44rpx" />
+					<wd-icon name="mobile" size="40rpx"></wd-icon>
 				</view>
 				<view class="phone-login">手机号登录</view>
 			</view>
@@ -261,6 +261,10 @@
 			font-size: 12px;
 			margin: 7px 0px;
 			color: var(--wot-text-primary-color, var(--wot-color-theme, #4d80f0));
+			.icon{
+				font-size: 50rpx;
+				color: var(--wot-text-primary-color, var(--wot-color-theme, #4d80f0));
+			}
 		}
 
 		.phone-login {

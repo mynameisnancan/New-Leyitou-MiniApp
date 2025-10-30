@@ -15,7 +15,6 @@
 			</view>
 			<wd-search 
 				v-model="searchValue" 
-				@change="searchChange" 
 				:maxlength="20" 
 				hide-cancel
 			/>
@@ -54,9 +53,14 @@
 					</view>
 				</wd-radio>
 			</wd-radio-group> 
+			<baseLoading v-show="loading"></baseLoading>
+			<template v-if="listData.length==0 && !loading">
+				<view class="uni-pt-xl uni-pb-xl">
+					<wd-status-tip image="content" tip="暂无数据" />
+				</view>
+			</template>
 		</scroll-view>
-		<baseNoData v-if="noData && listData.length>0"/>
-		<baseLoading v-show="loading"></baseLoading>
+		
 	</view>
 	
 	</wd-popup>
@@ -71,12 +75,16 @@
 	}from '@/api/user/types'
 	import config from '@/config'
 	import {
+		debounce
+	}from '@/utils/utils'
+	import {
 		defineModel,
 		ref,
 		toRefs,
 		withDefaults,
 		defineProps,
-		defineEmits
+		defineEmits,
+		watch,
 	}from 'vue'
 	import {
 		getUserList
@@ -132,7 +140,7 @@
 	
 	const change = ({ value }:any) => {
 		selectedData.value.value = value;
-		selectedData.value.label = listData.value.find(item => item.userId === value)?.nickName
+		selectedData.value.label = listData.value.find(item => item.userId === value)?.nickName || '暂无'
 	}
 	
 	function scrolltolower(){
@@ -171,6 +179,10 @@
 		searchValue.value = ''
 		searchChange()
 	}
+	
+	watch(() => searchValue.value, () => {
+		debounce(searchChange,300)()
+	})
 </script>
 
 <style>

@@ -9,6 +9,10 @@
 	// margin-top: 24rpx !important;
 }
 
+:deep(.wd-radio){
+		border-bottom: 1px solid  #eff0f3;
+	}
+	
 :deep(.wd-tabbar-item__body.tabbar-icon .is-active) {
     color: var(--wot-tabbar-active-color, var(--wot-color-theme, #4d80f0));
 }

@@ -5,7 +5,7 @@
 				<view class="uni-flex  uni-items-center author-info">
 					<image :src="hiddenAuthorImgComputed(item.dyAuthorInfo?.avatar)" class="image"/>
 					<text class="user-name">{{hiddenAuthorComputed(item.dyAuthorInfo?.nickName)}}</text>
-					<text class="user-name">运营人: {{hiddenAuthorComputed(item.dyAuthorInfo?.userInfo?.nickName)}}</text>
+					<text class="user-name">运营人: {{hiddenAuthorComputed(item.payAuthorInfo?.userInfo?.nickName)}}</text>
 				</view>
 				<view class="uni-flex  uni-items-center">
 					<view class="look-msg">
@@ -21,18 +21,12 @@
 					 <view class="title-item">
 						<view class="title">{{hiddenMessageComputed(item.dyProductInfo?.title)}}</view>
 						<view class="remark">
-							<view class="info ">
-								订单创建时间：{{item.orderCreateTime}}
-							</view>
 							<view :class="orderStatusComputed(item.status)?.elTagType" class="uni-ml-sm uni-border-radius-sm uni-p-sm">
 								{{orderStatusComputed(item.status)?.label}}
 							</view>
 						 </view>
 						 <view class="order-code">
 							订单号：{{item.orderId}}
-						 </view>
-						 <view class="uni-text-sm uni-ml-sm  ">
-						 	已成交：{{item.orderDataInfo.totalPayOrderCountForRoi2 || 0}}单
 						 </view>
 					 </view>
 				</view>
@@ -43,22 +37,20 @@
 			</view>
 			<view class="data-bottom">
 					<view class="item">
-						<view>投放金额</view>
-						<view>{{item.amount || 0}}</view>
+						<view>总预算</view>
+						<view>{{item.amount || '---'}}</view>
 					</view>
 					<view class="item">
-						<view>整体消耗</view>
-						<view>{{item.orderDataInfo.statCostForRoi2 || 0 }}</view>
+						<view>支付ROI目标</view>
+						<view>{{ item.dataLabel ? compute(item,'roiGoal') : '---' }}</view>
 					</view>
 					<view class="item">
-						<view>整体成交金额</view>
-						<view>{{item.orderDataInfo.totalPayOrderGmvForRoi2 || 0}}</view>
+						<view>消耗</view>
+						<view> {{ item.dataLabel ? compute(item, 'statCost') : '---' }}</view>
 					</view>
 					<view class="item">
-						<view>整体成交ROI</view>
-						<view>{{sumRoiFun(
-							item.orderDataInfo.totalPayOrderGmvForRoi2 || 0,
-							item.orderDataInfo.statCostForRoi2 || 0)}}</view>
+						<view>成交ROI</view>
+						<view> {{ item.dataLabel ? compute(item, 'prepayAndPayOrderRoi') : '---' }}</view>
 						</view>
 			  </view>
 			<!--<view class="shop uni-flex  uni-justify-between uni-items-center">
@@ -79,7 +71,6 @@
 				</view>-->
 		</view>
 		<baseLoading v-if="loading"></baseLoading>
-		<baseNoData v-if="noData && list.length>0"/>
 		<template v-if="list.length==0 && !loading">
 			<view class="uni-pt-xl uni-pb-xl">
 				<wd-status-tip image="content" tip="暂无数据" />
@@ -89,20 +80,20 @@
 
 <script setup lang="ts">
 	import type {
-		SxtUinOrderQuery,
-		SxtUniOrderMergeVo
+		SxtOrderQuery,
+		SxtOrderVo
 	}from '@/api/index/types'
 	import {onReachBottom} from '@dcloudio/uni-app'
-	import {getUniOrderlist} from '@/api/index/index'
+	import {getOrderList} from '@/api/index/index'
 	import {ref,defineModel,computed,defineExpose,watch,toRefs} from 'vue'
 	import {
 		useDict
 	}from '@/utils/dict'
 	import {
-		sumRoiFun
+		compute
 	}from '@/utils/utils'
 	
-	const orderQuery =defineModel<SxtUinOrderQuery>("orderQuery",{
+	const orderQuery =defineModel<SxtOrderQuery>("orderQuery",{
 		type:Object,
 		default:{}
 	})
@@ -128,18 +119,18 @@
 	})
 	const loading = ref<boolean>(false)
 	const noData = ref<boolean>(false)
-	const list = ref<SxtUniOrderMergeVo[]>([])
+	const list = ref<SxtOrderVo[]>([])
 	
 	defineExpose({
 		refreshList,
 		loadData
 	});
 	
-
+	loadData()
 	
 	// 获取订单列表
-	async function getUniOrderlistApi(){
-		const res = await getUniOrderlist({
+	async function getOrderListApi(){
+		const res = await getOrderList({
 			...pageParams.value,
 			...orderQuery.value,
 			...timeQuery.value,
@@ -148,7 +139,7 @@
 			uni.stopPullDownRefresh()
 		})
 		if(res.rows){
-			list.value = list.value.concat(res.rows,res.rows,res.rows,res.rows,res.rows,res.rows,res.rows,res.rows) 
+			list.value = list.value.concat(res.rows) 
 			pageParams.value.total = res.total
 		}
 		if(list.value.length == res.total || res.rows.length == 0){
@@ -161,7 +152,7 @@
 		if (noData.value ) return;
 			loading.value = true;
 			try {
-				await getUniOrderlistApi();
+				await getOrderListApi();
 				pageParams.value.pageNum++;
 			} finally {
 				loading.value = false;
@@ -218,7 +209,7 @@
 	}
 	
 	
-	function toMessage(item:SxtUniOrderMergeVo) {
+	function toMessage(item:SxtOrderVo) {
 		uni.navigateTo({
 			url: `/sub_page/index/message?orderId=${item.orderId}`,
 			animationType: 'slide-in-right'

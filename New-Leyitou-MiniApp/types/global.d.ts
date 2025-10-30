@@ -14,6 +14,11 @@ declare global {
     value: string;
     elTagType?: TagType;
   }
+  
+  interface LabelValue {
+	label?: string;
+	value?: string|number;  
+  }
 
   type TagType = 'primary' | 'danger' | 'warning' | 'success';
 
@@ -133,7 +138,7 @@ declare global {
 	 *
 	 * DyShopInfo
 	 */
-	export interface DyShopInfo {
+	interface DyShopInfo {
 	  /**
 	   * 店铺评分信息
 	   */
@@ -164,6 +169,93 @@ declare global {
 	   */
 	  shopType?: number;
 	}
+	
+	/**
+	 * 视频信息
+	 *
+	 * DyVideoInfo
+	 */
+	interface DyVideoInfo {
+	    /**
+	     * 平台达人id
+	     */
+	    authorId?: number;
+	    creatTime?: string;
+	    /**
+	     * 视频时长
+	     */
+	    duration?: number;
+	    /**
+	     * 抖音评论数
+	     */
+	    dyComment?: number;
+	    /**
+	     * 抖音点赞数
+	     */
+	    dyLike?: number;
+	    /**
+	     * 抖音分享数
+	     */
+	    dyShare?: number;
+	    /**
+	     * 抖音播放数
+	     */
+	    dyTotalPlay?: number;
+	    /**
+	     * 视频标题
+	     */
+	    title?: string;
+	    /**
+	     * 抖音作者uid
+	     */
+	    uid?: number;
+	    /**
+	     * 视频封面图片
+	     */
+	    videoCoverUrl?: string;
+	    /**
+	     * 抖音短视频 ID
+	     */
+	    videoId?: string;
+	}
 
+	/**
+	 * 商品佣金信息
+	 *
+	 * ProductRateInfo
+	 */
+	interface ProductRateInfo {
+	    activityCosRatio?: number;
+	    cosRatio?: number;
+	    platCosRatio?: number;
+	    productId?: string;
+	    serviceRatio?: number;
+	    tenantCosRatio?: number;
+	    [property: string]: any;
+	}
+	
+	/**
+	 * 直播间信息
+	 *
+	 * RoomInfoVo
+	 */
+	interface RoomInfoVo {
+	    /**
+	     * 直播间封面
+	     */
+	    room_cover?: string;
+	    /**
+	     * 直播间id
+	     */
+	    room_id?: string;
+	    /**
+	     * 直播间状态 可选值: FINISH 结束 LIVING 直播中 PAUSE 暂停 PREPARE 未开播 UNKNOW 未知
+	     */
+	    room_status?: string;
+	    /**
+	     * 直播间标题
+	     */
+	    room_title?: string;
+	}
 }
 export const a = 1;

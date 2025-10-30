@@ -95,12 +95,19 @@
 		uuid: ''
 	});
 	const codeUrl = ref();
-
+	// 记住密码
+	const rememberPwd = ref<boolean>(true)
 	//登录
 	async function login() {
 		const res = await userStore.login(loginForm.value);
 		if (res) {
 			const userInfo = await userStore.getInfo();
+			uni.setStorageSync('username',loginForm.value.username)
+			if(rememberPwd.value){
+				uni.setStorageSync('pwd',loginForm.value.password)
+			}else{
+				uni.removeStorageSync('pwd')
+			}
 			if (userInfo) {
 				uni.reLaunch({
 					url: '/pages/index/index'
@@ -143,6 +150,12 @@
 
 	onLoad(() => {
 		getCodeApi()
+		const pwd = uni.getStorageSync('pwd')
+		const username = uni.getStorageSync('username')
+		if(pwd) {
+			loginForm.value.username = username
+			loginForm.value.password = pwd
+		}
 	})
 </script>
 

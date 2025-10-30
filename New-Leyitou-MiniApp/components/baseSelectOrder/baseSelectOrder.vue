@@ -27,27 +27,19 @@
 			@scrolltolower="scrolltolower"
 		>
 			<wd-radio-group v-model="selectedValue" @change="change">
-				<wd-radio :value="item.authorId"  v-for="(item,index) in listData"  :key="index" shape="dot">
-					<view class="uni-flex uni-px-lg uni-items-center underline uni-w-full">
+				<wd-radio :value="item.dyVideoInfo.videoId"  v-for="(item,index) in listData"  :key="index" shape="dot">
+					<view class="uni-flex  underline ">
 						<view>
-							<wd-img  v-if="item?.dyAuthorInfo?.avatar" width="120rpx" height="120rpx" round  :src="item?.dyAuthorInfo?.avatar" />
-							<wd-img  v-else width="150rpx" height="150rpx" round  src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
+							<wd-img width="150rpx" height="150rpx" :radius="10" :src="item?.dyVideoInfo?.videoCoverUrl" />
 						</view>
-						<view class="uni-ml-lg uni-text-left uni-w-4-5 uni-font-color-black">
+						<view class="uni-ml-lg uni-text-left  ">
+							<view class="uni-text-warp-2 uni-font-color-black">
+								{{item?.dyVideoInfo?.title}}
+							</view>
 							<view class="uni-flex uni-items-center">
-								<view class="uni-text-lg">
+								<wd-img width="50rpx" height="50rpx" :radius="50" :src="item?.dyAuthorInfo?.avatar" />
+								<view class="uni-font-color-black uni-ml-sm">
 									{{item?.dyAuthorInfo?.nickName}}
-								</view>
-							</view>
-							<view class="uni-text-sm">
-								UID：{{item?.dyAuthorInfo?.uid}}
-							</view>
-							<view class="uni-flex uni-items-center uni-justify-between uni-text-sm">
-								<view>
-									粉丝数：{{item?.dyAuthorInfo?.fansNum || '0'}}
-								</view>
-								<view class="uni-ml-lg">
-									运营人：{{item?.dyAuthorInfo?.userInfo?.nickName || '暂无'}}
 								</view>
 							</view>
 						</view>
@@ -61,7 +53,7 @@
 				</view>
 			</template>
 		</scroll-view>
-	
+		
 	</view>
 	
 	</wd-popup>
@@ -69,12 +61,8 @@
 
 <script setup lang="ts">
 	import type {
-		PropTypes
-	}from './types'
-	import type {
-		DyAuthorAuthVo
-	}from '@/api/index/types'
-	import config from '@/config'
+		SxtVideoVo
+	}from '@/api/selectData/types'
 	import {
 		defineModel,
 		ref,
@@ -82,15 +70,14 @@
 		withDefaults,
 		defineProps,
 		defineEmits,
-		watch,
+		watch
 	}from 'vue'
-	import {
-		getDyAuthorList
-	}from '@/api/index/index'
 	import {
 		debounce
 	}from '@/utils/utils'
-
+	import {
+		getVideoList
+	}from '@/api/selectData/index'
 	
 	const emits = defineEmits(['confirm'])
 	
@@ -98,17 +85,12 @@
 		default:true
 	})
 	// 筛选框值
-	const searchValue = ref<any>()
-	// 选中的值
+	const searchValue = defineModel<any>('searchValue')
 	const selectedValue = defineModel('selectedValue')
 	// 已选择的数据
 	const selectedData = ref({
 		label:'',
 		value:''
-	})
-	
-	const props = withDefaults(defineProps<PropTypes>(),{
-		multiple:false,
 	})
 	
 	const noData = ref<boolean>(false)
@@ -118,7 +100,7 @@
 		pageSize:10,
 		total: 0
 	})
-	const listData = ref<DyAuthorAuthVo[]>([])
+	const listData = ref<SxtVideoVo[]>([])
 	
 	// 筛选文本框改变事件
 	const searchChange = () => {
@@ -131,7 +113,6 @@
 		noData.value=false
 		loadData() 
 	}
-		
 	
 	const cancel = () => {
 		visible.value = false
@@ -143,7 +124,7 @@
 	
 	const change = ({ value }:any) => {
 		selectedData.value.value = value;
-		selectedData.value.label = listData.value.find(item => item.authorId === value)?.dyAuthorInfo?.nickName || '暂无'
+		selectedData.value.label = listData.value.find(item => item.dyVideoInfo?.videoId === value)?.dyVideoInfo?.title || '暂无'
 	}
 	
 	function scrolltolower(){
@@ -164,10 +145,10 @@
 	}
 	
 	async function 	apiList(){
-		const res = await getDyAuthorList({
+		const res = await getVideoList({
 			...pageParams.value,
-			dyNickName: searchValue.value,
-			noLoading: true,
+			title: searchValue.value,
+			noLoading:true
 		})
 		if(res.rows){
 			listData.value = listData.value.concat(res.rows) 
@@ -195,9 +176,8 @@
 	})
 </script>
 
-
 <style lang="scss" scoped>
-	:deep(.wd-radio){
-		border-bottom: 1px solid  #eff0f3;
+	:deep(.wd-radio__label){
+		width: 80%;
 	}
 </style>

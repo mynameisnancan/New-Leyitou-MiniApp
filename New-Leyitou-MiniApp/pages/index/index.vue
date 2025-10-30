@@ -84,11 +84,11 @@
 	</view>
 	
 	<!-- 列表类型切换 -->
-	<view class="uni-m-lg uni-px-sm uni-flex uni-items-center uni-bg-color-white">
-		<wd-tabs v-model="listType" @click="listTabChange">
-			<wd-tab title="商品全域" name="商品全域">
+	<view class="uni-m-lg uni-px-sm uni-flex uni-items-center uni-bg-color-white uni-border-radius-lg">
+		<wd-tabs v-model="listType" @change="listTabChange">
+			<wd-tab title="商品全域" name="uniOrder">
 			</wd-tab>
-			<wd-tab title="直播带货" name="直播带货">
+			<wd-tab title="直播带货" name="order">
 			</wd-tab>
 		</wd-tabs>
 		<view class="uni-w-1-5 uni-flex uni-items-center" @click="openFilter">
@@ -97,17 +97,29 @@
 	</view>
 	<!-- 列表 -->
 	<view class="list-content">
-		<view v-if="listType === '商品全域'">
-			<orderList 
-				v-model:orderQuery="queryForm" 
+		<view v-if="listType === 'uniOrder'">
+			<uniOrderList 
+				v-model:orderQuery="uniOrderQuery" 
+				v-model:timeQuery="timeQuery"
+				ref="uniOrderListRef"
+			></uniOrderList>
+		</view>
+		<view v-else-if="listType === 'order'">
+			<orderList
+				v-model:orderQuery="orderQuery"
 				v-model:timeQuery="timeQuery"
 				ref="orderListRef"
-			></orderList>
+			/>
 		</view>
 	</view>
 	
 	<!-- 筛选条件弹出框 -->
-	<tableQuery v-model:visible="queryVisible" v-model:queryForm="queryForm"  />
+	<tableQuery 
+		v-model:visible="queryVisible" 
+		:queryForm="listType === 'uniOrder' ? uniOrderQuery : orderQuery"   
+		:queryType="listType"
+		@confirm="queryConfirm"
+	/>
 	
 	<view class="register" v-if="showLogin">
 		<view>当前尚未登录，登录后可正常使用</view>
@@ -118,7 +130,8 @@
 <script setup lang="ts">
 	import type {
 		SxtUinOrderQuery,
-		SxtUniOrderStatisticsVo
+		SxtUniOrderStatisticsVo,
+		SxtOrderQuery
 	}from '@/api/index/types'
 	import {
 		getUniOrderStatistics
@@ -127,26 +140,45 @@
 	import {
 		getRect
 	} from 'wot-design-uni/components/common/util'
-	import { ref,  onMounted } from 'vue'
+	import { ref,  onMounted,nextTick } from 'vue'
 	import {
 		lookPermissions,
 		sumRoiFun
 	}from '@/utils/utils.ts'
 	
-	import tableQuery from './components/tableQuery.vue'
-	import orderList from './components/orderList.vue'
+	import tableQuery from './components/uniOrderList/tableQuery.vue'
+	import uniOrderList from './components/uniOrderList/uniOrderList.vue'
+	import orderList from './components/orderList/orderList.vue'
 	
 	// 是否显示 未登录弹出框
 	const showLogin = ref<boolean>(true)
-	const orderListRef = ref()
+	const uniOrderListRef = ref()
+	const orderListRef= ref()
 	const queryFormRef = ref()
-	const queryForm = ref<SxtUinOrderQuery>({
+	const uniOrderQuery = ref<SxtUinOrderQuery>({
 		orderId: undefined,
 		status: undefined,
 		productId: undefined,
 		userId: undefined,
 		authorId: undefined,
 	})
+	const orderQuery = ref<SxtOrderQuery>({
+		status: undefined,
+		userId: undefined,
+		uid: undefined,
+		advertiserId: undefined,
+		productId: undefined,
+		videoId: undefined,
+		orderId: undefined,
+		timeType: 1,
+		timeStart: undefined,
+		timeEnd: undefined,
+		orderBy: undefined,
+		sort: 1,
+		sortField: 'createTime',
+		sortType: 1,
+	})
+	const queryForm = ref<any>()
 	const timeQuery = ref({
 		timeStart:undefined,
 		timeEnd:undefined
@@ -215,6 +247,11 @@
 	
 	// 列表类型修改事件
 	const listTabChange = (event:any) => {
+		if(event.name === '商品全域'){
+			// uniOrderListRef.value?.loadData()
+		}else if(event.name === '直播带货'){
+			// orderListRef.value?.loadData()
+		}
 	}
 	
 	// 打开筛选弹窗
@@ -228,6 +265,42 @@
 			url: '/sub_page/pages/loginModePage/index',
 			animationType: 'slide-in-right'
 		})
+	}
+	
+	const queryConfirm = (query:SxtUinOrderQuery | SxtOrderQuery) => {
+		if(query === null){
+			if(listType.value === 'uniOrder'){
+				uniOrderQuery.value = {
+					orderId: undefined,
+					status: undefined,
+					productId: undefined,
+					userId: undefined,
+					authorId: undefined,
+				}
+			}else if(listType.value === 'order'){
+				orderQuery.value = {
+					status: undefined,
+					userId: undefined,
+					uid: undefined,
+					advertiserId: undefined,
+					productId: undefined,
+					videoId: undefined,
+					orderId: undefined,
+					timeType: 1,
+					timeStart: undefined,
+					timeEnd: undefined,
+					orderBy: undefined,
+					sort: 1,
+					sortField: 'createTime',
+					sortType: 1,
+				}
+			}
+		}else if(listType.value === 'uniOrder'){
+			uniOrderQuery.value = query
+		}else if(listType.value === 'order'){
+			orderQuery.value = query
+		}
+		queryForm.value = query
 	}
 	
 	// 获取统计数据
@@ -252,9 +325,10 @@
 	}
 	
 	onShow(() => {
+		console.log(uni.getStorageSync('userInfo'))
 		if(uni.getStorageSync('userInfo')){
 			showLogin.value = uni.getStorageSync('userInfo').userName ? false : true
-			orderListRef.value.loadData()
+			uniOrderListRef.value?.loadData()
 			getUniOrderStatisticsApi()
 		}
 		

@@ -4,7 +4,7 @@ export function getToken() {
   return uni.getStorageSync(TokenKey)
 }
 
-export function setToken(token) {
+export function setToken(token:string) {
   return uni.setStorageSync(TokenKey, token)
 }
 
