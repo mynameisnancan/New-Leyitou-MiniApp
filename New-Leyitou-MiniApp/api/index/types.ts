@@ -510,88 +510,88 @@ export interface SxtOrderVo {
     /**
      * 批量优惠券信息，在预算追加后，会出现多张券的使用情况
      */
-    addAmountInfo?: AddAmountInfoVo;
+    addAmountInfo: AddAmountInfoVo;
     /**
      * 付款千川id
      */
-    advertiserId?: number;
+    advertiserId: number;
     /**
      * 出价总和
      */
-    amount?: number;
+    amount: number;
     /**
      * 人群定向
      */
-    audience?: AudienceVo;
+    audience: AudienceVo;
     /**
      * 审核建议信息
      */
-    auditRecord?: AuditRecordVo;
+    auditRecord: AuditRecordVo;
     /**
      * 优惠券信息
      */
-    couponInfo?: CouponInfoVo;
+    couponInfo: CouponInfoVo;
     /**
      * 批量优惠券信息，在预算追加后，会出现多张券的使用情况
      */
-    couponInfos?: CouponInfoVo[];
-    createTime?: string;
+    couponInfos: CouponInfoVo[];
+    createTime: string;
     /**
      * 订单数据
      */
-    dataLabel?: SxtOrderDataVo;
+    dataLabel: SxtOrderDataVo;
     /**
      * 投放设置
      */
-    deliverySetting?: DeliverySettingVo;
+    deliverySetting: DeliverySettingVo;
     /**
      * 视频作者达人信息
      */
-    dyAuthorInfo?: DyAuthorInfo;
+    dyAuthorInfo: DyAuthorInfo;
     /**
      * 抖音商品信息
      */
-    dyProductInfo?: DyProductInfo;
+    dyProductInfo: DyProductInfo;
     /**
      * 抖音店铺信息
      */
-    dyShopInfo?: DyShopInfo;
+    dyShopInfo: DyShopInfo;
     /**
      * 视频信息
      */
-    dyVideoInfo?: DyVideoInfo;
+    dyVideoInfo: DyVideoInfo;
     /**
      * 主键id
      */
-    id?: number;
+    id: number;
     /**
      * LIVE_PROM_GOODS 直播间带货 VIDEO_PROM_GOODS 短视频带货
      */
-    marketingGoal?: string;
+    marketingGoal: string;
     /**
      * 投放订单号
      */
-    orderId?: string;
+    orderId: string;
     /**
      * 订单标签 0无标签 1白名单标签
      */
-    orderLabel?: number;
+    orderLabel: number;
     /**
      * 订单类型 0外部订单 1内部订单
      */
-    orderType?: number;
+    orderType: number;
     /**
      * 付款达人信息
      */
-    payAuthorInfo?: DyAuthorInfo;
+    payAuthorInfo: DyAuthorInfo;
     /**
      * 商品佣金信息
      */
-    productRateInfo?: ProductRateInfo;
+    productRateInfo: ProductRateInfo;
     /**
      * 直播间信息
      */
-    roomInfo?: RoomInfoVo;
+    roomInfo: RoomInfoVo;
     /**
      * 订单投放状态 可选值:
      * AUDIT 审核中
@@ -607,15 +607,15 @@ export interface SxtOrderVo {
      * UNPAID 未支付
      * UNPAIDCANCEL 未支付取消订单
      */
-    status?: string;
+    status: string;
     /**
      * 终止结果
      */
-    terminateResult?: string;
+    terminateResult: string;
     /**
      * 终止状态 0无 1终止中 2终止成功 3终止失败
      */
-    terminateStatus?: number;
+    terminateStatus: number;
 }
 
 

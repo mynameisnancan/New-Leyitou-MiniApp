@@ -4,6 +4,20 @@ import {
 	ref
 }from 'vue'
 
+// 复制
+export const copyStr = (url:string) => {
+	uni.setClipboardData({
+		data: url,
+		success: function () {
+		}
+	});
+}
+
+// 获取导航栏高度, wot导航栏默认44高度
+export const getNavHeight = () => {
+	const { statusBarHeight } = uni.getSystemInfoSync()
+	return 44 + (statusBarHeight||0)
+}
 
 let timer = ref()
   // 防抖函数
@@ -54,30 +68,6 @@ export const goBack  = (num:number = 1) => {
 		delta:num,//返回层数，2则上上页
 	})
 }
-
-// 应用版本的颜色
-export const versionBgColors = [
-	 {
-	    cardBgColor: '#dcf8ce',
-	    btnColor: '#52c41a'
-	  },
-	  {
-	    cardBgColor: '#feedc3',
-	    btnColor: '#ffba34'
-	  },
-	  {
-	    cardBgColor: '#ffe7e1',
-	    btnColor: '#e92e2e'
-	  },
-	  {
-	    cardBgColor: '#e9e3ff',
-	    btnColor: '#7947e4'
-	  },
-	  {
-	    cardBgColor: '#f2f2f2',
-	    btnColor: '#443922'
-	  }
-]
 
 
 // 数字转千分位

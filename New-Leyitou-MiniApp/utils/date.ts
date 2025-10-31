@@ -70,3 +70,28 @@ export function getLastMonthDate(){
 	const endDateStr =  dayjs(endDate).format("YYYY-MM-DD");
 	return [startDateStr,endDateStr]
 }
+
+// 获取当前年份最后一天的时间戳
+export const getMaxDate = () => {
+	// 获取当前年份
+	const currentYear = new Date().getFullYear();
+	
+	// 创建一个表示当前年份最后一天的日期对象
+	// 月份是从0开始的，所以12表示12月
+	const endOfYear = new Date(currentYear, 11, 31, 23, 59, 59, 999); // 12月31日，23:59:59.999
+	
+	// 将日期对象转换为时间戳（毫秒）
+	const timestamp = endOfYear.getTime();
+	
+	return timestamp;
+}
+
+// 获取当前2025年1月1日时间戳
+export const getMinDate = () => {
+	
+	const endOfYear = new Date(2025, 0, 1); 
+	
+	const timestamp = endOfYear.getTime();
+	
+	return timestamp;
+}

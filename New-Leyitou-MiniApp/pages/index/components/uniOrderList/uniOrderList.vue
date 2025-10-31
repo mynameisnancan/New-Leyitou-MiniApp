@@ -1,7 +1,7 @@
 
 <template>
 		<view class="commoditys-item" v-for="(item,index) in list" :key="index"   >
-			<view class="accout-img uni-flex uni-justify-between uni-items-center" @click.stop="toMessage(item)">
+			<view class="accout-img uni-flex uni-justify-between uni-items-center" >
 				<view class="uni-flex  uni-items-center author-info">
 					<image :src="hiddenAuthorImgComputed(item.dyAuthorInfo?.avatar)" class="image"/>
 					<text class="user-name">{{hiddenAuthorComputed(item.dyAuthorInfo?.nickName)}}</text>
@@ -14,7 +14,7 @@
 					</view>
 				</view>
 			</view>			
-			<view class="data-top"  >
+			<view class="data-top" @click.stop="toMessage(item)">
 				<view class="uni-flex  uni-justify-between uni-w-9-10" >
 					 <image v-if="hiddenMessageImgComputed(item.dyProductInfo?.cover)" :src="item.dyProductInfo?.cover" class="image" ></image>
 					 <view v-else class="hidden-message-img">图片已隐藏</view>
@@ -146,7 +146,6 @@
 		}).finally(() => {
 			uni.stopPullDownRefresh()
 		})
-		console.log(res.rows)
 		if(res.rows){
 			list.value = list.value.concat(res.rows) 
 			console.log(list.value)
@@ -221,7 +220,7 @@
 	
 	function toMessage(item:SxtUniOrderMergeVo) {
 		uni.navigateTo({
-			url: `/sub_page/index/message?orderId=${item.orderId}`,
+			url: `/sub_page/pages/index/uniOrderDetail/index?orderId=${item.orderId}`,
 			animationType: 'slide-in-right'
 		})
 	}
