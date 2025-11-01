@@ -14,8 +14,8 @@
 					</view>
 				</view>
 			</view>			
-			<view class="data-top" @click.stop="toMessage(item)">
-				<view class="uni-flex  uni-justify-between uni-w-9-10" >
+			<view class="data-top">
+				<view  @click.stop="toMessage(item)" class="uni-flex  uni-justify-between uni-w-9-10" >
 					 <image v-if="hiddenMessageImgComputed(item.dyProductInfo?.cover)" :src="item.dyProductInfo?.cover" class="image" ></image>
 					 <view v-else class="hidden-message-img">图片已隐藏</view>
 					 <view class="title-item">
@@ -118,7 +118,7 @@
 	const hiddenMessage = ref<boolean>(true)
 	const hiddenShop = ref<boolean>(true)
 	const hiddenAuthor = ref<boolean>(true)
-	const {leyitou_order_status} = toRefs(useDict('leyitou_order_status'))
+	const {leyitou_order_status} = toRefs(useDict(['leyitou_order_status']))
 	
 	const pageParams= ref({
 		pageNum:1,

@@ -113,7 +113,7 @@
 	})
 	
 	// 订单状态
-	const {leyitou_order_status} = toRefs(useDict('leyitou_order_status'))
+	const {leyitou_order_status} = toRefs(useDict(['leyitou_order_status']))
 	// 时间类型
 	const dateTypes:LabelValue[] = [
 		{

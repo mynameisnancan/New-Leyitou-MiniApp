@@ -1,7 +1,7 @@
 
 <template>
 		<view class="commoditys-item" v-for="(item,index) in list" :key="index"   >
-			<view class="accout-img uni-flex uni-justify-between uni-items-center" @click.stop="toMessage(item)">
+			<view class="accout-img uni-flex uni-justify-between uni-items-center" >
 				<view class="uni-flex  uni-items-center author-info">
 					<image :src="hiddenAuthorImgComputed(item.dyAuthorInfo?.avatar)" class="image"/>
 					<text class="user-name">{{hiddenAuthorComputed(item.dyAuthorInfo?.nickName)}}</text>
@@ -15,7 +15,7 @@
 				</view>
 			</view>			
 			<view class="data-top"  >
-				<view class="uni-flex  uni-justify-between uni-w-9-10" >
+				<view @click.stop="toMessage(item)"class="uni-flex  uni-justify-between uni-w-9-10" >
 					 <image v-if="hiddenMessageImgComputed(item.dyProductInfo?.cover)" :src="item.dyProductInfo?.cover" class="image" ></image>
 					 <view v-else class="hidden-message-img">图片已隐藏</view>
 					 <view class="title-item">
@@ -110,7 +110,7 @@
 	const hiddenMessage = ref<boolean>(true)
 	const hiddenShop = ref<boolean>(true)
 	const hiddenAuthor = ref<boolean>(true)
-	const {leyitou_order_status} = toRefs(useDict('leyitou_order_status'))
+	const {leyitou_order_status} = toRefs(useDict(['leyitou_order_status']))
 	
 	const pageParams= ref({
 		pageNum:1,
@@ -211,7 +211,7 @@
 	
 	function toMessage(item:SxtOrderVo) {
 		uni.navigateTo({
-			url: `/sub_page/index/message?orderId=${item.orderId}`,
+			url: `/sub_page/pages/index/orderDetail/index?orderId=${item.orderId}`,
 			animationType: 'slide-in-right'
 		})
 	}

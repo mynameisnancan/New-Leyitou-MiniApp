@@ -31,8 +31,8 @@
 				<view class="uni-text-28">
 					<wd-text text="其他方式登录"></wd-text>
 				</view>
-				<view class="phone-icon">
-					<wd-icon name="mobile" size="40rpx"></wd-icon>
+				<view class="phone-icon icon">
+					<text class="t-icon icon-tel"></text>
 				</view>
 				<view class="phone-login">手机号登录</view>
 			</view>
@@ -261,8 +261,8 @@
 			font-size: 12px;
 			margin: 7px 0px;
 			color: var(--wot-text-primary-color, var(--wot-color-theme, #4d80f0));
-			.icon{
-				font-size: 50rpx;
+			.t-icon{
+				font-size: 40rpx;
 				color: var(--wot-text-primary-color, var(--wot-color-theme, #4d80f0));
 			}
 		}

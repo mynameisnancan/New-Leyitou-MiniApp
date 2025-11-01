@@ -1,16 +1,20 @@
 <template>
 	<wd-navbar 
 		fixed 
-		placeholder 
 		title="全域订单详情" 
 		left-arrow 
 		safeAreaInsetTop
-		:custom-style="`background-color: rgba(216, 234, 255,${barOpacity}) !important;`"
+		@click-left="handleClickLeft"
+		:custom-style="`background-color: rgba(255, 255, 255,${barOpacity}) !important;`"
 	/>
-	<view class="body">
+	<view class="body"  :style="{paddingTop:getNavHeight()+'px'}">
 		<view class="gradual-bg-color uni-p-lg">
+			<view @click="copyStr(orderData?.orderId)" class="uni-font-color-gray uni-text-26">
+				订单ID:{{orderData?.orderId}}
+				<wd-icon name="file-copy" size="30rpx"></wd-icon>
+			</view>
 			<!-- 抖音号模板 -->
-			<view class="message-module uni-flex uni-items-center uni-justify-around uni-p-sm uni-border-radius-xl uni-text-bold">
+			<view class="message-module uni-flex uni-items-center uni-justify-around uni-p-sm uni-mt-lg uni-border-radius-xl uni-text-bold">
 				<view class="uni-flex uni-flex-wrap uni-items-center uni-flex-column">
 					<view>
 						<wd-img 
@@ -57,14 +61,10 @@
 						<wd-icon name="file-copy" size="30rpx"></wd-icon>
 					</view>
 					<view class="uni-flex uni-items-center uni-mt-sm">
-						<view>
-							￥<text class="uni-font-color-red">{{orderData?.dyProductInfo?.price}}</text>
+						<view class="uni-font-color-theme">
+							活动佣金：{{orderData?.productRateInfo?.activityCosRatio || 0.0 }}%
 						</view>
-						<view class="uni-ml-lg">库存：{{orderData?.dyProductInfo?.productStock}}</view>
-						<view class="uni-ml-lg">
-							总销量：
-							<text class="uni-font-color-red">{{orderData?.dyProductInfo?.sales}}</text>
-						</view>
+						<view class="uni-ml-lg">服务费率：{{orderData?.productRateInfo?.serviceRatio || 0.0}}%</view>
 					</view>
 			
 					<view class="uni-flex uni-mt-sm">
@@ -79,19 +79,90 @@
 				</view>
 			</view>
 		</view>
-		<wd-card>
-			<template #title>
-				<view class="uni-flex uni-justify-between uni-items-center">
-					<view class="uni-text-bold uni-text-26">订单详情</view>
-					<view @click="openCalender" class="uni-text-xl icon">
-						<text class="t-icon icon-riqi  "></text>
+		<view class="content">
+			<!-- 订单数据 -->
+			<wd-card>
+				<template #title>
+					<view class="uni-flex uni-justify-between uni-items-center">
+						<view class="uni-text-bold uni-text-lg">订单详情</view>
+						<view @click="openCalender" class="uni-text-xl icon">
+							<text class="t-icon icon-riqi  "></text>
+						</view>
+					</view>
+				</template>
+				<uniorderEchart :dateRange="orderTime" :orderData="uniOrderData" />
+			</wd-card>
+			<!-- 投放设置 -->
+			<wd-card custom-class="card-custom-class">
+				<template #title>
+					<view class="uni-text-bold uni-text-lg">订单详情</view>
+				</template>
+				<view class="uni-font-color-black uni-text-26">
+					<view class="uni-flex uni-justify-between">
+						<view>出价类型</view>
+						<view>
+							<baseTag :options="sxt_order_bid_type" :value="orderData?.deliverySetting?.bid_type"></baseTag>
+						</view>
+					</view>
+					<view class="uni-flex uni-justify-between">
+						<view>支付ROI</view>
+						<view class='uni-text-bold'>{{ orderData.deliverySetting?.roi_goal || '--' }}</view>
+					</view>
+					<view class="uni-flex uni-justify-between">
+						<view>投放时长</view>
+						<view>
+							<baseTag :options="sxt_order_delivery_time" :value="orderData?.deliverySetting?.delivery_time"></baseTag>
+						</view>
+					</view>
+					<view class="uni-flex uni-justify-between">
+						<view>投放金额</view>
+						<view class='uni-text-bold'>
+							  {{ orderData.deliverySetting?.amount || '--' }} 元
+						</view>
+					</view>
+					<view class="uni-flex uni-justify-between">
+						<view>是否开启智能优惠券</view>
+						<view class='uni-text-bold'>
+							{{
+								orderData.deliverySetting?.qcpx_mode === 'QCPX_MODE_ON'
+								  ? '开启'
+								  : '关闭'
+							}}
+						</view>
 					</view>
 				</view>
-				<orderEchart :dateRange="orderTime" :orderData="uniOrderData" />
-			</template>
-			<view>
-			</view>
-		</wd-card>
+			</wd-card>
+			
+			<!-- 投中续费信息 -->
+			<wd-card custom-class="card-custom-class">
+				<template #title>
+					<view class="uni-text-bold uni-text-lg">投中续费信息</view>
+				</template>
+				<view v-if="orderData.addAmountInfo && orderData?.addAmountInfo.add_amount" class="uni-font-color-black uni-text-26">
+					<view class="uni-flex uni-justify-between">
+						<view>续费订单金额之和</view>
+						<view class='uni-text-bold'>
+							 ￥{{ orderData?.addAmountInfo.add_amount || '--' }}
+						</view>
+					</view>
+					<view class="uni-flex uni-justify-between">
+						<view>续费次数</view>
+						<view class='uni-text-bold'>
+							{{ orderData?.addAmountInfo?.add_amount_cnt || '--' }}次
+						</view>
+					</view>
+					<view class="uni-flex uni-justify-between">
+						<view>续费订单时长之和</view>
+						<view class='uni-text-bold'>
+							{{ orderData?.addAmountInfo?.add_delivery_time || '--' }}小时
+						</view>
+					</view>
+				</view>
+				<view v-else>
+					<wd-status-tip image="search" tip="暂无追投续费信息" />
+				</view>
+			</wd-card>
+		</view>
 		
 		
 		<wd-calendar
@@ -137,20 +208,20 @@
 	}from '@/utils/date'
 	import dayjs from 'dayjs'
 	import {onLoad,onPageScroll} from '@dcloudio/uni-app'
-	import orderEchart from './components/orderEchart'
+	import uniorderEchart from './components/uniorderEchart'
 	import {
 		getMaxDate,
 		getMinDate
 	}from '@/utils/date'
 	
 	const orderId = ref<number>()
-	const dateValue = ref<number|number[]>(Date.now())
+	const dateValue = ref<number[]>([Date.now(),Date.now()])
 	const orderTime = ref([getTodayDate(),getTodayDate()])
 	const orderData = ref<SxtUniOrderDetailMergeVo>({
 		status:undefined
 	})
 	//导航栏透明度
-	const barOpacity = ref<number>(1)
+	const barOpacity = ref<number>(0)
 	// ehcart数据源
 	const uniOrderData = ref<SxtUniOrderDataMergeVo[]>([])
 	const calendar = ref()
@@ -158,11 +229,20 @@
 	const updateOpacity = (event:any) => {
 		const scrollTop = event.scrollTop
 		let height = getNavHeight()
-		barOpacity.value = Math.round(scrollTop/height*100)/100
+		if(event.scrollTop <0){
+			barOpacity.value = 0
+		}else if(scrollTop <= height){
+			barOpacity.value = Math.round(scrollTop/height*100)/100
+		}else{
+			barOpacity.value = 1
+		}
 	}
 	
-	const {leyitou_order_status} = toRefs(useDict('leyitou_order_status'))
-	
+	const { 
+		leyitou_order_status,
+		sxt_order_bid_type,
+	} = toRefs(useDict(['leyitou_order_status','sxt_order_bid_type']))
+	const { sxt_order_delivery_time } =  toRefs(useDict(['sxt_order_delivery_time'],true))
 	// 获取echart图表数据
 	const getUniOrderDataApi = () => {
 		if(!orderId.value)return
@@ -194,7 +274,6 @@
 	}
 	
 	const handleConfirm = ({ value }:any) => {
-		console.log(value)
 		if(value.length===2){
 			orderTime.value = [
 				dayjs(value[0]).format("YYYY-MM-DD"),
@@ -204,7 +283,9 @@
 		}
 	}
 	
-	
+	const handleClickLeft = () => {
+	  uni.navigateBack()
+	}
 	
 	onLoad((data:any) => {
 		if(data.orderId){
@@ -227,8 +308,13 @@
 </script>
 
 <style lang="scss" scoped>
+
 	.body{
+		background-color:#d8eaff;
+	}
+	.content{
 		background-color: #f6f7fb;
+		padding-bottom: 20rpx;
 	}
 	.gradual-bg-color{
 		 background: linear-gradient(to bottom, #d8eaff 0%,#dff0ff 50%, #eaf4fd 75%,#edf4fa 100%);
@@ -242,5 +328,8 @@
 <style lang="scss">
 	page{
 		background-color: #f6f7fb;
+	}
+	.card-custom-class{
+		padding: 0rpx 20rpx 20rpx 20rpx !important;
 	}
 </style>

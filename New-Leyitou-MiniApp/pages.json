@@ -49,6 +49,12 @@
 				"style": {
 					"navigationStyle": "custom"
 				}
+			},
+			{
+				"path": "pages/index/orderDetail/index", // 随心推详情
+				"style": {
+					"navigationStyle": "custom"
+				}
 			}
 		]
 	}],

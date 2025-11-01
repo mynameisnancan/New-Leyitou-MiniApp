@@ -173,3 +173,83 @@ export interface SxtUniOrderDataMergeVo {
      */
     hourKey: number;
 }
+
+/**
+ * 随心推数据指标对象
+ *
+ * SxtDataLabelVo
+ */
+export interface SxtDataLabelVo {
+    /**
+     * 数据指标名称
+     */
+    dataLabel: SxtDataCollectVo;
+    /**
+     * 数据指标名称
+     */
+    labelName: string;
+}
+
+/**
+ * 数据指标名称
+ *
+ * SxtDataCollectVo
+ */
+export interface SxtDataCollectVo {
+    /**
+     * 点击次数
+     */
+    clickCnt: number;
+    /**
+     * 点击率
+     */
+    ctr: number;
+    /**
+     * 评论次数
+     */
+    dyComment: number;
+    /**
+     * 新增粉丝数
+     */
+    dyFollow: number;
+    /**
+     * 点赞次数
+     */
+    dyLike: number;
+    /**
+     * 分享次数
+     */
+    dyShare: number;
+    /**
+     * 成交金额
+     */
+    payOrderAmount: number;
+    /**
+     * 成交订单数
+     */
+    payOrderCount: number;
+    /**
+     * 5s完播率，短视频内容分析指标
+     */
+    playDuration5sRate: number;
+    /**
+     * 支付roi
+     */
+    prepayAndPayOrderRoi: number;
+    /**
+     * 展示次数
+     */
+    showCnt: number;
+    /**
+     * 千展费用
+     */
+    showCntCost: number;
+    /**
+     * 消耗
+     */
+    statCost: number;
+    /**
+     * 播放次数
+     */
+    totalPlay: number;
+}

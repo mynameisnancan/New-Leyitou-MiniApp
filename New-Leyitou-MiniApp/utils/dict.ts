@@ -3,7 +3,7 @@ import { useDictStore } from '@/store/dict';
 import {ref} from 'vue'
 
 
-export const useDict = (...args: string[]): { [key: string]: DictDataOption[] } => {
+export const useDict = (args: string[],formatNumber:boolean = false): { [key: string]: DictDataOption[] } => {
   const res = ref<{
     [key: string]: DictDataOption[];
   }>({});
@@ -16,7 +16,7 @@ export const useDict = (...args: string[]): { [key: string]: DictDataOption[] } 
       } else {
         await getDicts(dictType).then((resp) => {
           res.value[dictType] = resp.data.map(
-            (p): DictDataOption => ({ label: p.dictLabel, value: p.dictValue, elTagType: p.listClass, elTagClass: p.cssClass })
+            (p:any): DictDataOption => ({ label: p.dictLabel, value: formatNumber ? Number(p.dictValue) : p.dictValue, elTagType: p.listClass, elTagClass: p.cssClass })
           );
           useDictStore().setDict(dictType, res.value[dictType]);
         });

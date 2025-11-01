@@ -1,5 +1,5 @@
 <template>
-	<wd-tag :type="getType()?.elTagType" mark>{{getType()?.label}}</wd-tag>
+	<wd-tag :type="getType()?.elTagType" mark>{{getType()?.label || '--'}}</wd-tag>
 </template>
 
 <script setup lang="ts">

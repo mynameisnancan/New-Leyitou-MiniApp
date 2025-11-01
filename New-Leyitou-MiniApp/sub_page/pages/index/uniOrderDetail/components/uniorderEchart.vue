@@ -21,22 +21,29 @@
 	import dayjs from 'dayjs'
 	import {
 		generateXData,
-		generateYData
+		generateYData,
+		getEchartColors,
+		convertRgbToRgba
 	} from '@/utils/echart'
+	import {useThemeStore} from '@/store/useTheme'
 
 	type PropTypes = {
 		orderData : SxtUniOrderDataMergeVo[]
 		dateRange : any
 	}
-
+	
+	const useTheme = useThemeStore()
+	
 	const props = withDefaults(defineProps<PropTypes>(), {
 		orderData: () => [],
 		dateRange: () => []
 	})
+	
+	const defaultColor = useTheme.themeVars.colorTheme
 
-	const option = ref({
+	const option = ref<any>({
 		tooltip: { trigger: 'axis' },
-		// color: getNewChartColor(defaultColor),
+		color: getEchartColors(defaultColor),
 		grid: {
 			left: '3%',
 			right: '3%',
@@ -205,8 +212,6 @@
 
 	const setEchartOption = () => {
 		let xAxisData : string[] = [];
-		console.log(props.dateRange)
-		console.log(props.dateRange[0])
 		// 时间间隔查询是一天的数据 小于一天 x轴单位是 h小时 否则以天日期为单位
 		const startTime = new Date(props.dateRange[0]).getTime();
 		const endTime = new Date(props.dateRange[1]).getTime();
@@ -222,20 +227,17 @@
 
 		// 初始化x轴数据
 		if (option.value.xAxis && 'data' in option.value.xAxis) {
-			// console.log('init xAxisData');
 			option.value.xAxis.data = xAxisData;
 		}
 
 		// 初始化y轴数据
 		if (option.value.series && Array.isArray(option.value.series)) {
-			option.value.series.forEach((seriesItem, _seriesIndex) => {
+			option.value.series.forEach((seriesItem:any, _seriesIndex:number) => {
 				seriesItem.data = isOneDay.value
 					? generateYData(xDataLength, 'hour')
 					: generateYData(xDataLength, 'day');
 			});
 		}
-		
-		console.log(xAxisData)
 		
 		// TODO(perf): 业务参数的取值修改和赋值处理的优化
 		if (props.orderData.length > 0) {
@@ -249,9 +251,7 @@
 
 			// dataKey: "2025-9-27"
 			// 填充真实数据
-			console.log(props.orderData)
 			props.orderData.forEach((item) => {
-				console.log(item)
 				let key = '';
 				if (item.dataKey) {
 					// key = item.dataKey;
@@ -280,7 +280,7 @@
 
 			// 然后按照 xAxisData 的顺序来更新 series 数据
 			if (Array.isArray(option.value.series)) {
-				option.value.series.forEach((seriesItem, seriesIndex) => {
+				option.value.series.forEach((seriesItem:any, seriesIndex:number) => {
 					const newData : number[] = [];
 					xAxisData.forEach((_xAxisItem, index) => {
 						const dataItem = fullDataMap.get(_xAxisItem);
@@ -312,43 +312,41 @@
 						}
 					});
 					seriesItem.data = newData;
-					
-					// if (
-					// 	seriesItem.type === 'line' &&
-					// 	seriesItem.areaStyle &&
-					// 	seriesItem.areaStyle.color
-					// ) {
-						// const color =
-						// 	getNewChartColor(defaultColor)[seriesIndex] || defaultColor;
-						// const rgbaStart = convertRgbToRgba(color, 0.7);
-						// const rgbaEnd = convertRgbToRgba(color, 0.1);
+					if (
+						seriesItem.type === 'line' &&
+						seriesItem.areaStyle &&
+						seriesItem.areaStyle.color
+					) {
+						const color = getEchartColors(defaultColor)[seriesIndex] || defaultColor;
+						const rgbaStart = convertRgbToRgba(color, 0.7);
+						const rgbaEnd = convertRgbToRgba(color, 0.1);
 
 						// 确保 areaStyle.color 是一个渐变对象而不是字符串,并且是属于color对象中的属性
-						// if (
-						// 	typeof seriesItem.areaStyle.color === 'object' &&
-						// 	seriesItem.areaStyle.color &&
-						// 	'colorStops' in seriesItem.areaStyle.color
-						// ) {
-						// 	seriesItem.areaStyle.color.colorStops = [
-						// 		{ offset: 0, color: rgbaStart },
-						// 		{ offset: 1, color: rgbaEnd },
-						// 	];
-						// } else {
-						// 	// 如果原本是字符串或其他非法结构，则重新构造整个 color 对象
-						// 	seriesItem.areaStyle.color = {
-						// 		type: 'linear',
-						// 		x: 0,
-						// 		y: 0,
-						// 		x2: 0,
-						// 		y2: 1,
-						// 		colorStops: [
-						// 			{ offset: 0, color: rgbaStart },
-						// 			{ offset: 1, color: rgbaEnd },
-						// 		],
-						// 		global: false,
-						// 	};
-						// }
-					// }
+						if (
+							typeof seriesItem.areaStyle.color === 'object' &&
+							seriesItem.areaStyle.color &&
+							'colorStops' in seriesItem.areaStyle.color
+						) {
+							seriesItem.areaStyle.color.colorStops = [
+								{ offset: 0, color: rgbaStart },
+								{ offset: 1, color: rgbaEnd },
+							];
+						} else {
+							// 如果原本是字符串或其他非法结构，则重新构造整个 color 对象
+							seriesItem.areaStyle.color = {
+								type: 'linear',
+								x: 0,
+								y: 0,
+								x2: 0,
+								y2: 1,
+								colorStops: [
+									{ offset: 0, color: rgbaStart },
+									{ offset: 1, color: rgbaEnd },
+								],
+								global: false,
+							};
+						}
+					}
 				});
 			}
 		}
