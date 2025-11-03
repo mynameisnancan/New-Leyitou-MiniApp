@@ -75,6 +75,7 @@
 				containLabel: true,
 			},
 			legend: {
+				type: 'scroll',
 				selected: {
 					消耗: true,
 					支付ROI: true,

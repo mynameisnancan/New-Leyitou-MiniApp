@@ -55,6 +55,20 @@
 				"style": {
 					"navigationStyle": "custom"
 				}
+			},
+			{
+				"path": "pages/creationTool/index", // 投放工具
+				"style": {
+					"navigationStyle": "custom"
+					// "navigationBarTitleText": "投放工具"
+				}
+			},
+			{
+				"path": "pages/creationTool/affirm", // 投放信息确认
+				"style": {
+					"navigationStyle": "custom"
+					// "navigationBarTitleText": "投放信息确认"
+				}
 			}
 		]
 	}],

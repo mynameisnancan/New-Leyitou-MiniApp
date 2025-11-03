@@ -70,7 +70,7 @@
 				<view class="options">
 					<view class="item-container">
 						 <template v-for="(item,index) in optionsItems" :key="index">
-							<view class="options-item" v-if="lookPermissions(item.permission)">
+							<view @click="skipModule(item.path)" class="options-item" v-if="lookPermissions(item.permission)">
 								<view class="icon">
 									<text :class="item.icon"></text>
 								</view>
@@ -195,7 +195,7 @@
 		{
 			name: '投放工具',
 			icon: 't-icon icon-gongju',
-			path: '',
+			path: '/sub_page/pages/creationTool/index',
 			permission:''
 		},
 		{
@@ -268,6 +268,7 @@
 	}
 	
 	const queryConfirm = (query:SxtUinOrderQuery | SxtOrderQuery) => {
+		console.log(query)
 		if(query === null){
 			if(listType.value === 'uniOrder'){
 				uniOrderQuery.value = {
@@ -322,6 +323,13 @@
 			authorId: undefined,
 		}
 		getUniOrderStatisticsApi()
+	}
+	
+	const skipModule = (path:string) => {
+		uni.navigateTo({
+			url: path,
+			animationType: 'slide-in-right'
+		})
 	}
 	
 	onShow(() => {

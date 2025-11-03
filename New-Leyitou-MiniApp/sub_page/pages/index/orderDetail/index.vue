@@ -193,6 +193,117 @@
 				</template>
 				<orderEchart :dateRange="orderTime" :orderData="orderEchartData"/>
 			</wd-card>
+			<!-- 消耗 -->
+			<wd-card custom-style="padding:20rpx">
+				<view class="uni-text-26">
+					<view class="uni-flex uni-justify-between uni-items-center uni-text-26">
+						<view class="icon uni-text-26">
+							<text class="t-icon icon-jine-tianchong"></text>
+							消耗
+						</view>
+						<view class="uni-text-bold uni-font-color-black">
+							￥{{ orderData?.dataLabel ? orderData?.dataLabel.statCost : 0 }}
+						</view>
+					</view>
+					<view class="uni-flex uni-justify-between uni-items-center uni-mt-lg">
+						<view class="icon uni-text-26">
+							<text class="t-icon icon-24gf-playCircle"></text>
+							播放量
+						</view>
+						<view class="uni-text-bold uni-font-color-black">
+							{{   orderData?.dataLabel ? orderData?.dataLabel.totalPlay : 0}}
+						</view>
+					</view>
+					<view class="uni-flex uni-items-center icon uni-text-26 uni-mt-lg">
+						<text class="t-icon icon-a-44tubiao-204"></text>
+						 成交数据
+					</view>
+					<view class="uni-flex uni-items-center uni-justify-around uni-text-26 uni-mt-lg">
+						<view class="uni-flex uni-flex-column uni-items-center">
+							<view class="uni-text-bold uni-font-color-black">{{ orderData?.dataLabel ? orderData?.dataLabel.payOrderCount : 0}}</view>
+							<view class="uni-font-color-gray">成交订单数</view>
+						</view>
+						<view class="uni-flex uni-flex-column uni-items-center">
+							<view class="uni-text-bold uni-font-color-black">{{ orderData?.dataLabel ? orderData?.dataLabel.payOrderAmount : 0}}</view>
+							<view class="uni-font-color-gray">成交订单金额</view>
+						</view>
+						<view class="uni-flex uni-flex-column uni-items-center">
+							<view class="uni-text-bold uni-font-color-black">{{orderData?.dataLabel ? compute(orderData, 'ROI') : 0}}</view>
+							<view class="uni-font-color-gray">成交ROI</view>
+						</view>
+						<view class="uni-flex uni-flex-column uni-items-center">
+							<view class="uni-text-bold uni-font-color-black">{{ orderData?.dataLabel ? compute(orderData, 'realROI') : 0}}</view>
+							<view class="uni-font-color-gray">佣金ROI</view>
+						</view>
+					</view>
+					<wd-divider></wd-divider>
+					<view class="icon uni-text-26">
+						<text class="t-icon icon-zhuanhua"></text>
+						转化数据
+					</view>
+					<view class="uni-flex uni-items-center  uni-text-26 uni-mt-lg">
+						<view class="uni-flex uni-flex-column uni-items-center uni-w-1-4">
+							<view class="uni-text-bold uni-font-color-black">{{ orderData?.dataLabel ? orderData?.dataLabel.showCnt : 0}}</view>
+							<view class="uni-font-color-gray">展示次数</view>
+						</view>
+						<view class="uni-flex uni-flex-column uni-items-center uni-w-1-4">
+							<view class="uni-text-bold uni-font-color-black">{{ orderData?.dataLabel ? compute(orderData, 'CPM') : 0}}</view>
+							<view class="uni-font-color-gray">千展费用</view>
+						</view>
+						<view class="uni-flex uni-flex-column uni-items-center uni-w-1-4">
+							<view class="uni-text-bold uni-font-color-black">{{orderData?.dataLabel ? orderData?.dataLabel.clickCnt : 0}}</view>
+							<view class="uni-font-color-gray">点击数</view>
+						</view>
+						<view class="uni-flex uni-flex-column uni-items-center uni-w-1-4">
+							<view class="uni-text-bold uni-font-color-black">{{ orderData?.dataLabel ? compute(orderData, 'CTR') : 0}}</view>
+							<view class="uni-font-color-gray">点击率</view>
+						</view>
+					</view>
+					<view class="uni-flex uni-items-center  uni-text-26 uni-mt-lg">
+						<view class="uni-flex uni-flex-column uni-items-center uni-w-1-4">
+							<view class="uni-text-bold uni-font-color-black">{{  orderData?.dataLabel ? orderData?.dataLabel.payOrderCount : 0}}</view>
+							<view class="uni-font-color-gray">转化数</view>
+						</view>
+						<view class="uni-flex uni-flex-column uni-items-center uni-w-1-4">
+							<view class="uni-text-bold uni-font-color-black">{{ orderData?.dataLabel ? compute(orderData, 'CVR') : 0}}</view>
+							<view class="uni-font-color-gray">转化率</view>
+						</view>
+						<view class="uni-flex uni-flex-column uni-items-center uni-w-1-4">
+							<view class="uni-text-bold uni-font-color-black">{{ orderData?.dataLabel ? compute(orderData, 'CAC') : 0 }}</view>
+							<view class="uni-font-color-gray">转化成本</view>
+						</view>
+					</view>
+					<wd-divider></wd-divider>
+					<view class="icon uni-text-26">
+						<text class="t-icon icon-xianxing-_xiangshangqushi"></text>
+						互动数据
+					</view>
+					<view class="uni-flex uni-items-center  uni-text-26 uni-mt-lg">
+						<view class="uni-flex uni-flex-column uni-items-center uni-w-1-4">
+							<view class="uni-text-bold uni-font-color-black">{{  orderData?.dataLabel ? orderData?.dataLabel.dyLike : 0}}</view>
+							<view class="uni-font-color-gray">点赞次数</view>
+						</view>
+						<view class="uni-flex uni-flex-column uni-items-center uni-w-1-4">
+							<view class="uni-text-bold uni-font-color-black">{{  orderData?.dataLabel ? orderData?.dataLabel.dyComment : 0}}</view>
+							<view class="uni-font-color-gray">评论次数</view>
+						</view>
+						<view class="uni-flex uni-flex-column uni-items-center uni-w-1-4">
+							<view class="uni-text-bold uni-font-color-black">{{ orderData?.dataLabel ? orderData?.dataLabel.dyShare : 0 }}</view>
+							<view class="uni-font-color-gray">分享次数</view>
+						</view>
+						<view class="uni-flex uni-flex-column uni-items-center uni-w-1-4">
+							<view class="uni-text-bold uni-font-color-black">{{  orderData?.dataLabel ? orderData?.dataLabel.dyFollow : 0 }}</view>
+							<view class="uni-font-color-gray">新增粉丝数</view>
+						</view>
+					</view>
+					<view class="uni-flex uni-items-center  uni-text-26 uni-mt-lg">
+						<view class="uni-flex uni-flex-column uni-items-center uni-w-1-4">
+							<view class="uni-text-bold uni-font-color-black">{{  orderData?.dataLabel ? orderData?.dataLabel.dyHomeVisited : 0}}</view>
+							<view class="uni-font-color-gray">主页访问数</view>
+						</view>
+					</view>
+				</view>
+			</wd-card>
 		</view>
 		
 		
@@ -298,6 +409,7 @@
 	const init = () => {
 		if (orderId.value) {
 			getOrderDetailApi()
+			getOrderDataHourApi()
 		}
 	}
 
@@ -315,7 +427,7 @@
 				dayjs(value[0]).format("YYYY-MM-DD"),
 				dayjs(value[1]).format("YYYY-MM-DD")
 			]
-			getUniOrderDataApi()
+			getOrderDataHourApi()
 		}
 	}
 	

@@ -102,10 +102,7 @@
 	// 选中的值
 	const selectedValue = defineModel('selectedValue')
 	// 已选择的数据
-	const selectedData = ref({
-		label:'',
-		value:''
-	})
+	const selectedData = ref()
 	
 	const props = withDefaults(defineProps<PropTypes>(),{
 		multiple:false,
@@ -142,8 +139,13 @@
 	}
 	
 	const change = ({ value }:any) => {
-		selectedData.value.value = value;
-		selectedData.value.label = listData.value.find(item => item.authorId === value)?.dyAuthorInfo?.nickName || '暂无'
+		// selectedData.value.value = value;
+		const item = listData.value.find(item => item.authorId === value);
+		if(item){
+			// selectedData.value.label =item?.dyAuthorInfo?.nickName || '暂无'
+			selectedData.value = item
+		}
+		// selectedData.value.label = listData.value.find(item => item.authorId === value)?.dyAuthorInfo?.nickName || '暂无'
 	}
 	
 	function scrolltolower(){

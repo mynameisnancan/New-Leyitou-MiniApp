@@ -27,10 +27,10 @@
 						v-model="queryForm.status" 
 						clearable
 					/>
-					<wd-cell title="订单商品" title-width="180rpx" :value="selectedProduct.label" @click="openSelectCommodity" ellipsis is-link />
+					<wd-cell title="订单商品" title-width="180rpx" :value="selectedProduct?.dyProductInfo?.title" @click="openSelectCommodity" ellipsis is-link />
 					<wd-cell title="运营人" title-width="180rpx" :value="selectedUser.label" @click="openSelectUser" ellipsis is-link />
-					<wd-cell title="付款抖音号" title-width="180rpx" :value="selectedDouYin.label" @click="openSelectDouYin" ellipsis is-link />
-					<wd-cell v-if="queryType === 'order'" title="被投抖音号" title-width="180rpx" :value="selectedByDouYin.label" @click="openSelectByDouYin" ellipsis is-link />
+					<wd-cell title="付款抖音号" title-width="180rpx" :value="selectedDouYin?.dyAuthorInfo?.nickName" @click="openSelectDouYin" ellipsis is-link />
+					<wd-cell v-if="queryType === 'order'" title="被投抖音号" title-width="180rpx" :value="selectedByDouYin?.dyAuthorInfo?.nickName" @click="openSelectByDouYin" ellipsis is-link />
 					<wd-cell v-if="queryType === 'order'" title="订单素材" title-width="180rpx" :value="selectedOrder.label" @click="openSelectOrder" ellipsis is-link />
 					<wd-picker
 						v-if="queryType === 'order'"
@@ -143,25 +143,16 @@
 	const douYinSelectedValue = ref()
 	const douYinType = ref<'selectedDouYin'|'selectedByDouYin'>()
 	// 订单商品
-	const selectedProduct = ref<LabelValue>({
-		label:'',
-		value:''
-	})
+	const selectedProduct = ref<any>()
 	// 运营人
 	const selectedUser = ref<LabelValue>({
 		label:'',
 		value:''
 	})
 	// 抖音账号
-	const selectedDouYin = ref<LabelValue>({
-		label:'',
-		value:''
-	})
+	const selectedDouYin = ref<any>()
 	// 被投抖音号
-	const selectedByDouYin = ref<LabelValue>({
-		label:'',
-		value:''
-	})
+	const selectedByDouYin = ref<any>()
 	// 订单素材
 	const selectedOrder = ref<LabelValue>({
 		label:'',
@@ -182,13 +173,13 @@
 	}
 	// 打开选择抖音账号弹窗
 	const openSelectDouYin = () => {
-		douYinSelectedValue.value = selectedDouYin.value.value
+		douYinSelectedValue.value = selectedDouYin.value?.authorId || null
 		douYinType.value = 'selectedDouYin'
 		douYinVisible.value = true
 	}
 	// 打开被抖音账号弹窗
 	const openSelectByDouYin = () => {
-		douYinSelectedValue.value = selectedByDouYin.value.value
+		douYinSelectedValue.value = selectedByDouYin.value?.authorId|| null
 		douYinType.value = 'selectedByDouYin'
 		douYinVisible.value = true
 	}
@@ -211,9 +202,6 @@
 	}
 	// 抖音账号选择弹出框确认事件
 	const douYinConfirm = (selectedData:any) => {
-		console.log(selectedData)
-		console.log(props.queryForm)
-		console.log(douYinType.value)
 		if(douYinType.value === 'selectedDouYin' && 'authorId' in props.queryForm){
 			selectedDouYin.value = selectedData
 			// queryForm.value.authorId = selectedData.value

@@ -96,10 +96,7 @@
 	const searchValue = defineModel<any>('searchValue')
 	const selectedValue = defineModel('selectedValue')
 	// 已选择的数据
-	const selectedData = ref({
-		label:'',
-		value:''
-	})
+	const selectedData = ref()
 	
 	const props = withDefaults(defineProps<PropTypes>(),{
 		multiple:false,
@@ -135,8 +132,12 @@
 	}
 	
 	const change = ({ value }:any) => {
-		selectedData.value.value = value;
-		selectedData.value.label = listData.value.find(item => item.productId === value)?.dyProductInfo?.title || '暂无'
+		// selectedData.value.value = value;
+		const item = listData.value.find(item => item.productId === value)
+		if(item){
+			selectedData.value = item
+		}
+		// selectedData.value.label = listData.value.find(item => item.productId === value)?.dyProductInfo?.title || '暂无'
 	}
 	
 	function scrolltolower(){
