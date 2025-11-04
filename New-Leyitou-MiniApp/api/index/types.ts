@@ -282,7 +282,7 @@ export interface QcUniProductVo {
 	/**
 	 * 店铺信息
 	 */
-	dyShopInfo: DyShopInfo
+	dyShopInfo?: DyShopInfo
 }
 
 

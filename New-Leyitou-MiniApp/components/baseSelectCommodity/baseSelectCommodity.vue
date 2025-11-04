@@ -96,7 +96,7 @@
 	const searchValue = defineModel<any>('searchValue')
 	const selectedValue = defineModel('selectedValue')
 	// 已选择的数据
-	const selectedData = ref()
+	const selectedData = ref<QcUniProductVo>()
 	
 	const props = withDefaults(defineProps<PropTypes>(),{
 		multiple:false,
@@ -132,12 +132,10 @@
 	}
 	
 	const change = ({ value }:any) => {
-		// selectedData.value.value = value;
 		const item = listData.value.find(item => item.productId === value)
 		if(item){
 			selectedData.value = item
 		}
-		// selectedData.value.label = listData.value.find(item => item.productId === value)?.dyProductInfo?.title || '暂无'
 	}
 	
 	function scrolltolower(){
@@ -174,7 +172,7 @@
 	
 	const init = () => {
 		searchValue.value = ''
-		searchChange()
+		
 	}
 	
 	watch(() => searchValue.value, () => {

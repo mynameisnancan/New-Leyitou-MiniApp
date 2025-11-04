@@ -6,11 +6,13 @@
 			<wd-cell title="目标商品" title-width="180rpx" :value="selectedProduct?.dyProductInfo?.title" @click="openSelectCommodity"
 				ellipsis is-link />
 			<wd-cell title="出价类型" title-width="180rpx">
-				<wd-radio-group v-model="formData.delivery_setting.bid_type" inline shape="dot">
-					<wd-radio :value="item.value" v-for="(item,index) in sxt_order_bid_type" :key="index">
-						{{item.label}}
-					</wd-radio>
-				</wd-radio-group>
+				<view class="custom-radio">
+					<wd-radio-group v-model="formData.delivery_setting.bid_type" inline shape="dot">
+						<wd-radio :value="item.value" v-for="(item,index) in sxt_order_bid_type" :key="index">
+							{{item.label}}
+						</wd-radio>
+					</wd-radio-group>
+				</view>
 			</wd-cell>
 			<wd-cell title="支付ROI" title-width="180rpx">
 				<wd-input-number v-model="formData.delivery_setting.roi_goal" :min="0.01" :max="10000" :step="0.01"
@@ -26,15 +28,20 @@
 					inactive-value="QCPX_MODE_OFF" size="40rpx" />
 			</wd-cell>
 			<wd-cell title="创建方式" title-width="150rpx">
-				<wd-radio-group v-model="createOrderQuery.createWay" inline shape="dot">
-					<wd-radio :value="item.value" v-for="(item,index) in leyitou_sxt_create_way" :key="index">
-						{{item.label}}
-					</wd-radio>
-				</wd-radio-group>
+				<view class="custom-radio">
+					<wd-radio-group v-model="createOrderQuery.createWay" inline shape="dot">
+						<wd-radio :value="item.value" v-for="(item,index) in leyitou_sxt_create_way" :key="index" :disabled="Number(item.value) === 2">
+							{{item.label}}
+						</wd-radio>
+					</wd-radio-group>
+				</view>
 			</wd-cell>
-			<wd-datetime-picker v-if="createOrderQuery.createWay === 1" type="date" v-model="createTime" label="年月日"
-				@change="createOrderQuery.createTime = [createOrderQuery.createTime]" />
-			<wd-divider></wd-divider>	
+			
+			<wd-transition :show="createOrderQuery.createWay === 1" name="fade">
+				<wd-datetime-picker type="date" v-model="createTime" label="年月日"
+					@change="createOrderQuery.createTime = [createOrderQuery.createTime]" />
+			</wd-transition>
+			
 		</wd-cell-group>
 		<view class="uni-flex uni-justify-center uni-mt-lg">
 			<wd-button @click="createOrder" custom-class="uni-w-3-4">创建订单</wd-button>
@@ -54,6 +61,10 @@
 
 <script setup lang="ts">
 	import type {
+		QcUniProductVo,
+		DyAuthorAuthVo
+	}from '@/api/index/types'
+	import type {
 		CreateOrderQuery,
 		CreateSxtUniOrderInfoVo
 	} from '@/sub_page/api/creationTool/types'
@@ -64,6 +75,9 @@
 	import {
 		useDict
 	} from '@/utils/dict'
+	import {
+		onLoad
+	} from '@dcloudio/uni-app'
 	import dayjs from 'dayjs'
 	import {
 		ref,
@@ -110,10 +124,10 @@
 	const douYinVisible = ref<boolean>(false)
 
 	// 订单商品
-	const selectedProduct = ref<any>()
+	const selectedProduct = ref<QcUniProductVo>()
 
 	// 抖音账号
-	const selectedDouYin = ref<any>()
+	const selectedDouYin = ref<DyAuthorAuthVo>()
 
 
 	// 打开选择订单商品弹窗
@@ -133,33 +147,58 @@
 	const douYinConfirm = (selectedData : any) => {
 		if (douYinType.value === 'selectedDouYin') {
 			selectedDouYin.value = selectedData
-			// queryForm.value.authorId = selectedData.value
 			formData.value.aweme_id = selectedData?.authorId
+			formData.value.advertiser_id = selectedData?.qcSxtAdvertiserId
 		}
 	}
 
 	// 商品选择弹出框确认事件
 	const commodityConfirm = (selectedData : any) => {
 		selectedProduct.value = selectedData
-		// queryForm.value.productId = selectedData.value
 		formData.value.product_id = selectedData.productId
 	}
 
 	const createOrder = () => {
-		console.log(formData.value)
-		console.log(createOrderQuery.value)
-		console.log(!formData.value.aweme_id)
 		if(!formData.value.aweme_id){
 			return toast.warning('请选择付款抖音号!')
 		}
 		if(!formData.value.product_id){
 			return toast.warning('请选择目标商品!')
 		}
-		uni.setStorageSync('affirm',formData.value)
+		uni.setStorageSync('affirm-form-data',formData.value)
+		uni.setStorageSync('affirm-selected-data',{
+			douYinData:selectedDouYin.value,
+			productData:selectedProduct.value
+		})
+		uni.setStorageSync('affirm-form-query',createOrderQuery.value)
 		uni.navigateTo({
 			url: '/sub_page/pages/creationTool/affirm',
 			animationType: 'slide-in-right'
 		})
+	}
+	
+	const initData = () => {
+		formData.value = {
+			marketing_goal: 'VIDEO_PROM_GOODS',
+			advertiser_id: undefined,
+			aweme_id: undefined,
+			product_id: undefined,
+			delivery_setting: {
+				bid_type: 'AUTO_BID',
+				roi_goal: 1,
+				delivery_time: 2,
+				amount: 0,
+				qcpx_mode: 'QCPX_MODE_ON',
+			},
+		}
+		createTime.value = Date.now()
+		createOrderQuery.value = {
+			createWay: 0,
+			createTime: [dayjs().format('YYYY-MM-DD HH:mm:ss')],
+			list: [],
+		}
+		selectedProduct.value = {};
+		selectedDouYin.value = {};
 	}
 	
 	// 允许当前文件样式穿透
@@ -168,14 +207,16 @@
 			styleIsolation: 'shared'
 		}
 	})
+	
+	onLoad(() => {
+		
+	})
 </script>
 
-<style lang="scss" scoped>
-	:deep(.wd-radio) {
-		line-height: unset;
-	}
-
-	.wd-radio {
-		line-height: unset;
+<style lang="scss">
+	.custom-radio  {
+		.wd-radio{
+			line-height: unset;
+		}
 	}
 </style>

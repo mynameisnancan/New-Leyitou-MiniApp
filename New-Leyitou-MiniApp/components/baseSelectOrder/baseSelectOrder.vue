@@ -88,10 +88,7 @@
 	const searchValue = defineModel<any>('searchValue')
 	const selectedValue = defineModel('selectedValue')
 	// 已选择的数据
-	const selectedData = ref({
-		label:'',
-		value:''
-	})
+	const selectedData = ref<SxtVideoVo>()
 	
 	const noData = ref<boolean>(false)
 	const loading = ref<boolean>(false)
@@ -123,8 +120,12 @@
 	}
 	
 	const change = ({ value }:any) => {
-		selectedData.value.value = value;
-		selectedData.value.label = listData.value.find(item => item.dyVideoInfo?.videoId === value)?.dyVideoInfo?.title || '暂无'
+		// selectedData.value.value = value;
+		// selectedData.value.label = listData.value.find(item => item.dyVideoInfo?.videoId === value)?.dyVideoInfo?.title || '暂无'
+		const item = listData.value.find(item => item.dyVideoInfo?.videoId === value)
+		if(item){
+			selectedData.value = item
+		}
 	}
 	
 	function scrolltolower(){
@@ -161,7 +162,6 @@
 	
 	const init = () => {
 		searchValue.value = ''
-		searchChange()
 	}
 	
 	watch(() => searchValue.value, () => {

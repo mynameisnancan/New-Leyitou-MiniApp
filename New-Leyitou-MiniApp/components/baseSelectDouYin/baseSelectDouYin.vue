@@ -26,7 +26,35 @@
 			:lower-threshold="100" 
 			@scrolltolower="scrolltolower"
 		>
-			<wd-radio-group v-model="selectedValue" @change="change">
+			<wd-checkbox-group v-model="multipleSelectedValue" v-if="multiple" @change="multipleChange">
+				 <wd-checkbox :modelValue="item.authorId"  v-for="(item,index) in listData"  :key="index" shape="square">
+					<view class="uni-flex uni-px-lg uni-items-center underline uni-w-full">
+						<view>
+							<wd-img  v-if="item?.dyAuthorInfo?.avatar" width="120rpx" height="120rpx" round  :src="item?.dyAuthorInfo?.avatar" />
+							<wd-img  v-else width="150rpx" height="150rpx" round  src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
+						</view>
+						<view class="uni-ml-lg uni-text-left uni-w-4-5 uni-font-color-black">
+							<view class="uni-flex uni-items-center">
+								<view class="uni-text-lg">
+									{{item?.dyAuthorInfo?.nickName}}
+								</view>
+							</view>
+							<view class="uni-text-sm">
+								UID：{{item?.dyAuthorInfo?.uid}}
+							</view>
+							<view class="uni-flex uni-items-center uni-justify-between uni-text-sm">
+								<view>
+									粉丝数：{{item?.dyAuthorInfo?.fansNum || '0'}}
+								</view>
+								<view class="uni-ml-lg">
+									运营人：{{item?.dyAuthorInfo?.userInfo?.nickName || '暂无'}}
+								</view>
+							</view>
+						</view>
+					</view> 
+				 </wd-checkbox>
+			</wd-checkbox-group>
+			<wd-radio-group v-else v-model="selectedValue" @change="radioChange">
 				<wd-radio :value="item.authorId"  v-for="(item,index) in listData"  :key="index" shape="dot">
 					<view class="uni-flex uni-px-lg uni-items-center underline uni-w-full">
 						<view>
@@ -54,7 +82,9 @@
 					</view>
 				</wd-radio>
 			</wd-radio-group> 
+			
 			<baseLoading v-show="loading"></baseLoading>
+			
 			<template v-if="listData.length==0 && !loading">
 				<view class="uni-pt-xl uni-pb-xl">
 					<wd-status-tip image="content" tip="暂无数据" />
@@ -101,8 +131,16 @@
 	const searchValue = ref<any>()
 	// 选中的值
 	const selectedValue = defineModel('selectedValue')
-	// 已选择的数据
-	const selectedData = ref()
+	// 单选已选择的数据
+	const selectedData = ref<DyAuthorAuthVo>()
+	
+	// 多选选中的数据
+	const multipleSelectedValue = defineModel('multipleSelectedValue',{
+		default: () => []
+	})
+	// 多选已选择的数据
+	const multipleSelectedData = ref<DyAuthorAuthVo[]>([])
+	
 	
 	const props = withDefaults(defineProps<PropTypes>(),{
 		multiple:false,
@@ -138,14 +176,15 @@
 		visible.value = false
 	}
 	
-	const change = ({ value }:any) => {
-		// selectedData.value.value = value;
+	const radioChange = ({ value }:any) => {
 		const item = listData.value.find(item => item.authorId === value);
 		if(item){
-			// selectedData.value.label =item?.dyAuthorInfo?.nickName || '暂无'
 			selectedData.value = item
 		}
-		// selectedData.value.label = listData.value.find(item => item.authorId === value)?.dyAuthorInfo?.nickName || '暂无'
+	}
+	
+	const multipleChange = ({ value }:any) => {
+		console.log(value)
 	}
 	
 	function scrolltolower(){
@@ -182,7 +221,6 @@
 	
 	const init = () => {
 		searchValue.value = ''
-		searchChange()
 	}
 	
 	watch(() => searchValue.value, () => {

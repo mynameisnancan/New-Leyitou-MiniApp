@@ -42,14 +42,20 @@
 		</view>
 		<view class="uni-flex uni-justify-between">
 			<view>抖音号信息</view>
-			<view class="uni-font-color-theme uni-text-bold">
-				 0
+			<view class="uni-flex uni-items-center uni-font-color-theme uni-text-bold">
+				<wd-img v-if="douYinData?.dyAuthorInfo?.avatar" width="50rpx" height="50rpx" round :src="douYinData?.dyAuthorInfo?.avatar" />
+				<wd-img v-else width="150rpx" height="150rpx" round  src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
+				<view class="uni-ml-lg">
+					{{ douYinData?.dyAuthorInfo?.nickName }}
+				</view>
 			</view>
 		</view>
 		<view class="uni-flex uni-justify-between">
-			<view>商品信息</view>
-			<view class="uni-font-color-theme uni-text-bold">
-			 0
+			<view class="uni-w-1-5">商品信息</view>
+			<view class="uni-flex uni-items-center uni-font-color-theme uni-text-bold">
+				<view>
+					{{ productData.length }}个商品
+				</view>
 			</view>
 		</view>
 	</wd-card>
@@ -58,16 +64,26 @@
 		<wd-button @click="goBack" custom-class="uni-w-1-4" type="info">取消</wd-button>
 		<wd-button @click="submit" custom-class="uni-w-1-4">确定</wd-button>
 	</view>
+	
+	<wd-toast />
 </template>
 
 <script setup lang="ts">
+	import type {
+		QcUniProductVo,
+		DyAuthorAuthVo
+	}from '@/api/index/types'
 	import type {
 		CreateOrderQuery,
 		CreateSxtUniOrderInfoVo
 	} from '@/sub_page/api/creationTool/types'
 	import {
+		createUniOrder
+	}from '@/sub_page/api/creationTool/index'
+	import {
 		onLoad
 	} from '@dcloudio/uni-app'
+	import { useToast } from 'wot-design-uni'
 	import {
 		ref,
 		toRefs
@@ -78,6 +94,7 @@
 	import {
 		goBack
 	}from '@/utils/utils'
+	import dayjs from 'dayjs'
 
 	const createData = ref<CreateSxtUniOrderInfoVo>({
 		marketing_goal: 'VIDEO_PROM_GOODS',
@@ -92,7 +109,15 @@
 			qcpx_mode: 'QCPX_MODE_ON',
 		},
 	});
-
+	const createOrderQuery = ref<CreateOrderQuery>({
+		createWay: 0,
+		createTime: [dayjs().format('YYYY-MM-DD HH:mm:ss')],
+		list: [],
+	})
+	const toast = useToast()
+	const douYinData = ref<DyAuthorAuthVo>()
+	const productData = ref<QcUniProductVo[]>([])
+	
 	const { sxt_order_bid_type } = toRefs(useDict(['sxt_order_bid_type']))
 	const { sxt_order_delivery_time } = toRefs(useDict(['sxt_order_delivery_time'], true))
 	
@@ -100,13 +125,22 @@
 		uni.navigateBack()
 	}
 	
-	const submit = () => {
-		
+	const submit = async () => {
+		createOrderQuery.value.uniList = [createData.value];
+		try{
+			const res = await createUniOrder(createOrderQuery.value)
+			toast.success(res.msg || '操作成功');
+			setTimeout(() => {
+				goBack()
+			},500)		
+		}catch{}
 	}
 
 	onLoad(() => {
-		createData.value = uni.getStorageSync('affirm')
-		console.log(createData.value)
+		createData.value = uni.getStorageSync('affirm-form-data')
+		createOrderQuery.value = uni.getStorageSync('affirm-form-query')
+		douYinData.value =  uni.getStorageSync('affirm-selected-data')?.douYinData
+		productData.value = [ uni.getStorageSync('affirm-selected-data')?.productData]
 	})
 </script>
 <style scoped lang="scss">

@@ -20,18 +20,20 @@
 						v-model="queryForm.orderId"
 						placeholder="请输入订单ID"
 						:maxlength="19"
+						label-width="180rpx"
 					/>
 					<wd-picker
 						:columns="leyitou_order_status" 
 						label="订单状态" 
 						v-model="queryForm.status" 
 						clearable
+						label-width="180rpx"
 					/>
 					<wd-cell title="订单商品" title-width="180rpx" :value="selectedProduct?.dyProductInfo?.title" @click="openSelectCommodity" ellipsis is-link />
-					<wd-cell title="运营人" title-width="180rpx" :value="selectedUser.label" @click="openSelectUser" ellipsis is-link />
+					<wd-cell title="运营人" title-width="180rpx" :value="selectedUser?.nickName" @click="openSelectUser" ellipsis is-link />
 					<wd-cell title="付款抖音号" title-width="180rpx" :value="selectedDouYin?.dyAuthorInfo?.nickName" @click="openSelectDouYin" ellipsis is-link />
 					<wd-cell v-if="queryType === 'order'" title="被投抖音号" title-width="180rpx" :value="selectedByDouYin?.dyAuthorInfo?.nickName" @click="openSelectByDouYin" ellipsis is-link />
-					<wd-cell v-if="queryType === 'order'" title="订单素材" title-width="180rpx" :value="selectedOrder.label" @click="openSelectOrder" ellipsis is-link />
+					<wd-cell v-if="queryType === 'order'" title="订单素材" title-width="180rpx" :value="selectedOrder?.dyVideoInfo?.title" @click="openSelectOrder" ellipsis is-link />
 					<wd-picker
 						v-if="queryType === 'order'"
 						:columns="dateTypes" 
@@ -71,7 +73,16 @@
 </template>
 
 <script lang="ts" setup>
-	
+	import type {
+		DyAuthorAuthVo,
+		QcUniProductVo
+	}from '@/api/index/types'
+	import type {
+		SxtVideoVo
+	}from '@/api/selectData/types'
+	import type {
+		SysUserVo
+	}from '@/api/user/types'
 	import type {
 		SxtUinOrderQuery,
 		SxtOrderQuery
@@ -143,21 +154,15 @@
 	const douYinSelectedValue = ref()
 	const douYinType = ref<'selectedDouYin'|'selectedByDouYin'>()
 	// 订单商品
-	const selectedProduct = ref<any>()
+	const selectedProduct = ref<QcUniProductVo>()
 	// 运营人
-	const selectedUser = ref<LabelValue>({
-		label:'',
-		value:''
-	})
+	const selectedUser = ref<SysUserVo>()
 	// 抖音账号
-	const selectedDouYin = ref<any>()
+	const selectedDouYin = ref<DyAuthorAuthVo>()
 	// 被投抖音号
-	const selectedByDouYin = ref<any>()
+	const selectedByDouYin = ref<DyAuthorAuthVo>()
 	// 订单素材
-	const selectedOrder = ref<LabelValue>({
-		label:'',
-		value:''
-	})
+	const selectedOrder = ref<SxtVideoVo>()
 	
 	// 筛选弹窗关闭事件
 	const handleClose = () => {
@@ -191,29 +196,30 @@
 	// 商品选择弹出框确认事件
 	const commodityConfirm = (selectedData:any) => {
 		selectedProduct.value = selectedData
-		// queryForm.value.productId = selectedData.value
+		props.queryForm.productId = selectedData.productId
 		emits('confirm',props.queryForm)
 	}
 	// 用户选择弹出框确认事件
 	const userConfirm = (selectedData:any) => {
 		selectedUser.value = selectedData
-		// queryForm.value.userId = selectedData.value
+		props.queryForm.userId = selectedData.userId
 		emits('confirm',props.queryForm)
 	}
 	// 抖音账号选择弹出框确认事件
 	const douYinConfirm = (selectedData:any) => {
 		if(douYinType.value === 'selectedDouYin' && 'authorId' in props.queryForm){
 			selectedDouYin.value = selectedData
-			// queryForm.value.authorId = selectedData.value
+			props.queryForm.authorId = selectedData.authorId
 		}else if(douYinType.value === 'selectedByDouYin' && 'uid' in props.queryForm){
 			selectedByDouYin.value = selectedData
-			// queryForm.value.uid = selectedData.value
+			props.queryForm.uid = selectedData.authorId
 		}
 		emits('confirm',props.queryForm)
 	}
 	// 选择订单素材弹窗确认事件
 	const orderConfirm = (selectedData:any) => {
 		selectedOrder.value = selectedData
+		props.queryForm.orderId = selectedData.orderId
 		emits('confirm',props.queryForm)
 	}
 	
@@ -229,18 +235,9 @@
 		// 	timeStart: undefined,
 		// 	timeEnd: undefined
 		// }
-		selectedProduct.value = {
-			label:'',
-			value:''
-		}
-		selectedUser.value = {
-			label:'',
-			value:''
-		}
-		selectedDouYin.value = {
-			label:'',
-			value:''
-		}
+		selectedProduct.value = {}
+		selectedUser.value = {}
+		selectedDouYin.value = {}
 		visible.value = false
 	}
 	

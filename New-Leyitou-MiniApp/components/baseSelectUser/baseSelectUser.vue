@@ -100,10 +100,7 @@
 	const searchValue = defineModel<any>('searchValue')
 	const selectedValue = defineModel('selectedValue')
 	// 已选择的数据
-	const selectedData = ref({
-		label:'',
-		value:''
-	})
+	const selectedData = ref<SysUserVo>()
 	
 	const props = withDefaults(defineProps<PropTypes>(),{
 		multiple:false,
@@ -139,8 +136,12 @@
 	}
 	
 	const change = ({ value }:any) => {
-		selectedData.value.value = value;
-		selectedData.value.label = listData.value.find(item => item.userId === value)?.nickName || '暂无'
+		// selectedData.value.value = value;
+		const item = listData.value.find(item => item.userId === value);
+		if(item){
+			selectedData.value = item
+		}
+		
 	}
 	
 	function scrolltolower(){
@@ -177,7 +178,6 @@
 	
 	const init = () => {
 		searchValue.value = ''
-		searchChange()
 	}
 	
 	watch(() => searchValue.value, () => {

@@ -225,3 +225,9 @@ export interface SxtUniDeliverySettingVo {
      */
     roi_goal?: number;
 }
+
+// 解析添加素材信息
+export interface AwemeItemParseType {
+  awemeId?: string;
+  awemeItemId?: number;
+}
