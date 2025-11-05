@@ -26,7 +26,7 @@
 			:lower-threshold="100" 
 			@scrolltolower="scrolltolower"
 		>
-			<wd-checkbox-group v-model="multipleSelectedValue" v-if="multiple" @change="multipleChange">
+			<wd-checkbox-group v-model="selectedValue" v-if="multiple" @change="multipleChange">
 				 <wd-checkbox :modelValue="item.authorId"  v-for="(item,index) in listData"  :key="index" shape="square">
 					<view class="uni-flex uni-px-lg uni-items-center underline uni-w-full">
 						<view>
@@ -129,16 +129,12 @@
 	})
 	// 筛选框值
 	const searchValue = ref<any>()
-	// 选中的值
+	// 默认选中的值value
 	const selectedValue = defineModel('selectedValue')
+	
 	// 单选已选择的数据
 	const selectedData = ref<DyAuthorAuthVo>()
-	
-	// 多选选中的数据
-	const multipleSelectedValue = defineModel('multipleSelectedValue',{
-		default: () => []
-	})
-	// 多选已选择的数据
+	// 多选已选择的数据value
 	const multipleSelectedData = ref<DyAuthorAuthVo[]>([])
 	
 	
@@ -172,7 +168,11 @@
 		visible.value = false
 	}
 	const confirm = () => {
-		emits('confirm',selectedData.value)
+		if(props.multiple){
+			emits('confirm',multipleSelectedData.value)
+		}else{
+			emits('confirm',selectedData.value)
+		}
 		visible.value = false
 	}
 	
@@ -184,7 +184,14 @@
 	}
 	
 	const multipleChange = ({ value }:any) => {
-		console.log(value)
+		let arr = []
+		for(const val of value){
+			const item = listData.value.find(item => item.authorId === val);
+			if(item){
+				arr.push(item)
+			}
+		}
+		multipleSelectedData.value = arr
 	}
 	
 	function scrolltolower(){

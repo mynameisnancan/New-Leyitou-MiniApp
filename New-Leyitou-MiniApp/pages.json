@@ -69,6 +69,13 @@
 					"navigationStyle": "custom"
 					// "navigationBarTitleText": "投放信息确认"
 				}
+			},
+			{
+				"path": "pages/creationTool/liveAffirm", // 投放信息确认
+				"style": {
+					"navigationStyle": "custom"
+					// "navigationBarTitleText": "投放信息确认"
+				}
 			}
 		]
 	}],

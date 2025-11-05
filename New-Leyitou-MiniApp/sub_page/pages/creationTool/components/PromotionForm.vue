@@ -38,7 +38,7 @@
 			</wd-cell>
 			
 			<wd-transition :show="createOrderQuery.createWay === 1" name="fade">
-				<wd-datetime-picker type="date" v-model="createTime" label="年月日"
+				<wd-datetime-picker type="date" v-model="createTime" label="创建时间"
 					@change="createOrderQuery.createTime = [createOrderQuery.createTime]" />
 			</wd-transition>
 			
@@ -69,9 +69,6 @@
 		CreateSxtUniOrderInfoVo
 	} from '@/sub_page/api/creationTool/types'
 	import { useToast } from 'wot-design-uni'
-	import {
-		createUniOrder
-	} from '@/sub_page/api/creationTool/index'
 	import {
 		useDict
 	} from '@/utils/dict'

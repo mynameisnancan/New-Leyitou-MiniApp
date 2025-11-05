@@ -231,3 +231,9 @@ export interface AwemeItemParseType {
   awemeId?: string;
   awemeItemId?: number;
 }
+
+// 订单代投校验
+export interface DeliveryCheckType {
+  advertiserId?: number;
+  uids?: number[];
+}
