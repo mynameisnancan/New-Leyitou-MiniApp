@@ -1,9 +1,9 @@
 <template>
 	<wd-form ref="formRef" :model="formData">
-		<wd-cell-group border>
+		<wd-cell-group >
 			<wd-cell title="付款抖音号" title-width="180rpx" :value="radioDouYinValue?.dyAuthorInfo?.nickName"
-				@click="openSelectDouYin" ellipsis is-link />
-			<wd-cell title="添加方式" title-width="180rpx">
+				@click="openSelectDouYin" ellipsis is-link border/>
+			<wd-cell title="添加方式" title-width="180rpx" border>
 				<view class="custom-radio">
 					<wd-radio-group v-model="awemeItemSource" shape="button" inline>
 						<wd-radio value="NORMAL">正常添加</wd-radio>
@@ -11,7 +11,7 @@
 					</wd-radio-group>
 				</view>
 			</wd-cell>
-			<wd-cell title="加热方式" title-width="180rpx">
+			<wd-cell title="加热方式" title-width="180rpx" border>
 				<view class="custom-radio">
 					<wd-radio-group v-model="formData.delivery_setting.liveroom_heat_mode" shape="button" inline>
 						<wd-radio value="BY_ROOM">直接加热</wd-radio>
@@ -19,34 +19,34 @@
 					</wd-radio-group>
 				</view>
 			</wd-cell>
-			
+
 			<wd-cell v-if="videoSelectVisiable && awemeItemSource === 'NORMAL'" title="订单素材" title-width="180rpx"
-				:value="`已选中${awemeItems.length}个`" @click="openSelectOrder" ellipsis is-link />
-			<wd-input v-else-if="videoSelectVisiable && awemeItemSource === 'LINK'" type="text" label="选择视频" prop="orderId" clearable v-model="awemeItemLink"
-				placeholder="请输入视频链接" label-width="180rpx">
+				:value="`已选中${awemeItems.length}个`" @click="openSelectOrder" ellipsis is-link border/>
+			<wd-input v-else-if="videoSelectVisiable && awemeItemSource === 'LINK'" type="text" label="选择视频"
+				prop="orderId" clearable v-model="awemeItemLink" placeholder="请输入视频链接" label-width="180rpx" border>
 				<template #suffix>
 					<wd-button @click="handleAddItemLink" size="small">解析</wd-button>
 				</template>
 			</wd-input>
-			<wd-cell v-else title="选择直播账号" title-width="180rpx"
-				:value="`已选择${multipleDouYinValue.length}个`" @click="openMultipleSelectDouYin" ellipsis is-link />	
-			
+			<wd-cell v-else title="选择直播账号" title-width="180rpx" :value="`已选择${multipleDouYinValue.length}个`"
+				@click="openMultipleSelectDouYin" ellipsis is-link border/>
+
 			<!-- 优化目标 -->
-			<wd-cell>
+			<wd-cell border>
 				<template #title>
 					<view class="uni-text-bold">优化目标</view>
 				</template>
 			</wd-cell>
 			<wd-picker :columns="deliveryTimesLive" label="投放时长" v-model="formData.delivery_setting.delivery_time"
-				clearable label-width="180rpx" />
-			<wd-cell title="出价模式" label-width="180rpx">
+				clearable label-width="180rpx" border/>
+			<wd-cell title="出价模式" label-width="180rpx" border>
 				<view class="custom-radio">
 					<wd-radio-group v-model="formData.delivery_setting.bid_mode" shape="button" inline>
 						<wd-radio value="PRICING_ACTION">按优化目标</wd-radio>
 					</wd-radio-group>
 				</view>
 			</wd-cell>
-			<wd-cell title="出价类型" title-width="180rpx">
+			<wd-cell title="出价类型" title-width="180rpx" border>
 				<view class="custom-radio">
 					<wd-radio-group v-model="formData.delivery_setting.bid_type" shape="button" inline>
 						<wd-radio value="AUTO_BID">自动出价</wd-radio>
@@ -54,20 +54,56 @@
 					</wd-radio-group>
 				</view>
 			</wd-cell>
-			<wd-cell v-if="isROI && !manualBidDisiable" title="目标支付ROI" title-width="180rpx">
+			<wd-cell v-if="isROI && !manualBidDisiable" title="目标支付ROI" title-width="180rpx" border>
 				<wd-input-number v-model="formData.delivery_setting.roi_goal" :min="0.01" :max="100" :step="0.1" />
 			</wd-cell>
-			<wd-cell title="单笔投放金额" title-width="180rpx">
+			<wd-cell title="单笔投放金额" title-width="180rpx" border>
 				<wd-input-number v-model="formData.delivery_setting.amount" :min="100" :max="5000000" :step="100" />
 			</wd-cell>
-			<wd-cell title="创建方式" title-width="180rpx">
+
+			<wd-cell title="定向设置" title-width="180rpx" border>
+				<wd-radio-group v-model="formData.audience.audience_mode" shape="button">
+					<wd-radio value="ATUO">系统推荐</wd-radio>
+					<wd-radio value="CUSTOM">自定义</wd-radio>
+				</wd-radio-group>
+			</wd-cell>
+			<wd-cell title="限运地区" title-width="180rpx" border>
+				<wd-radio-group v-model="formData.audience.exclude_limited_region" shape="button">
+					<wd-radio :value="1">排除</wd-radio>
+					<wd-radio :value="0">不排除</wd-radio>
+				</wd-radio-group>
+			</wd-cell>
+			<wd-cell title="性别" title-width="180rpx" border>
+				<wd-radio-group v-model="formData.audience.gender" shape="button">
+					<wd-radio value="">不限</wd-radio>
+					<wd-radio value="GENDER_MALE">男性</wd-radio>
+					<wd-radio value="GENDER_FEMALE">女性</wd-radio>
+				</wd-radio-group>
+			</wd-cell>
+			<wd-cell title="年龄" title-width="180rpx" border>
+				<wd-checkbox v-model="ageNoCheck" @change="onAgeNoCheck" shape="square">不限</wd-checkbox>
+			</wd-cell>
+			<wd-cell title="" title-width="180rpx">
+				<wd-checkbox-group v-model="formData.audience.age" @change="handleAgeCheckChange" shape="square" inline border>
+					<wd-checkbox modelValue="AGE_BETWEEN_18_23">18-23岁</wd-checkbox>
+					<wd-checkbox modelValue="AGE_BETWEEN_24_30">24-30岁</wd-checkbox>
+					<wd-checkbox modelValue="AGE_BETWEEN_31_40">31-40岁</wd-checkbox>
+					<wd-checkbox modelValue="AGE_BETWEEN_41_50">41-50岁</wd-checkbox>
+				</wd-checkbox-group>
+			</wd-cell>		
+
+			<wd-cell title="创建方式" title-width="180rpx" border>
+			</wd-cell>
+			<wd-cell title="" >
 				<wd-radio-group v-model="func.createWay" shape="button">
 					<wd-radio :value="0">立即创建</wd-radio>
 					<wd-radio :value="1">定时创建</wd-radio>
 					<wd-radio :value="2" :disabled="func.createCount<=1">分批创建</wd-radio>
 				</wd-radio-group>
 			</wd-cell>
-			<wd-cell title="投放笔数" title-width="180rpx">
+
+
+			<wd-cell title="投放笔数" title-width="180rpx" border>
 				<wd-input-number v-model="func.createCount" :min="1" :max="100" :step="1" />
 			</wd-cell>
 			<wd-transition :show="!createNow">
@@ -86,16 +122,12 @@
 	<!-- 选择抖音号弹窗 -->
 	<baseSelectDouYin v-model:visible="douYinVisible" v-model:selectedValue="douYinSelectedValue"
 		@confirm="douYinConfirm" :multiple="douYinMultiple"></baseSelectDouYin>
-	
+
 	<!-- 选中素材 -->
 	<!-- 选择订单素材弹窗 -->
-	<baseSelectOrder
-		v-model:visible="orderVisible"
-		v-model:selectedValue="orderSelectedValue"
-		@confirm="orderConfirm"
-		multiple
-	></baseSelectOrder>
-	
+	<baseSelectOrder v-model:visible="orderVisible" v-model:selectedValue="orderSelectedValue" @confirm="orderConfirm"
+		multiple></baseSelectOrder>
+
 	<wd-toast />
 </template>
 
@@ -165,6 +197,8 @@
 		batchInterval: 5,
 		createTime: Date.now(),
 	});
+
+	const ageNoCheck = ref<boolean>(true)
 
 	const awemeItemSource = ref<string>('NORMAL');
 
@@ -284,7 +318,7 @@
 
 	// 抖音账号选择弹出框确认事件
 	const douYinConfirm = (selectedData : any) => {
-		if(!selectedData) return ;
+		if (!selectedData) return;
 		if (douYinType.value === 'selectedDouYin') {
 			radioDouYinValue.value = selectedData
 			formData.value.aweme_id = selectedData.dyAuthorInfo?.authorId
@@ -293,29 +327,48 @@
 			multipleDouYinValue.value = selectedData
 		}
 	}
-	
+
 	// 打开选中素材弹出框
 	const openSelectOrder = () => {
-		orderSelectedValue.value = awemeItems.value.map((item:any) => item?.dyVideoInfo?.videoId)
+		orderSelectedValue.value = awemeItems.value.map((item : any) => item?.dyVideoInfo?.videoId)
 		orderVisible.value = true
 	}
-	
+
 	// 素材选中弹窗确认事件
-	const orderConfirm = (selectedData:any) => {
-		if(selectedData)awemeItems.value = selectedData
+	const orderConfirm = (selectedData : any) => {
+		if (selectedData) awemeItems.value = selectedData
 	}
+
+	const onAgeNoCheck = ({ value } : any) => {
+		if (value === false) {
+			ageNoCheck.value = true;
+		}
+		if (formData.value.audience) {
+			formData.value.audience.age = [];
+		}
+	};
+
+	const handleAgeCheckChange = () => {
+		if (formData.value.audience?.age) {
+			if (formData.value.audience.age.length === 0) {
+				ageNoCheck.value = false;
+			}
+		}
+
+	};
+
 
 	const createOrder = async () => {
 		const valid = validateForm()
 		if (!valid) return;
 		try {
 			await hasDeliveryPermission()
-			uni.setStorageSync('liveAffirm-data',{
-				formData:formData.value,
-				douYin:radioDouYinValue.value,
+			uni.setStorageSync('liveAffirm-data', {
+				formData: formData.value,
+				douYin: radioDouYinValue.value,
 				douYinList: multipleDouYinValue.value,
-				vedio:awemeItems.value,
-				func:func.value
+				vedio: awemeItems.value,
+				func: func.value
 			})
 			uni.navigateTo({
 				url: '/sub_page/pages/creationTool/liveAffirm',
@@ -331,14 +384,14 @@
 		if (!formData.value.aweme_id) {
 			return toast.warning('请选择付款抖音号!')
 		}
-		if(formData.value?.delivery_setting?.liveroom_heat_mode === 'BY_ROOM' && multipleDouYinValue.value.length === 0){
+		if (formData.value?.delivery_setting?.liveroom_heat_mode === 'BY_ROOM' && multipleDouYinValue.value.length === 0) {
 			return toast.warning('请选择直播账号!')
 		}
-		if(formData.value?.delivery_setting?.liveroom_heat_mode === 'BY_VIDEO' ){
-			if(awemeItems.value.length === 0 && awemeItemSource.value === 'NORMAL'){
+		if (formData.value?.delivery_setting?.liveroom_heat_mode === 'BY_VIDEO') {
+			if (awemeItems.value.length === 0 && awemeItemSource.value === 'NORMAL') {
 				return toast.warning('请选择订单素材!')
 			}
-			if(awemeItemSource.value === 'LINK' && !awemeItemLink.value){
+			if (awemeItemSource.value === 'LINK' && !awemeItemLink.value) {
 				return toast.warning('请输入视频链接!')
 			}
 		}

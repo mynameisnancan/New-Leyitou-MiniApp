@@ -1,7 +1,6 @@
 <template>
 	<wd-navbar title="投放信息确认" left-arrow @click-left="handleClickLeft" placeholder fixed safeAreaInsetTop></wd-navbar>
 	<wd-card title="投放设置" custom-class="card-custom-class uni-mt-lg">
-		{{ formData }}
 		<view class="uni-flex uni-justify-between">
 			<view>营销目标</view>
 			<view class="uni-font-color-theme uni-text-bold">
@@ -17,7 +16,7 @@
 		<view class="uni-flex uni-justify-between">
 			<view>投放时长</view>
 			<view class="uni-font-color-theme uni-text-bold">
-				{{getLabelByValue(leyitou_order_setting,formData.delivery_setting?.delivery_time)}}小时
+				{{formData.delivery_setting?.delivery_time || 0}}小时
 			</view>
 		</view>
 		<view class="uni-flex uni-justify-between">
@@ -27,21 +26,27 @@
 			</view>
 		</view>
 		<view class="uni-flex uni-justify-between">
-			<view>优化目标出价</view>
+			<view>出价类型</view>
 			<view class="uni-font-color-theme uni-text-bold">
 				{{getLabelByValue(leyitou_order_setting,formData.delivery_setting?.bid_type)}}
 			</view>
 		</view>
 		<view class="uni-flex uni-justify-between">
+			<view>优化目标出价</view>
+			<view class="uni-font-color-theme uni-text-bold">
+				{{formData.delivery_setting?.cpa_bid}}
+			</view>
+		</view>
+		<view class="uni-flex uni-justify-between">
 			<view>目标支付ROI</view>
 			<view class="uni-font-color-theme uni-text-bold">
-				{{getLabelByValue(leyitou_order_setting,formData.delivery_setting?.roi_goal)}}
+				{{formData.delivery_setting?.roi_goal || 0}}
 			</view>
 		</view>
 		<view class="uni-flex uni-justify-between">
 			<view>单笔投放金额</view>
 			<view class="uni-font-color-theme uni-text-bold">
-				￥{{getLabelByValue(leyitou_order_setting,formData.delivery_setting?.amount)}}
+				￥{{formData.delivery_setting?.amount}}
 			</view>
 		</view>
 	</wd-card>
@@ -136,7 +141,7 @@
 	const {
 		leyitou_order_setting
 	} = toRefs(useDict(['leyitou_order_setting']))
-
+	console.log(leyitou_order_setting)
 	const toast = useToast()
 	
 	const formData = ref<CreateOrderInfoVo>({
@@ -223,7 +228,6 @@
 		};
 
 		// console.log(awemeItems.value);
-
 		if (formData.value.delivery_setting?.liveroom_heat_mode === 'BY_ROOM') {
 			for (let count = 0; count < func.value.createCount; count++) {
 				vedio.value.forEach((video) => {
@@ -292,7 +296,6 @@
 				return;
 			}
 		}
-		console.log(task)
 		createUniOrder(task).then(res => {
 			toast.success('任务提交成功');
 		}).catch(() => {

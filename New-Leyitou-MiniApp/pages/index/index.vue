@@ -201,7 +201,7 @@
 		{
 			name: '投放记录',
 			icon: 't-icon icon-shangpinliebiao',
-			path: '',
+			path: '/sub_page/pages/createRecord/index',
 			permission:''
 		},
 		{

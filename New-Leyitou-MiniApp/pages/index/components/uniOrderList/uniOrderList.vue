@@ -24,8 +24,8 @@
 							<view class="info ">
 								订单创建时间：{{item.orderCreateTime}}
 							</view>
-							<view :class="orderStatusComputed(item.status)?.elTagType" class="uni-ml-sm uni-border-radius-sm uni-p-sm">
-								{{orderStatusComputed(item.status)?.label}}
+							<view class="uni-ml-sm uni-border-radius-sm uni-p-sm">
+								<baseTag :options="leyitou_order_status" :value="item.status"></baseTag>
 							</view>
 						 </view>
 						 <view class="order-code">
@@ -178,14 +178,7 @@
 		noData.value=false
 		loadData()
 	}
-	 
-	 
 
-	const orderStatusComputed = computed(() => {
-		return (status:string) => {
-			return leyitou_order_status.value.find(item => item.value === status)
-		}
-	})
 	const hiddenMessageComputed = computed(() => {
 		return (data:any) => hiddenMessage.value ? data : '内容已隐藏'
 	})
@@ -262,7 +255,8 @@
 			align-items: center;
 			justify-content: space-between;
 			border-top: 1px solid #f0f0f0;
-			padding-top: 5px;
+			border-bottom: 1px solid #f0f0f0;
+			padding: 5px 0px;
 			.image{
 				width: 100rpx;
 				height: 100rpx;

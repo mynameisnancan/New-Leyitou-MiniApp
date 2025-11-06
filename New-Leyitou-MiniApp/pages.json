@@ -76,6 +76,13 @@
 					"navigationStyle": "custom"
 					// "navigationBarTitleText": "投放信息确认"
 				}
+			},
+			{
+				"path": "pages/createRecord/index", // 投放记录
+				"style": {
+					"navigationStyle": "custom"
+					// "navigationBarTitleText": ""
+				}
 			}
 		]
 	}],
