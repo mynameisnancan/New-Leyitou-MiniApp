@@ -1,7 +1,7 @@
 import request from '@/utils/request.ts';
 import config from '@/config.ts';
 import { LoginData, VerifyCodeResult, LoginResult } from './types';
-import { UserInfo } from '@/api/user/types';
+import { UserInfoVo } from '@/api/user/types';
 // 登录
 export const login = (data: LoginData): Promise<ResultType<LoginResult>> => {
   const params = {
@@ -36,7 +36,7 @@ export const getCode = (): Promise<ResultType<VerifyCodeResult>> => {
 };
 
 // 获取用户详细信息
-export function getInfo(): Promise<ResultType<UserInfo>> {
+export function getInfo(): Promise<ResultType<UserInfoVo>> {
   return request({
     url: '/core/sys/user/get_info',
     method: 'get'

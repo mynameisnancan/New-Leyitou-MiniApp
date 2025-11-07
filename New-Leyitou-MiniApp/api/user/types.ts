@@ -308,12 +308,27 @@ export interface SysUserThirdBindVo {
 }
 
 /**
- * 用户信息
+ * 数据对象
+ *
+ * UserInfoVo
  */
-export interface UserInfo {
-  user: UserVO;
-  roles: string[];
-  permissions: string[];
+export interface UserInfoVo {
+    /**
+     * 应用标识信息
+     */
+    appKeys?: string[];
+    /**
+     * 菜单权限
+     */
+    permissions?: string[];
+    /**
+     * 角色权限
+     */
+    roles?: string[];
+    /**
+     * 用户基本信息
+     */
+    user?: SysUserVo;
 }
 
 /**

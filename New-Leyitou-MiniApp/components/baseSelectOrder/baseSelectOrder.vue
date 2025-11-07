@@ -58,7 +58,7 @@
 						</view>
 					</wd-radio>
 				</wd-radio-group>
-				<baseLoading v-show="loading"></baseLoading>
+				<wd-loadmore v-show="loading" state="loading" :loading-props="{size:'40rpx'}" />
 				<template v-if="listData.length==0 && !loading">
 					<view class="uni-pt-xl uni-pb-xl">
 						<wd-status-tip image="content" tip="暂无数据" />

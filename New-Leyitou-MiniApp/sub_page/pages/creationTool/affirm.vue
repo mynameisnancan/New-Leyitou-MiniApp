@@ -44,7 +44,7 @@
 			<view>抖音号信息</view>
 			<view class="uni-flex uni-items-center uni-font-color-theme uni-text-bold">
 				<wd-img v-if="douYinData?.dyAuthorInfo?.avatar" width="50rpx" height="50rpx" round :src="douYinData?.dyAuthorInfo?.avatar" />
-				<wd-img v-else width="150rpx" height="150rpx" round  src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
+				<wd-img v-else width="50rpx" height="50rpx" round  src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
 				<view class="uni-ml-lg">
 					{{ douYinData?.dyAuthorInfo?.nickName }}
 				</view>
@@ -137,10 +137,14 @@
 	}
 
 	onLoad(() => {
-		createData.value = uni.getStorageSync('affirm-form-data')
-		createOrderQuery.value = uni.getStorageSync('affirm-form-query')
-		douYinData.value =  uni.getStorageSync('affirm-selected-data')?.douYinData
-		productData.value = [ uni.getStorageSync('affirm-selected-data')?.productData]
+		const storageData = uni.getStorageSync('affirm-data')
+		if(storageData){
+			createData.value = storageData.formData
+			createOrderQuery.value = storageData.createOrderQuery
+			douYinData.value =  storageData?.douYinData
+			productData.value = [storageData?.productData]
+		}
+		
 	})
 </script>
 <style scoped lang="scss">

@@ -70,7 +70,7 @@
 					</view> 
 				</view>-->
 		</view>
-		<baseLoading v-if="loading"></baseLoading>
+		<wd-loadmore v-show="loading" state="loading" :loading-props="{size:'40rpx'}" />
 		<template v-if="list.length==0 && !loading">
 			<view class="uni-pt-xl uni-pb-xl">
 				<wd-status-tip image="content" tip="暂无数据" />

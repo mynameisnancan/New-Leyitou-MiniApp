@@ -78,7 +78,7 @@
 					</view> 
 				</view>-->
 		</view>
-		<baseLoading v-if="loading"></baseLoading>
+		<wd-loadmore v-show="loading" state="loading" :loading-props="{size:'40rpx'}" />
 		<template v-if="list.length==0 && !loading">
 			<view class="uni-pt-xl uni-pb-xl">
 				<wd-status-tip image="content" tip="暂无数据" />
@@ -148,7 +148,6 @@
 		})
 		if(res.rows){
 			list.value = list.value.concat(res.rows) 
-			console.log(list.value)
 			pageParams.value.total = res.total
 		}
 		if(list.value.length == res.total || res.rows.length == 0){
@@ -255,7 +254,6 @@
 			align-items: center;
 			justify-content: space-between;
 			border-top: 1px solid #f0f0f0;
-			border-bottom: 1px solid #f0f0f0;
 			padding: 5px 0px;
 			.image{
 				width: 100rpx;

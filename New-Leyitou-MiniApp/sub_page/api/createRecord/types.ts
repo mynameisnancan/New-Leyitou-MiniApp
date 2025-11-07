@@ -1,5 +1,3 @@
-import { UserInfo } from "@/api/user/types";
-
 // 查询随心推订单创建记录列表
 export interface SxtOrderCreateRecordQuery extends Partial<PageQuery>{
     /**

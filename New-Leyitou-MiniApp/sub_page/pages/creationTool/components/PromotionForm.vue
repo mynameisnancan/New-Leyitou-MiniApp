@@ -78,7 +78,8 @@
 	import dayjs from 'dayjs'
 	import {
 		ref,
-		toRefs
+		toRefs,
+		onBeforeUnmount
 	} from 'vue'
 	
 	const formRef = ref()
@@ -162,12 +163,12 @@
 		if(!formData.value.product_id){
 			return toast.warning('请选择目标商品!')
 		}
-		uni.setStorageSync('affirm-form-data',formData.value)
-		uni.setStorageSync('affirm-selected-data',{
+		uni.setStorageSync('affirm-data',{
 			douYinData:selectedDouYin.value,
-			productData:selectedProduct.value
+			productData:selectedProduct.value,
+			formData:formData.value,
+			createOrderQuery:createOrderQuery
 		})
-		uni.setStorageSync('affirm-form-query',createOrderQuery.value)
 		uni.navigateTo({
 			url: '/sub_page/pages/creationTool/affirm',
 			animationType: 'slide-in-right'
@@ -205,8 +206,8 @@
 		}
 	})
 	
-	onLoad(() => {
-		
+	onBeforeUnmount(() => {
+		uni.removeStorageSync("affirm-data")
 	})
 </script>
 

@@ -2,14 +2,24 @@
 	<view>
 		<z-paging ref="paging" use-virtual-list @scroll="paginScroll" :force-close-inner-list="true"
 			:virtual-list-col="2" @virtualListChange="virtualListChange" @query="queryList" auto-show-back-to-top
-			auto-show-system-loading loading-more-no-more-text="我也是有底线的~" preload-page="50" showScrollbar>
+			auto-show-system-loading loading-more-no-more-text="没有更多数据了~" preload-page="50" showScrollbar>
 			<template #top>
-				<wd-navbar title="投放工具" left-arrow @click-left="handleClickLeft" placeholder fixed
+				<wd-navbar title="投放记录" left-arrow @click-left="handleClickLeft" placeholder fixed
 					safeAreaInsetTop></wd-navbar>
-					<view @click="openFilter" class="filter uni-bg-color-white uni-font-color-gray uni-flex uni-items-center uni-text-26 uni-p-sm">
+				<view 
+					class="filter uni-bg-color-white uni-font-color-gray uni-flex uni-items-center uni-text-26 uni-justify-between">
+					<view @click="openFilter" class="uni-flex uni-items-center">
 						数据筛选
-						<wd-icon name="filter" size="40rpx"></wd-icon>
+						<view class="icon">
+							<text class="t-icon icon-shaixuan"></text>
+						</view>
 					</view>
+					<view @click="reset">
+						重置
+						<wd-icon name="refresh" size="32rpx"></wd-icon>
+					</view>
+					
+				</view>
 			</template>
 			<template #empty>
 				<view class="uni-pt-xl uni-pb-xl">
@@ -22,67 +32,64 @@
 				</view>
 			</template>
 			<template #loadingMoreLoading>
-				<baseLoading></baseLoading>
+				<wd-loadmore state="loading" :loading-props="{size:'40rpx'}" />
 			</template>
 			<view class="uni-w-full uni-h-full">
 				<view class="uni-px-lg">
-						<view class="record-item" v-for="(item,index) in listData" :key="index">
-							<view
-								class="uni-flex uni-items-center author-info uni-text-26 uni-font-color-gray uni-pb-sm">
-								<view>抖音达人：</view>
-								<image v-if="item.dyAuthorInfo?.avatar" :src="item.dyAuthorInfo?.avatar"
-									class="image" />
-								<image v-else src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
-									class="image" />
-								<text class="user-name">{{item.dyAuthorInfo?.nickName || '暂无'}}</text>
-								<text class="user-name">运营人: {{item.dyAuthorInfo?.userInfo?.nickName || '暂无'}}</text>
-							</view>
-							<view class="data-top">
-								<view @click.stop="toMessage(item)" class="uni-flex  uni-justify-between uni-w-9-10">
-									<image v-if="item?.dyProductInfo?.cover" :src="item?.dyProductInfo?.cover"
-										class="image"></image>
-									<view v-else class="hidden-message-img">暂无图片</view>
-									<view class="title-item">
-										<view class="title">{{item?.dyProductInfo?.title}}</view>
-										<view class="remark uni-text-22">
-											<view class="uni-flex uni-items-center">
-												<view>
-													<wd-text type="error"
-														:text="`￥${item?.dyProductInfo?.price}`"></wd-text>
-												</view>
-												<view class="uni-ml-sm">
-													库存：{{item?.dyProductInfo?.productStock || 0}}
-												</view>
-												<view class="uni-ml-sm">
-													<baseTag :options="sxt_bud_marketing_goal"
-														:value="item.marketingGoal">
-													</baseTag>
-												</view>
+					<view class="record-item" @click.stop="toMessage(item)" v-for="(item,index) in listData"
+						:key="index">
+						<view class="uni-flex uni-items-center author-info uni-text-26 uni-font-color-gray uni-pb-sm">
+							<view>抖音达人：</view>
+							<image v-if="item.dyAuthorInfo?.avatar" :src="item.dyAuthorInfo?.avatar" class="image" />
+							<image v-else src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
+								class="image" />
+							<text class="user-name">{{item.dyAuthorInfo?.nickName || '暂无'}}</text>
+							<text class="user-name">运营人: {{item.dyAuthorInfo?.userInfo?.nickName || '暂无'}}</text>
+						</view>
+						<view class="data-top">
+							<view class="uni-flex  uni-justify-between uni-w-9-10">
+								<image v-if="item?.dyProductInfo?.cover" :src="item?.dyProductInfo?.cover"
+									class="image"></image>
+								<view v-else class="hidden-message-img">暂无图片</view>
+								<view class="title-item">
+									<view class="title">{{item?.dyProductInfo?.title}}</view>
+									<view class="remark uni-text-22">
+										<view class="uni-flex uni-items-center">
+											<view>
+												<wd-text type="error"
+													:text="`￥${item?.dyProductInfo?.price}`"></wd-text>
+											</view>
+											<view class="uni-ml-sm">
+												库存：{{item?.dyProductInfo?.productStock || 0}}
+											</view>
+											<view class="uni-ml-sm">
+												<baseTag :options="sxt_bud_marketing_goal" :value="item.marketingGoal">
+												</baseTag>
 											</view>
 										</view>
-										<view class="uni-flex uni-items-center uni-text-22 uni-font-color-gray">
-											订单ID：{{ item.orderId || '--'}}
-										</view>
-										<view
-											class="uni-flex uni-items-center author-info uni-font-color-gray uni-text-22">
-											<view>付款账户：</view>
-											<image v-if="item.payDyAuthorInfo?.avatar"
-												:src="item.payDyAuthorInfo?.avatar" class="image" />
-											<image v-else
-												src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
-												class="image" />
-											<text class="user-name">{{item.payDyAuthorInfo?.nickName || '暂无'}}</text>
-											<text class="user-name">运营人:
-												{{item.payDyAuthorInfo?.userInfo?.nickName || '暂无'}}</text>
-										</view>
+									</view>
+									<view class="uni-flex uni-items-center uni-text-22 uni-font-color-gray">
+										订单ID：{{ item.orderId || '--'}}
+									</view>
+									<view class="uni-flex uni-items-center author-info uni-font-color-gray uni-text-22">
+										<view>付款账户：</view>
+										<image v-if="item.payDyAuthorInfo?.avatar" :src="item.payDyAuthorInfo?.avatar"
+											class="image" />
+										<image v-else
+											src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
+											class="image" />
+										<text class="user-name">{{item.payDyAuthorInfo?.nickName || '暂无'}}</text>
+										<text class="user-name">运营人:
+											{{item.payDyAuthorInfo?.userInfo?.nickName || '暂无'}}</text>
 									</view>
 								</view>
 							</view>
 						</view>
 					</view>
+				</view>
 			</view>
 		</z-paging>
-		
+
 		<filterPopup v-model:visible="filterVisible" v-model:queryForm="filterQuery" @confirm="filterConfirm" />
 	</view>
 
@@ -107,7 +114,7 @@
 	} from '@/utils/dict'
 	import {
 		getNavHeight
-	}from '@/utils/utils'
+	} from '@/utils/utils'
 	import filterPopup from './components/filterPopup'
 
 	const pageParams = ref({
@@ -118,8 +125,8 @@
 	const filterQuery = ref<SxtOrderCreateRecordQuery>({
 		awemeId: undefined,
 		productId: undefined,
-		marketingGoal:undefined,
-		createStatus:undefined,
+		marketingGoal: undefined,
+		createStatus: undefined,
 	})
 	const listData = ref<SxtOrderCreateRecordVo[]>([])
 
@@ -128,9 +135,9 @@
 	} = toRefs(useDict(['sxt_bud_marketing_goal']))
 
 	const scrollTop = ref<number>(0)
-	
+
 	const filterVisible = ref<boolean>(false)
-	
+
 	function paginScroll(e : any) {
 		scrollTop.value = e.detail.scrollTop
 	}
@@ -154,15 +161,24 @@
 			paging.value.completeByTotal(res.rows, res.total)
 		})
 	}
-	
+
 	const openFilter = () => {
 		filterVisible.value = true
 	}
 	
+	const reset = () => {
+		filterQuery.value = {
+			awemeId: undefined,
+			productId: undefined,
+			marketingGoal: undefined,
+			createStatus: undefined,
+		}
+	}
+
 	const filterConfirm = () => {
 		pageParams.value = {
-			pageNum:1,
-			pageSize:10,
+			pageNum: 1,
+			pageSize: 10,
 			total: 0
 		}
 		paging.value.reload()
@@ -175,24 +191,28 @@
 	const handleClickLeft = () => {
 		uni.navigateBack()
 	}
-	
+
 	function toMessage(item : SxtOrderCreateRecordVo) {
+		uni.setStorageSync('createRecord', item)
 		uni.navigateTo({
-			url: `/sub_page/pages/index/createRecord/detail?orderId=${item.orderId}`,
+			url: `/sub_page/pages/createRecord/detail`,
 			animationType: 'slide-in-right'
 		})
 	}
-	
-	watch(() => filterQuery.value,() => {
+
+	watch(() => filterQuery.value, () => {
 		filterConfirm()
-	},{deep:true})
+	}, { deep: true })
 </script>
 
 <style lang="scss" scoped>
-	.filter{
+	.filter {
 		border-bottom-left-radius: 20rpx;
 		border-bottom-right-radius: 20rpx;
+		box-shadow: 0 4px 5px #e4e8fc4d;
+		padding: 10rpx 20rpx;
 	}
+
 	.record-item {
 		width: 100%;
 		background-color: white;

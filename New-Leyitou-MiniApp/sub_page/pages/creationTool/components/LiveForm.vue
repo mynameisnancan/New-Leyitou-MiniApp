@@ -151,7 +151,8 @@
 	} from '@/sub_page/api/creationTool/index'
 	import {
 		ref,
-		computed
+		computed,
+		onBeforeUnmount
 	} from 'vue'
 	import dayjs from 'dayjs'
 
@@ -477,6 +478,9 @@
 
 	getAwemeList()
 
+	onBeforeUnmount(() => {
+		uni.removeStorageSync("liveAffirm-data")
+	})
 
 	// 允许当前文件样式穿透
 	defineOptions({

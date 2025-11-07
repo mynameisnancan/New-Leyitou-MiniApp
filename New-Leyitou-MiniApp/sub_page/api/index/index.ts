@@ -3,7 +3,9 @@ import type {
 	SxtUniOrderDetailMergeVo,
 	SxtUniOrderDataMergeQuery,
 	SxtUniOrderDataMergeVo,
-	SxtDataLabelVo
+	SxtDataLabelVo,
+	OrderAddUnigetQuery,
+	OrderAddBudgetQuery
 }from './types'
 import type {
 	SxtOrderVo,
@@ -43,6 +45,24 @@ export const getOrderDetail = (orderId:number) :Promise<ResultType<SxtOrderVo>> 
 export const getOrderDataHour = (params: SxtUniOrderDataMergeQuery):Promise<ResultType<SxtDataLabelVo[]>> => {
 	return request({
 		url:'/leyitou/sxt/order/data/hour',
+		method:'get',
+		params
+	})
+}
+
+// 随心推全域订单追投
+export const orderAddUniBudget = (params:OrderAddUnigetQuery) => {
+	return request({
+		url:'/leyitou/sxt/uni_order/add_budget',
+		method:'get',
+		params
+	})
+}
+
+// 随心推订单追投
+export const orderAddBudget = (params:OrderAddBudgetQuery) => {
+	return request({
+		url:'/leyitou/sxt/order/add_budget',
 		method:'get',
 		params
 	})

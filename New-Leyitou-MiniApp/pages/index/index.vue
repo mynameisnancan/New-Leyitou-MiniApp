@@ -207,7 +207,7 @@
 		{
 			name: '追投记录',
 			icon: 't-icon icon-jilu',
-			path: '',
+			path: '/sub_page/pages/addRecord/index',
 			permission:''
 		},
 		{

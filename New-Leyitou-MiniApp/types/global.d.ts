@@ -257,5 +257,45 @@ declare global {
 		 */
 		room_title ?: string;
 	}
+	/**
+	 * 用户信息
+	 */
+	interface UserInfo {
+	   /**
+	      * 部门id
+	      */
+	     deptId?: number;
+	     /**
+	      * 部门信息
+	      */
+	     deptInfo?: DeptInfo;
+	     /**
+	      * 昵称
+	      */
+	     nickName?: string;
+	     /**
+	      * 用户id
+	      */
+	     userId?: number;
+	     /**
+	      * 用户名
+	      */
+	     userName?: string;
+	}
+	/**
+	 * 部门信息
+	 *
+	 * DeptInfo
+	 */
+	interface DeptInfo {
+	    /**
+	     * 部门id
+	     */
+	    deptId?: number;
+	    /**
+	     * 部门名称
+	     */
+	    deptName?: string;
+	}
 }
 export const a = 1;

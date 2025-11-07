@@ -1,26 +1,18 @@
 <template>
-	<wd-navbar 
-		fixed 
-		title="全域订单详情" 
-		left-arrow 
-		safeAreaInsetTop
-		@click-left="handleClickLeft"
-		:custom-style="`background-color: rgba(255, 255, 255,${barOpacity}) !important;`"
-	/>
-	<view class="body"  :style="{paddingTop:getNavHeight()+'px'}">
+	<wd-navbar fixed title="全域订单详情" left-arrow safeAreaInsetTop @click-left="handleClickLeft"
+		:custom-style="`background-color: rgba(255, 255, 255,${barOpacity}) !important;`" />
+	<view class="body" :style="{paddingTop:getNavHeight()+'px'}">
 		<view class="gradual-bg-color uni-p-lg">
 			<view @click="copyStr(orderData?.orderId)" class="uni-font-color-gray uni-text-26">
 				订单ID:{{orderData?.orderId}}
 				<wd-icon name="file-copy" size="30rpx"></wd-icon>
 			</view>
 			<!-- 抖音号模板 -->
-			<view class="message-module uni-flex uni-items-center uni-justify-around uni-p-sm uni-mt-lg uni-border-radius-xl uni-text-bold">
+			<view
+				class="message-module uni-flex uni-items-center uni-justify-around uni-p-sm uni-mt-lg uni-border-radius-xl uni-text-bold">
 				<view class="uni-flex uni-flex-wrap uni-items-center uni-flex-column">
 					<view>
-						<wd-img 
-							width="100rpx" 
-							height="100rpx" 
-							round 
+						<wd-img width="100rpx" height="100rpx" round
 							:src="orderData?.dyAuthorInfo?.avatar || 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'" />
 					</view>
 					<text class="uni-text-26">
@@ -37,26 +29,24 @@
 					</view>
 				</view>
 				<view class="uni-flex uni-flex-wrap uni-items-center uni-flex-column">
-				<view>
-					<wd-img
-						width="100rpx" 
-						height="100rpx" 
-						round 
-						:src="orderData?.dyAuthorInfo?.avatar || 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'" />
+					<view>
+						<wd-img width="100rpx" height="100rpx" round
+							:src="orderData?.dyAuthorInfo?.avatar || 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'" />
+					</view>
+					<text class="uni-text-26">
+						{{orderData?.dyAuthorInfo?.nickName || '暂无'}}
+					</text>
 				</view>
-				<text class="uni-text-26"> 
-					{{orderData?.dyAuthorInfo?.nickName || '暂无'}}
-				</text>
-			</view>
 			</view>
 			<!-- 商品模板 -->
 			<view class="message-module uni-flex uni-mt-lg uni-border-radius-xl uni-p-sm">
 				<view>
-					<wd-img width="200rpx" height="200rpx" :src="orderData?.dyProductInfo?.cover" radius="20rpx"/>
+					<wd-img width="200rpx" height="200rpx" :src="orderData?.dyProductInfo?.cover" radius="20rpx" />
 				</view>
 				<view class="uni-ml-lg uni-text-26 ">
 					<view class="uni-text-bold uni-text-warp-2">{{orderData?.dyProductInfo?.title || '暂无商品名称'}}</view>
-					<view @click="copyStr(orderData?.dyProductInfo?.productId || '')" class="uni-mt-sm uni-font-color-gray uni-flex uni-items-center">
+					<view @click="copyStr(orderData?.dyProductInfo?.productId || '')"
+						class="uni-mt-sm uni-font-color-gray uni-flex uni-items-center">
 						商品ID:{{orderData?.dyProductInfo?.productId}}
 						<wd-icon name="file-copy" size="30rpx"></wd-icon>
 					</view>
@@ -66,12 +56,13 @@
 						</view>
 						<view class="uni-ml-lg">服务费率：{{orderData?.productRateInfo?.serviceRatio || 0.0}}%</view>
 					</view>
-			
+
 					<view class="uni-flex uni-mt-sm">
 						<view class="uni-text-warp-1">
 							{{orderData?.dyShopInfo?.shopName}}
 						</view>
-						<view  @click="copyStr(orderData?.dyShopInfo?.shopId || '')" class="uni-ml-sm uni-font-color-gray uni-flex uni-items-center">
+						<view @click="copyStr(orderData?.dyShopInfo?.shopId || '')"
+							class="uni-ml-sm uni-font-color-gray uni-flex uni-items-center">
 							ID:{{orderData?.dyShopInfo?.shopId}}
 							<wd-icon name="file-copy" size="30rpx"></wd-icon>
 						</view>
@@ -101,7 +92,8 @@
 					<view class="uni-flex uni-justify-between">
 						<view>出价类型</view>
 						<view>
-							<baseTag :options="sxt_order_bid_type" :value="orderData?.deliverySetting?.bid_type"></baseTag>
+							<baseTag :options="sxt_order_bid_type" :value="orderData?.deliverySetting?.bid_type">
+							</baseTag>
 						</view>
 					</view>
 					<view class="uni-flex uni-justify-between">
@@ -111,13 +103,14 @@
 					<view class="uni-flex uni-justify-between">
 						<view>投放时长</view>
 						<view>
-							<baseTag :options="sxt_order_delivery_time" :value="orderData?.deliverySetting?.delivery_time"></baseTag>
+							<baseTag :options="sxt_order_delivery_time"
+								:value="orderData?.deliverySetting?.delivery_time"></baseTag>
 						</view>
 					</view>
 					<view class="uni-flex uni-justify-between">
 						<view>投放金额</view>
 						<view class='uni-text-bold'>
-							  {{ orderData.deliverySetting?.amount || '--' }} 元
+							{{ orderData.deliverySetting?.amount || '--' }} 元
 						</view>
 					</view>
 					<view class="uni-flex uni-justify-between">
@@ -132,17 +125,18 @@
 					</view>
 				</view>
 			</wd-card>
-			
+
 			<!-- 投中续费信息 -->
 			<wd-card custom-class="card-custom-class">
 				<template #title>
 					<view class="uni-text-bold uni-text-lg">投中续费信息</view>
 				</template>
-				<view v-if="orderData.addAmountInfo && orderData?.addAmountInfo.add_amount" class="uni-font-color-black uni-text-26">
+				<view v-if="orderData.addAmountInfo && orderData?.addAmountInfo.add_amount"
+					class="uni-font-color-black uni-text-26">
 					<view class="uni-flex uni-justify-between">
 						<view>续费订单金额之和</view>
 						<view class='uni-text-bold'>
-							 ￥{{ orderData?.addAmountInfo.add_amount || '--' }}
+							￥{{ orderData?.addAmountInfo.add_amount || '--' }}
 						</view>
 					</view>
 					<view class="uni-flex uni-justify-between">
@@ -163,118 +157,141 @@
 				</view>
 			</wd-card>
 		</view>
-		
-		
-		<wd-calendar
-			ref="calendar" 
-			type="daterange" 
-			v-model="dateValue" 
-			@confirm="handleConfirm" 
-			:with-cell="false"
-			:min-date="getMinDate()"
-			:max-date="getMaxDate()"
-			allow-same-day
-			:z-index="9999"
-		/>
-		
+
+		<view class="buttom-btn">
+			<view class="uni-flex uni-justify-center uni-mt-lg">
+				<wd-button @click="addBudgetOrder" custom-class="uni-w-3-4">追投</wd-button>
+			</view>
+		</view>
+
+		<wd-calendar ref="calendar" type="daterange" v-model="dateValue" @confirm="handleConfirm" :with-cell="false"
+			:min-date="getMinDate()" :max-date="getMaxDate()" allow-same-day :z-index="9999" />
+
+		<wd-message-box selector="wd-message-box-slot">
+			<view>
+				<wd-cell title="追投金额">
+					<wd-input-number prop="renewalBudget" clearable v-model="addBudQuery.renewalBudget"
+						placeholder="请输入追投金额"  :min="100" :max="500000" :step="100" />
+				</wd-cell>
+				<wd-picker :columns="sxt_order_delivery_time" label="追投时长" v-model="addBudQuery.addDeliveryTime"
+					clearable root-portal :z-index="100" />
+			</view>
+		</wd-message-box>
+
+		<wd-toast />
+
 	</view>
 </template>
 
 <script setup lang="ts">
 	import type {
 		SxtUniOrderDetailMergeVo,
-		SxtUniOrderDataMergeVo
-	}from '@/sub_page/api/index/types'
+		SxtUniOrderDataMergeVo,
+		OrderAddUnigetQuery
+	} from '@/sub_page/api/index/types'
 	import type {
 		SxtUniOrderDataInfo
-	}from '@/api/index/types'
+	} from '@/api/index/types'
 	import {
 		getUniOrderDetail,
-		getUniOrderData
-	}from '@/sub_page/api/index/index'
+		getUniOrderData,
+		orderAddUniBudget
+	} from '@/sub_page/api/index/index'
 	import {
 		useDict
-	}from '@/utils/dict'
+	} from '@/utils/dict'
 	import {
 		ref,
 		toRefs
-	}from 'vue'
+	} from 'vue'
 	import {
 		getNavHeight,
 		copyStr
-	}from '@/utils/utils'
+	} from '@/utils/utils'
 	import {
 		getTodayDate
-	}from '@/utils/date'
+	} from '@/utils/date'
 	import dayjs from 'dayjs'
-	import {onLoad,onPageScroll} from '@dcloudio/uni-app'
+	import { onLoad, onPageScroll } from '@dcloudio/uni-app'
 	import uniorderEchart from './components/uniorderEchart'
 	import {
 		getMaxDate,
 		getMinDate
-	}from '@/utils/date'
-	
+	} from '@/utils/date'
+	import { useMessage, useToast } from 'wot-design-uni'
+
+	const message = useMessage('wd-message-box-slot')
+	const toast = useToast()
+
 	const orderId = ref<number>()
-	const dateValue = ref<number[]>([Date.now(),Date.now()])
-	const orderTime = ref([getTodayDate(),getTodayDate()])
+	const dateValue = ref<number[]>([Date.now(), Date.now()])
+	const orderTime = ref([getTodayDate(), getTodayDate()])
 	const orderData = ref<SxtUniOrderDetailMergeVo>({
-		status:undefined
+		status: undefined
 	})
 	//导航栏透明度
 	const barOpacity = ref<number>(0)
 	// ehcart数据源
 	const uniOrderData = ref<SxtUniOrderDataMergeVo[]>([])
 	const calendar = ref()
+
+	// 追投参数
+	const addBudQuery = ref<OrderAddUnigetQuery>({
+		addAmount: 100,
+		addDeliveryTime: 2,
+		orderId: '',
+	});
+
 	// 根据页面滚动修改导航栏透明度
-	const updateOpacity = (event:any) => {
+	const updateOpacity = (event : any) => {
 		const scrollTop = event.scrollTop
 		let height = getNavHeight()
-		if(event.scrollTop <0){
+		if (event.scrollTop < 0) {
 			barOpacity.value = 0
-		}else if(scrollTop <= height){
-			barOpacity.value = Math.round(scrollTop/height*100)/100
-		}else{
+		} else if (scrollTop <= height) {
+			barOpacity.value = Math.round(scrollTop / height * 100) / 100
+		} else {
 			barOpacity.value = 1
 		}
 	}
-	
-	const { 
+
+	const {
 		leyitou_order_status,
 		sxt_order_bid_type,
-	} = toRefs(useDict(['leyitou_order_status','sxt_order_bid_type']))
-	const { sxt_order_delivery_time } =  toRefs(useDict(['sxt_order_delivery_time'],true))
+	} = toRefs(useDict(['leyitou_order_status', 'sxt_order_bid_type']))
+	const { sxt_order_delivery_time } = toRefs(useDict(['sxt_order_delivery_time'], true))
 	// 获取echart图表数据
 	const getUniOrderDataApi = () => {
-		if(!orderId.value)return
+		if (!orderId.value) return
 		getUniOrderData({
-			orderId:orderId.value,
-			timeStart:orderTime.value[0],
-			timeEnd:orderTime.value[1]
+			orderId: orderId.value,
+			timeStart: orderTime.value[0],
+			timeEnd: orderTime.value[1]
 		}).then(res => {
 			uniOrderData.value = res.data
 		})
 	}
-	
+
 	// 获取订单详情数据
 	const getUniOrderDetailApi = () => {
-		if(!orderId.value)return
+		if (!orderId.value) return
 		getUniOrderDetail(orderId.value).then(res => {
 			orderData.value = res.data
 		})
 	}
 	const init = () => {
-		if(orderId.value){
+		if (orderId.value) {
 			getUniOrderDetailApi()
 			getUniOrderDataApi()
 		}
 	}
-	
+
 	const openCalender = () => {
 		calendar.value?.open()
 	}
-	
-	const handleConfirm = ({ value }:any) => {
-		if(value.length===2){
+
+	const handleConfirm = ({ value } : any) => {
+		if (value.length === 2) {
 			orderTime.value = [
 				dayjs(value[0]).format("YYYY-MM-DD"),
 				dayjs(value[1]).format("YYYY-MM-DD")
@@ -282,54 +299,88 @@
 			getUniOrderDataApi()
 		}
 	}
-	
+
 	const handleClickLeft = () => {
-	  uni.navigateBack()
+		uni.navigateBack()
 	}
-	
-	onLoad((data:any) => {
-		if(data.orderId){
+
+	onLoad((data : any) => {
+		if (data.orderId) {
 			orderId.value = data.orderId
+			addBudQuery.value.orderId = data.orderId
 			init()
 		}
 	})
-	
-	onPageScroll((event:any) => {
+
+	onPageScroll((event : any) => {
 		updateOpacity(event)
 	})
-	
+
+	const addBudgetOrder = () => {
+		message
+			.confirm({
+				closeOnClickModal: false,
+				title: '追加订单预算'
+			})
+			.then(() => {
+				orderAddUniBudgetApi()
+			})
+	}
+
+	const orderAddUniBudgetApi = () => {
+		orderAddUniBudget(addBudQuery.value).then(res => {
+			if (res.code == 200) {
+				toast.success(res.msg)
+			} else {
+				toast.error(res.msg)
+			}
+		})
+	}
+
 	// // 允许当前文件样式穿透
 	// defineOptions({
 	// 	options: {
 	// 		styleIsolation: 'shared'
 	// 	}
 	// })
-	
 </script>
 
 <style lang="scss" scoped>
+	.body {
+		background-color: #d8eaff;
+	}
 
-	.body{
-		background-color:#d8eaff;
-	}
-	.content{
+	.content {
 		background-color: #f6f7fb;
-		padding-bottom: 20rpx;
+		padding-bottom: 100rpx;
 	}
-	.gradual-bg-color{
-		 background: linear-gradient(to bottom, #d8eaff 0%,#dff0ff 50%, #eaf4fd 75%,#edf4fa 100%);
-		 width: 100%;
+
+	.gradual-bg-color {
+		background: linear-gradient(to bottom, #d8eaff 0%, #dff0ff 50%, #eaf4fd 75%, #edf4fa 100%);
+		width: 100%;
 	}
-	.message-module{
+
+	.message-module {
 		border: 1px solid white;
 		background-color: #eef9ff;
 	}
+
+	.buttom-btn {
+		width: 100%;
+		position: fixed;
+		left: 0px;
+		bottom: 0%;
+		background-color: white;
+		padding: 20rpx;
+		z-index: 99;
+	}
 </style>
 <style lang="scss">
-	page{
+	page {
 		background-color: #f6f7fb;
 	}
-	.card-custom-class{
+
+	.card-custom-class {
 		padding: 0rpx 20rpx 20rpx 20rpx !important;
 	}
 </style>

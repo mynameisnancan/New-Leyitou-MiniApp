@@ -304,6 +304,13 @@
 					</view>
 				</view>
 			</wd-card>
+			
+			<view class="buttom-btn">
+				<view class="uni-flex uni-justify-center uni-mt-lg">
+					<wd-button @click="addBudgetOrder" custom-class="uni-w-3-4">追投</wd-button>
+				</view>
+			</view>
+			
 		</view>
 		
 		
@@ -319,6 +326,21 @@
 			:z-index="9999"
 		/>
 		
+		<wd-message-box selector="wd-message-box-slot">
+			<view>
+				<wd-cell title="追投金额">
+					<wd-input-number prop="renewalBudget" clearable v-model="addBudQuery.renewalBudget"
+						placeholder="请输入追投金额" :maxlength="19" :min="100" :max="500000" :step="100" />
+				</wd-cell>
+				<wd-cell title="追投时长">
+					<wd-input-number prop="renewalDeliverySeconds" clearable v-model="addBudQuery.renewalDeliverySeconds"
+						placeholder="请输入追投时长"  :min="0" :max="24" :step="0" />
+				</wd-cell>
+			</view>
+		</wd-message-box>
+		
+		<wd-toast />
+		
 	</view>
 </template>
 
@@ -331,7 +353,8 @@
 	} from '@/sub_page/api/index/types'
 	import {
 		getOrderDetail,
-		getOrderDataHour
+		getOrderDataHour,
+		orderAddBudget
 	} from '@/sub_page/api/index/index'
 	import {
 		useDict
@@ -355,7 +378,11 @@
 	import dayjs from 'dayjs'
 	import { onLoad, onPageScroll } from '@dcloudio/uni-app'
 	import orderEchart from './components/orderEchart.vue'
-
+	import { useMessage, useToast } from 'wot-design-uni'
+	
+	const message = useMessage('wd-message-box-slot')
+	const toast = useToast()
+	
 	const {
 		leyitou_order_status,
 		leyitou_live_status,
@@ -374,6 +401,14 @@
 	const orderEchartData = ref<SxtDataLabelVo[]>()
 	
 	const calendar = ref()
+	
+	// 追投参数
+	const addBudQuery = ref<OrderAddUnigetQuery>({
+		renewalBudget: 100,
+		renewalDeliverySeconds: 0,
+		orderId: '',
+	});
+	
 	// 根据页面滚动修改导航栏透明度
 	const updateOpacity = (event:any) => {
 		const scrollTop = event.scrollTop
@@ -431,10 +466,31 @@
 		}
 	}
 	
+	const addBudgetOrder = () => {
+		message
+			.confirm({
+				closeOnClickModal: false,
+				title: '追加订单预算'
+			})
+			.then(() => {
+				orderAddBudgetApi()
+			})
+	}
+	
+	const orderAddBudgetApi = () => {
+		orderAddBudget(addBudQuery.value).then(res => {
+			if (res.code == 200) {
+				toast.success(res.msg)
+			} else {
+				toast.error(res.msg)
+			}
+		})
+	}
 
 	onLoad((data : any) => {
 		if (data.orderId) {
 			orderId.value = data.orderId
+			addBudQuery.value.orderId = data.orderId
 			init()
 		}
 	})
@@ -466,7 +522,16 @@
 
 	.content {
 		background-color: #f6f7fb;
-		padding-bottom: 20rpx;
+		padding-bottom: 100rpx;
+	}
+	.buttom-btn {
+		width: 100%;
+		position: fixed;
+		left: 0px;
+		bottom: 0%;
+		background-color: white;
+		padding: 20rpx;
+		z-index: 99;
 	}
 </style>
 

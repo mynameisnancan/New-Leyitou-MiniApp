@@ -253,3 +253,33 @@ export interface SxtDataCollectVo {
      */
     totalPlay: number;
 }
+
+export interface OrderAddUnigetQuery {
+  /**
+   * 追投金额
+   */
+  addAmount: number;
+  /**
+   * 追投时长
+   */
+  addDeliveryTime: number;
+  /**
+   * 订单id
+   */
+  orderId: string;
+}
+
+export interface OrderAddBudgetQuery {
+  /**
+   * 订单id
+   */
+  orderId: string;
+  /**
+   * 追投金额
+   */
+  renewalBudget: number;
+  /**
+   * 追投时长
+   */
+  renewalDeliverySeconds: number;
+}

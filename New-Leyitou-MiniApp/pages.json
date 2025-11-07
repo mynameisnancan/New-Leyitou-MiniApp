@@ -83,6 +83,20 @@
 					"navigationStyle": "custom"
 					// "navigationBarTitleText": ""
 				}
+			},
+			{
+				"path": "pages/createRecord/detail", // 投放记录详情
+				"style": {
+					"navigationStyle": "custom"
+					// "navigationBarTitleText": ""
+				}
+			},
+			{
+				"path": "pages/addRecord/index", // 追投记录
+				"style": {
+					"navigationStyle": "custom"
+					// "navigationBarTitleText": ""
+				}
 			}
 		]
 	}],
