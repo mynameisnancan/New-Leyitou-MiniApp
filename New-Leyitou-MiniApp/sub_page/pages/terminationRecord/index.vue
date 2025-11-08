@@ -1,12 +1,11 @@
 <template>
 	<view>
-
 		<z-paging ref="paging" use-virtual-list @scroll="paginScroll" :force-close-inner-list="true"
 			:virtual-list-col="2" @virtualListChange="virtualListChange" @query="queryList" auto-show-back-to-top
 			auto-show-system-loading loading-more-no-more-text="没有更多数据了~" preload-page="50" showScrollbar>
 
 			<template #top>
-				<wd-navbar title="追投记录" left-arrow @click-left="handleClickLeft" placeholder fixed
+				<wd-navbar title="终止记录" left-arrow @click-left="handleClickLeft" placeholder fixed
 					safeAreaInsetTop></wd-navbar>
 				<view
 					class="filter uni-bg-color-white uni-font-color-gray uni-flex uni-items-center uni-text-26 uni-justify-between">
@@ -20,9 +19,9 @@
 						重置
 						<wd-icon name="refresh" size="32rpx"></wd-icon>
 					</view>
-
 				</view>
 			</template>
+
 			<template #empty>
 				<view class="uni-pt-xl uni-pb-xl">
 					<wd-status-tip image="content" tip="暂无数据" />
@@ -46,7 +45,6 @@
 								<text>{{item.orderId}}</text>
 								<wd-icon name="file-copy" size="30rpx"></wd-icon>
 							</view>
-
 						</view>
 						<view class="uni-flex uni-items-center uni-justify-between uni-mt-lg">
 							<view>广告账户ID</view>
@@ -56,16 +54,25 @@
 							</view>
 						</view>
 						<view class="uni-flex uni-items-center uni-justify-between uni-mt-lg">
-							<view>追投信息</view>
-							<view>
-								<view class="uni-font-color-black">追加预算：<wd-text type="error" :text="`${item.addAmount || '--'}元`"></wd-text></view>
-								<view class="uni-font-color-black">投放预算：<wd-text type="error"
-										:text="`${item.addDeliveryTime || '--'} ${getTimeUnit(item.timeUnit)}`"></wd-text>
-								</view>
-								<view class="uni-font-color-black">追投类型：
-									<baseTag :options="sxt_add_type" :value="item.addType" />
-								</view>
+							<view>平台达人ID</view>
+							<view @click="copyStr(item.authorId)" class="uni-font-color-black">
+								<text>{{item.authorId}}</text>
+								<wd-icon name="file-copy" size="30rpx"></wd-icon>
 							</view>
+						</view>
+						<view class="uni-flex uni-items-center uni-justify-between uni-mt-lg">
+							<view>推广订单来源</view>
+							<view>
+								<baseTag :options="sxt_order_from" :value="item.orderFrom" />
+							</view>
+						</view>
+						<view class="uni-flex uni-items-center uni-justify-between uni-mt-lg">
+							<view>已终止订单数</view>
+							<view class="uni-font-color-black">{{item.terminateQuotaUsed}}</view>
+						</view>
+						<view class="uni-flex uni-items-center uni-justify-between uni-mt-lg">
+							<view>终止订单配额</view>
+							<view class="uni-font-color-black">{{item.terminateQuotaSum}}</view>
 						</view>
 						<view class="uni-flex uni-items-center uni-justify-between uni-mt-lg">
 							<view>操作类型</view>
@@ -74,39 +81,34 @@
 							</view>
 						</view>
 						<view class="uni-flex uni-items-center uni-justify-between uni-mt-lg">
-							<view>追投人</view>
-							<view class="uni-font-color-black">
-								<view>{{item.userInfo?.nickName || '--'}}</view>
-							</view>
+							<view>终止人</view>
+							<view class="uni-font-color-black">{{item.userInfo?.nickName || '--'}}</view>
 						</view>
 						<view class="uni-flex uni-items-center uni-justify-between uni-mt-lg">
-							<view>追投请求结果</view>
-							<view>
-								<baseTag :options="sxt_req_success" :value="item.reqSuccess" />
-							</view>
+							<view>随心推订单监控日志ID</view>
+							<view class="uni-font-color-black">{{item.sxtMonitorLogId || '--' }}</view>
 						</view>
 						<view class="uni-flex uni-items-center uni-justify-between uni-mt-lg">
-							<view>追投时间</view>
-							<view class="uni-font-color-black">{{item.createTime || '--' }}</view>
+							<view>终止时间</view>
+							<view class="uni-font-color-black">{{item.createTime || '--'}}</view>
 						</view>
 					</wd-card>
 				</view>
 			</view>
+
 		</z-paging>
-
 		<filterPopup v-model:visible="filterVisible" v-model:queryForm="filterQuery" @confirm="filterConfirm" />
-
 	</view>
 </template>
 
 <script setup lang="ts">
 	import type {
-		SxtOrderAddRecordQuery,
-		SxtOrderAddRecordVo
-	} from '@/sub_page/api/addRecord/types'
+		SxtOrderTerminationRecordQuery,
+		SxtOrderTerminationRecordVo
+	} from '@/sub_page/api/terminationRecord/types'
 	import {
-		getAddRecordList
-	} from '@/sub_page/api/addRecord/index'
+		getTerminationRecordList
+	} from '@/sub_page/api/terminationRecord/index'
 	import {
 		useDict
 	} from '@/utils/dict'
@@ -121,27 +123,26 @@
 	import filterPopup from './components/filterPopup.vue'
 
 	const {
-		sxt_add_type,
-		sxt_opt_type
-	} = toRefs(useDict(['sxt_add_type', 'sxt_opt_type'], true))
-
+		sxt_order_from
+	} = toRefs(useDict(['sxt_order_from']))
 	const {
-		sxt_req_success
-	} = toRefs(useDict(['sxt_req_success']))
+		sxt_opt_type
+	} = toRefs(useDict(['sxt_opt_type'], true))
 
 	const pageParams = ref({
 		pageNum: 1,
 		pageSize: 10,
 		total: 0
 	})
-	const filterQuery = ref<SxtOrderAddRecordQuery>({
+	const filterQuery = ref<SxtOrderTerminationRecordQuery>({
 		advertiserId: undefined,
 		authorId: undefined,
-		addType: 1,
+		orderId: undefined,
+		orderFrom: undefined,
 		optType: undefined,
-		reqSuccess: undefined,
 	})
-	const listData = ref<SxtOrderAddRecordVo[]>([])
+
+	const listData = ref<SxtOrderTerminationRecordVo[]>([])
 
 	const handleClickLeft = () => {
 		uni.navigateBack()
@@ -155,7 +156,7 @@
 		scrollTop.value = e.detail.scrollTop
 	}
 
-	function virtualListChange(vList : SxtOrderAddRecordVo[]) {
+	function virtualListChange(vList : SxtOrderTerminationRecordVo[]) {
 		listData.value = vList;
 	}
 
@@ -163,7 +164,7 @@
 	function queryList(pageNo : number, pageSize : number) {
 		pageParams.value.pageNum = pageNo
 		pageParams.value.pageSize = pageSize
-		getAddRecordList({
+		getTerminationRecordList({
 			...pageParams.value,
 			...filterQuery.value,
 			noLoading: true
@@ -183,9 +184,9 @@
 		filterQuery.value = {
 			advertiserId: undefined,
 			authorId: undefined,
-			addType: 1,
+			orderId: undefined,
+			orderFrom: undefined,
 			optType: undefined,
-			reqSuccess: undefined,
 		}
 	}
 
@@ -201,11 +202,6 @@
 	function backTop() {
 		paging.value.scrollToTop()
 	}
-
-	const getTimeUnit = (timeUnit : number) => {
-		const time = ['小时', '天'];
-		return time[timeUnit] || '';
-	};
 
 	watch(() => filterQuery.value, () => {
 		filterConfirm()

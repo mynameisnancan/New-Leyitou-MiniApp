@@ -51,7 +51,8 @@
 					</view>
 				</wd-radio>
 			</wd-radio-group> 
-			<wd-loadmore v-show="loading" state="loading" :loading-props="{size:'40rpx'}" />
+			<wd-loadmore v-if="loading" state="loading" :loading-props="{size:'40rpx'}" />
+			<wd-loadmore v-if="noData && listData.length>0" state="finished" :loading-props="{size:'40rpx'}" finished-text="没有更多数据了~"/>
 			<template v-if="listData.length==0 && !loading">
 				<view class="uni-pt-xl uni-pb-xl">
 					<wd-status-tip image="content" tip="暂无数据" />

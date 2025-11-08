@@ -46,7 +46,7 @@
 				<view class="uni-ml-lg uni-text-26 ">
 					<view class="uni-text-bold uni-text-warp-2">{{orderData?.dyProductInfo?.title || '暂无商品名称'}}</view>
 					<view @click="copyStr(orderData?.dyProductInfo?.productId || '')"
-						class="uni-mt-sm uni-font-color-gray uni-flex uni-items-center">
+						class="uni-mt-sm uni-font-color-black uni-flex uni-items-center">
 						商品ID:{{orderData?.dyProductInfo?.productId}}
 						<wd-icon name="file-copy" size="30rpx"></wd-icon>
 					</view>
@@ -62,7 +62,7 @@
 							{{orderData?.dyShopInfo?.shopName}}
 						</view>
 						<view @click="copyStr(orderData?.dyShopInfo?.shopId || '')"
-							class="uni-ml-sm uni-font-color-gray uni-flex uni-items-center">
+							class="uni-ml-sm uni-font-color-black uni-flex uni-items-center">
 							ID:{{orderData?.dyShopInfo?.shopId}}
 							<wd-icon name="file-copy" size="30rpx"></wd-icon>
 						</view>

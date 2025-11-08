@@ -1,10 +1,13 @@
 <template>
 	<view class="content">
-		<view class="uni-h-350 uni-w-full header">
-			<view class="head-portrait">
-				<wd-img width="140rpx" height="140rpx" round mode=""
-					src="https://img2.baidu.com/it/u=1071451148,1162169494&fm=253&fmt=auto&app=120&f=JPEG?w=667&h=500" />
-				<!-- <wd-skeleton theme="avatar" /> -->
+		<view class="uni-h-300 uni-w-full header">
+			<view class="head-portrait uni-flex uni-items-center">
+				<wd-img v-if="userData.avatar" width="140rpx" height="140rpx" round mode="" :src="userData.avatar" />
+				<wd-img v-else width="140rpx" height="140rpx" round mode=""
+					src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
+				<view class="uni-ml-lg">
+					<wd-text :text="userData.nickName || '请登录'" size="40rpx"></wd-text>
+				</view>
 			</view>
 			<view class="uni-border-radius-lg setting uni-flex uni-items-center">
 				<wd-icon name="shezhi" size="35rpx"></wd-icon>
@@ -12,28 +15,26 @@
 			</view>
 		</view>
 		<view class="uni-pt-xl">
-			<wd-card title="管理中心" custom-title-class="uni-text-sm uni-text-bold">
+			<wd-card title="我的菜单" custom-title-class="uni-text-sm uni-text-bold">
 				<view class="uni-flex-wrap">
-					<view v-for="(item,index) in manageList" :key="index" @click="skipPage(item.path)" class="uni-p-sm uni-flex-column uni-items-center">
-						<wd-icon :name="item.icon" size="22px"></wd-icon>
-						<!-- <view class="uni-font-color-black">	{{item.name}}</view> -->
-						<wd-text :text="item.name"></wd-text>
+					<view v-for="(item,index) in manageList" :key="index" @click="skipPage(item.path)"
+						class="uni-p-sm uni-flex-column uni-items-center">
+						<view class="icon">
+							<text :class="item.icon"></text>
+						</view>
+						<view class="uni-font-color-black">{{item.name}}</view>
 					</view>
 				</view>
 				<template #footer></template>
 			</wd-card>
 		</view>
-		
-		
-		<!-- <wd-tabbar v-model="tabbar" fixed placeholder @change="tabbarChange" custom-class="uni-h-100" safeAreaInsetBottom>
-			<template v-for="(item,index) in routes" :key="index">
-				<wd-tabbar-item :title="item.meta.title" :icon="item.meta.icon" :name="item.component"></wd-tabbar-item>
-			</template>
-		</wd-tabbar> -->
 	</view>
 </template>
 
 <script setup lang="ts">
+	import type {
+		SysUserVo
+	} from '@/api/user/types'
 	import {
 		ref
 	} from 'vue'
@@ -48,54 +49,65 @@
 		getToken
 	} from '@/utils/auth.ts'
 	const userStore = useUserStore();
-	// const routes = userStore.routes;
-	const routes = uni.getStorageSync('routes')
+
+	const userData = ref<SysUserVo>({})
 
 	const tabbar = ref('/pages/personalCenter/index');
-	
+
 	const manageList = ref([
 		{
-			name:'订单列表',
-			path:'/sub_page/pages/orderList/index',
-			icon:'list'
+			name: '投放工具',
+			icon: 't-icon icon-gongju',
+			path: '/sub_page/pages/creationTool/index',
+			permission: ''
 		},
 		{
-			name:'缴费记录',
-			path:'/sub_page/pages/payRecord/index',
-			icon:'list'
+			name: '投放记录',
+			icon: 't-icon icon-shangpinliebiao',
+			path: '/sub_page/pages/createRecord/index',
+			permission: ''
+		},
+		{
+			name: '追投记录',
+			icon: 't-icon icon-jilu',
+			path: '/sub_page/pages/addRecord/index',
+			permission: ''
+		},
+		{
+			name: '终止记录',
+			icon: 't-icon icon-zhongzhiguanli',
+			path: '/sub_page/pages/terminationRecord/index',
+			permission: ''
+		},
+		{
+			name: '商品列表',
+			icon: 't-icon icon-shangpin',
+			path: '/sub_page/pages/pages/commodityList/index',
+			permission: ''
 		},
 	])
 
 	const tabbarChange = ({
 		value
-	}:any) => {
+	} : any) => {
 		uni.switchTab({
 			url: value
 		})
 	}
-	
+
 	//跳转页面
-	const skipPage = (page:string) => {
+	const skipPage = (page : string) => {
 		uni.navigateTo({
-			url:page
+			url: page
 		})
 	}
-	
-	const skipOpenVersion  = () => {
-		uni.switchTab({
-			url:'/pages/openVersion/index'
-		})
-	}
-	
+
 
 	onShow(() => {
-		tabbar.value = '/pages/personalCenter/index'
-		if(getToken()){
-			 
-		}else{
-			uni.redirectTo({
-				url:"/sub_page/pages/loginModePage/index"
-			})
+		if (getToken()) {
+			userData.value = uni.getStorageSync('userInfo')
+		} else {
+
 		}
 	})
 	onLoad(() => {
@@ -104,10 +116,15 @@
 </script>
 
 <style scoped lang="scss">
-	
-	.wot-theme-dark .header{
+	.wot-theme-dark .header {
 		background-color: var(--wot-dark-background, #1b1b1b);
 	}
+
+	.icon {
+		font-size: 50rpx;
+		color: var(--wot-text-primary-color, var(--wot-color-theme, #4d80f0));
+	}
+
 	.header {
 		background-color: #e7eaf9;
 		position: relative;
@@ -127,13 +144,14 @@
 		top: 50%;
 		color: #999;
 	}
-	.color-f56c6c{
-		color:#f56c6c
+
+	.color-f56c6c {
+		color: #f56c6c
 	}
 </style>
 
 <style lang="scss">
-	page{
+	page {
 		background-color: #f6f7fb;
 	}
 </style>

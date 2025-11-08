@@ -1,17 +1,27 @@
+import type {
+	SysUserVo
+}from '@/api/user/types'
 import { defineStore } from 'pinia';
 import { setToken ,removeToken} from '@/utils/auth';
 import {LoginData, LoginResult} from '@/api/types';
 import {login as loginApi,getInfo as getUserInfo,logout as logoutApi} from '@/api/login.ts'
 import { useThemeStore } from './useTheme';
+
 const themeStore = useThemeStore()
+interface State {
+	user:SysUserVo;
+	roles:string[];
+	permissions:string[];
+	token:string;
+	appKeys:string
+}
 export const useUserStore = defineStore('user', {
-	state: () => {
+	state: ():State => {
 		return {  
 			user:{},
-			roles: {},
-			permissions:[] as string[],
+			roles: [],
+			permissions:[],
 			token: '',
-			routes:[],
 			appKeys:''
 		};
 	},
@@ -21,11 +31,10 @@ export const useUserStore = defineStore('user', {
 			return new Promise((resolve) => {
 				logoutApi().then(res => {
 					this.user = {}
-					this.roles ={}
+					this.roles = []
 					this.permissions =[]
 					this.token=''
 					uni.removeStorageSync("userInfo")
-					uni.removeStorageSync("routes")
 					uni.removeStorageSync("permissions")
 					removeToken()
 					resolve(res)
@@ -56,9 +65,9 @@ export const useUserStore = defineStore('user', {
 		getInfo(){
 			return new Promise((resolve) => {
 				getUserInfo().then(res => {
-					this.user = res.data.user
-					this.roles = res.data.roles
-					this.permissions = res.data.permissions
+					this.user = res.data.user || {}
+					this.roles = res.data.roles || []
+					this.permissions = res.data.permissions || []
 					uni.setStorageSync('userInfo',res.data.user)
 					uni.setStorageSync('permissions',res.data.permissions)
 					const theme = uni.getStorageSync('theme')

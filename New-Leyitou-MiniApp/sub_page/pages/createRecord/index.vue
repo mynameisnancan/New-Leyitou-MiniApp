@@ -68,10 +68,10 @@
 											</view>
 										</view>
 									</view>
-									<view class="uni-flex uni-items-center uni-text-22 uni-font-color-gray">
+									<view class="uni-flex uni-items-center uni-text-22 uni-font-color-black">
 										订单ID：{{ item.orderId || '--'}}
 									</view>
-									<view class="uni-flex uni-items-center author-info uni-font-color-gray uni-text-22">
+									<view class="uni-flex uni-items-center author-info uni-font-color-black uni-text-22">
 										<view>付款账户：</view>
 										<image v-if="item.payDyAuthorInfo?.avatar" :src="item.payDyAuthorInfo?.avatar"
 											class="image" />

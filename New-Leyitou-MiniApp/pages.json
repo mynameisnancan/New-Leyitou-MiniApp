@@ -97,6 +97,20 @@
 					"navigationStyle": "custom"
 					// "navigationBarTitleText": ""
 				}
+			},
+			{
+				"path": "pages/terminationRecord/index", // 终止记录
+				"style": {
+					"navigationStyle": "custom"
+					// "navigationBarTitleText": ""
+				}
+			},
+			{
+				"path": "pages/commodityList/index", // 商品列表
+				"style": {
+					"navigationStyle": "custom"
+					// "navigationBarTitleText": ""
+				}
 			}
 		]
 	}],

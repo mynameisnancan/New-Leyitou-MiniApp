@@ -67,7 +67,7 @@
 						</template>
 					</wd-img>
 				</view>
-				<view class="uni-ml-lg uni-text-26 uni-font-color-gray">
+				<view class="uni-ml-lg uni-text-26 uni-font-color-black">
 					<view class="uni-text-bold uni-text-warp-2">{{orderData?.dyVideoInfo?.title}}</view>
 					<view class="uni-mt-sm">账号：{{orderData?.dyAuthorInfo?.nickName || '暂无抖音号名称'}}</view>
 					<view class="uni-mt-sm">发布时间：{{orderData?.createTime || '--'}}</view>
@@ -334,7 +334,7 @@
 				</wd-cell>
 				<wd-cell title="追投时长">
 					<wd-input-number prop="renewalDeliverySeconds" clearable v-model="addBudQuery.renewalDeliverySeconds"
-						placeholder="请输入追投时长"  :min="0" :max="24" :step="0" />
+						placeholder="请输入追投时长"  :min="0" :max="24" :step="1" :precision="0"/>
 				</wd-cell>
 			</view>
 		</wd-message-box>

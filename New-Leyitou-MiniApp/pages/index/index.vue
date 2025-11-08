@@ -213,13 +213,13 @@
 		{
 			name: '终止记录',
 			icon: 't-icon icon-zhongzhiguanli',
-			path: '',
+			path: '/sub_page/pages/terminationRecord/index',
 			permission:''
 		},
 		{
 			name: '商品列表',
 			icon: 't-icon icon-shangpin',
-			path: '',
+			path: '/sub_page/pages/pages/commodityList/index',
 			permission:''
 		},
 	]
