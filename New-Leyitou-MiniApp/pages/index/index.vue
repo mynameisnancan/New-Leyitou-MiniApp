@@ -219,7 +219,7 @@
 		{
 			name: '商品列表',
 			icon: 't-icon icon-shangpin',
-			path: '/sub_page/pages/pages/commodityList/index',
+			path: '/sub_page/pages/commodityList/index',
 			permission:''
 		},
 	]

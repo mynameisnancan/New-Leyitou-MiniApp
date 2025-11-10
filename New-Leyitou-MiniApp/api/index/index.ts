@@ -21,11 +21,11 @@ export const getUniOrderlist = (data:SxtUinOrderQuery):Promise<ResultType<SxtUni
 }
  
  // 查询全域投放商品列表
- export const getUniProductList = (data:UniProductQuery):Promise<ResultType<QcUniProductVo>> => {
+ export const getUniProductList = (params:UniProductQuery):Promise<ResultType<QcUniProductVo>> => {
 	 return request({
 	 	url: '/leyitou/qc/uni_product/list',
 	 	method: 'get',
-	 	data
+	 	params
 	 })
  }
 

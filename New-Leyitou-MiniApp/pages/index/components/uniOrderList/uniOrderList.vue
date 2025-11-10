@@ -295,26 +295,6 @@
 						 position: absolute;
 						 right:3%;
 					 }
-					 .success{
-						background-color: #79c25c;
-						color: white;
-						padding: 5rpx;
-					 }
-					 .danger{
-						background-color: #f56c6c;
-						color: white;
-						padding: 5rpx;
-					 }
-					 .warning{
-						background-color:#e6a23c;
-						color: white;
-						padding: 5rpx;
-					 }
-					 .primary{
-						background-color: #409eff;
-						color: white;
-						padding: 5rpx;
-					 }
 				 }
 				 .order-code{
 					 font-size: 20rpx;
