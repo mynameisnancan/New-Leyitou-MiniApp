@@ -1,8 +1,8 @@
 <template>
 	<view>
 		<z-paging ref="paging" use-virtual-list @scroll="paginScroll" :force-close-inner-list="true"
-			:virtual-list-col="2" @virtualListChange="virtualListChange" @query="queryList" auto-show-back-to-top
-			auto-show-system-loading loading-more-no-more-text="没有更多数据了~" preload-page="50" showScrollbar>
+			@virtualListChange="virtualListChange" @query="queryList" auto-show-back-to-top auto-show-system-loading
+			loading-more-no-more-text="没有更多数据了~" showScrollbar preload-page="50">
 
 			<template #top>
 				<wd-navbar title="商品列表" left-arrow @click-left="handleClickLeft" placeholder fixed
@@ -37,15 +37,20 @@
 			</template>
 
 			<view class="uni-w-full uni-h-full uni-p-lg">
-				<view class="commoditys-item" v-for="(item,index) in listData" :key="index">
-					<view class="accout-img uni-flex  uni-items-center author-info">
-						<image :src="item.dyAuthorInfo?.avatar" class="image" />
-						<text class="user-name">{{item.dyAuthorInfo?.nickName}}</text>
-						<text class="user-name">运营人:
-							{{item.dyAuthorInfo?.userInfo?.nickName}}</text>
+				<view class="commoditys-item" v-for="(item,index) in listData" :key="item.zp_index"
+					:id="`zp-id-${item.zp_index}`">
+					<view class="uni-flex uni-justify-between">
+						<view class="accout-img uni-flex  uni-items-center author-info">
+							<image :src="item.dyAuthorInfo?.avatar" class="image" />
+							<text class="user-name">{{item.dyAuthorInfo?.nickName}}</text>
+							<text class="user-name">运营人:
+								{{item.dyAuthorInfo?.userInfo?.nickName}}</text>
+						</view>
+						<view @click="put(item)"><wd-text text="投放"  type="primary"  size="26rpx"></wd-text></view>
 					</view>
+					
 					<view class="data-top">
-						<view @click.stop="toMessage(item)" class="uni-flex  uni-justify-between uni-w-full">
+						<view class="uni-flex  uni-justify-between uni-w-full">
 							<image v-if="item.dyProductInfo?.cover" :src="item.dyProductInfo?.cover" class="image">
 							</image>
 							<view v-else class="hidden-message-img">图片已隐藏</view>
@@ -125,7 +130,7 @@
 	}
 
 	function virtualListChange(vList : QcUniProductVo[]) {
-		console.log(vList)
+		console.log(vList.length)
 		listData.value = vList;
 	}
 
@@ -167,6 +172,16 @@
 		paging.value.reload()
 	}
 
+	// 调整到投放工具模块 并携带参数
+	const put = (item:QcUniProductVo) => {
+		uni.setStorageSync('tools-data',item)
+		uni.navigateTo({
+			url: '/sub_page/pages/creationTool/index',
+			animationType: 'slide-in-right'
+		})
+	}
+	
+	
 	watch(() => filterQuery.value, () => {
 		filterConfirm()
 	}, {
@@ -262,6 +277,7 @@
 		box-shadow: 0 4px 5px #e4e8fc4d;
 		padding: 10rpx 20rpx;
 	}
+
 	page {
 		background-color: #f6f7fb;
 	}

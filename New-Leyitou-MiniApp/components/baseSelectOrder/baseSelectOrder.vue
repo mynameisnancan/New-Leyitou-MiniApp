@@ -13,7 +13,7 @@
 			<scroll-view scroll-y class="hide-scrollbar" style="height: 600rpx;" :lower-threshold="100"
 				@scrolltolower="scrolltolower">
 				<wd-checkbox-group v-if="multiple" v-model="selectedValue" @change="multipleChange">
-					<wd-checkbox :modelValue="item.dyVideoInfo.videoId" v-for="(item,index) in listData" :key="index"
+					<wd-checkbox :modelValue="item?.dyVideoInfo?.videoId" v-for="(item,index) in listData" :key="index"
 						shape="square">
 						<view class="uni-flex underline uni-px-lg">
 							<view>

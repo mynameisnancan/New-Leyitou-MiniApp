@@ -6,7 +6,7 @@
 			<template #top>
 				<wd-navbar title="投放记录" left-arrow @click-left="handleClickLeft" placeholder fixed
 					safeAreaInsetTop></wd-navbar>
-				<view 
+				<view
 					class="filter uni-bg-color-white uni-font-color-gray uni-flex uni-items-center uni-text-26 uni-justify-between">
 					<view @click="openFilter" class="uni-flex uni-items-center">
 						数据筛选
@@ -18,7 +18,7 @@
 						重置
 						<wd-icon name="refresh" size="32rpx"></wd-icon>
 					</view>
-					
+
 				</view>
 			</template>
 			<template #empty>
@@ -37,7 +37,7 @@
 			<view class="uni-w-full uni-h-full">
 				<view class="uni-px-lg">
 					<view class="record-item" @click.stop="toMessage(item)" v-for="(item,index) in listData"
-						:key="index">
+						:key="item.zp_index" :id="`zp-id-${item.zp_index}`">
 						<view class="uni-flex uni-items-center author-info uni-text-26 uni-font-color-gray uni-pb-sm">
 							<view>抖音达人：</view>
 							<image v-if="item.dyAuthorInfo?.avatar" :src="item.dyAuthorInfo?.avatar" class="image" />
@@ -71,7 +71,8 @@
 									<view class="uni-flex uni-items-center uni-text-22 uni-font-color-black">
 										订单ID：{{ item.orderId || '--'}}
 									</view>
-									<view class="uni-flex uni-items-center author-info uni-font-color-black uni-text-22">
+									<view
+										class="uni-flex uni-items-center author-info uni-font-color-black uni-text-22">
 										<view>付款账户：</view>
 										<image v-if="item.payDyAuthorInfo?.avatar" :src="item.payDyAuthorInfo?.avatar"
 											class="image" />
@@ -165,7 +166,7 @@
 	const openFilter = () => {
 		filterVisible.value = true
 	}
-	
+
 	const reset = () => {
 		filterQuery.value = {
 			awemeId: undefined,

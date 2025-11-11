@@ -1,8 +1,8 @@
 <template>
 	<wd-form ref="formRef" :model="formData">
-		<wd-cell-group >
+		<wd-cell-group>
 			<wd-cell title="付款抖音号" title-width="180rpx" :value="radioDouYinValue?.dyAuthorInfo?.nickName"
-				@click="openSelectDouYin" ellipsis is-link border/>
+				@click="openSelectDouYin" ellipsis is-link border />
 			<wd-cell title="添加方式" title-width="180rpx" border>
 				<view class="custom-radio">
 					<wd-radio-group v-model="awemeItemSource" shape="button" inline>
@@ -21,7 +21,7 @@
 			</wd-cell>
 
 			<wd-cell v-if="videoSelectVisiable && awemeItemSource === 'NORMAL'" title="订单素材" title-width="180rpx"
-				:value="`已选中${awemeItems.length}个`" @click="openSelectOrder" ellipsis is-link border/>
+				:value="`已选中${awemeItems.length}个`" @click="openSelectOrder" ellipsis is-link border />
 			<wd-input v-else-if="videoSelectVisiable && awemeItemSource === 'LINK'" type="text" label="选择视频"
 				prop="orderId" clearable v-model="awemeItemLink" placeholder="请输入视频链接" label-width="180rpx" border>
 				<template #suffix>
@@ -29,7 +29,7 @@
 				</template>
 			</wd-input>
 			<wd-cell v-else title="选择直播账号" title-width="180rpx" :value="`已选择${multipleDouYinValue.length}个`"
-				@click="openMultipleSelectDouYin" ellipsis is-link border/>
+				@click="openMultipleSelectDouYin" ellipsis is-link border />
 
 			<!-- 优化目标 -->
 			<wd-cell border>
@@ -38,7 +38,7 @@
 				</template>
 			</wd-cell>
 			<wd-picker :columns="deliveryTimesLive" label="投放时长" v-model="formData.delivery_setting.delivery_time"
-				clearable label-width="180rpx" border/>
+				clearable label-width="180rpx" border />
 			<wd-cell title="出价模式" label-width="180rpx" border>
 				<view class="custom-radio">
 					<wd-radio-group v-model="formData.delivery_setting.bid_mode" shape="button" inline>
@@ -84,17 +84,18 @@
 				<wd-checkbox v-model="ageNoCheck" @change="onAgeNoCheck" shape="square">不限</wd-checkbox>
 			</wd-cell>
 			<wd-cell title="" title-width="180rpx">
-				<wd-checkbox-group v-model="formData.audience.age" @change="handleAgeCheckChange" shape="square" inline border>
+				<wd-checkbox-group v-model="formData.audience.age" @change="handleAgeCheckChange" shape="square" inline
+					border>
 					<wd-checkbox modelValue="AGE_BETWEEN_18_23">18-23岁</wd-checkbox>
 					<wd-checkbox modelValue="AGE_BETWEEN_24_30">24-30岁</wd-checkbox>
 					<wd-checkbox modelValue="AGE_BETWEEN_31_40">31-40岁</wd-checkbox>
 					<wd-checkbox modelValue="AGE_BETWEEN_41_50">41-50岁</wd-checkbox>
 				</wd-checkbox-group>
-			</wd-cell>		
+			</wd-cell>
 
 			<wd-cell title="创建方式" title-width="180rpx" border>
 			</wd-cell>
-			<wd-cell title="" >
+			<wd-cell title="">
 				<wd-radio-group v-model="func.createWay" shape="button">
 					<wd-radio :value="0">立即创建</wd-radio>
 					<wd-radio :value="1">定时创建</wd-radio>
@@ -152,7 +153,8 @@
 	import {
 		ref,
 		computed,
-		onBeforeUnmount
+		onBeforeUnmount,
+		onMounted
 	} from 'vue'
 	import dayjs from 'dayjs'
 
@@ -478,8 +480,23 @@
 
 	getAwemeList()
 
+	onMounted(() => {
+		const toolsData = uni.getStorageSync('tools-data')
+		if (toolsData && toolsData.dyAuthorInfo) {
+			console.log(toolsData)
+			radioDouYinValue.value = {
+				dyAuthorInfo: toolsData.dyAuthorInfo,
+				authorId: toolsData.dyAuthorInfo.authorId
+			};
+			formData.value.aweme_id = toolsData.dyAuthorInfo.authorId;
+			awemeItems.value = [toolsData]
+			formData.value.delivery_setting.liveroom_heat_mode = 'BY_VIDEO';
+		}
+	})
+
 	onBeforeUnmount(() => {
 		uni.removeStorageSync("liveAffirm-data")
+		uni.removeStorageSync("tools-data")
 	})
 
 	// 允许当前文件样式穿透

@@ -180,7 +180,7 @@ declare global {
 		 * 平台达人id
 		 */
 		authorId ?: number;
-		creatTime ?: string;
+		createTime ?: string;
 		/**
 		 * 视频时长
 		 */

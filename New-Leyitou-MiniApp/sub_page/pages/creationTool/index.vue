@@ -20,15 +20,29 @@
 	import LiveForm from './components/LiveForm.vue';
 	import PromotionForm from './components/PromotionForm.vue'
 	import {
-		ref
+		ref,
+		onMounted
 	} from 'vue'
-
+	import {onLoad} from '@dcloudio/uni-app'
+	
 	const tabValue = ref<number>(0)
-
+	const routeData = ref<any>()
 
 	const handleClickLeft = () => {
 		uni.navigateBack()
 	}
+	
+	onLoad((data) => {
+		routeData.value = data
+	})
+	
+	onMounted(() => {
+		if(routeData.value.tab){
+			tabValue.value = 1
+		}else{
+			tabValue.value = 0
+		}
+	})
 </script>
 
 <style lang="scss">

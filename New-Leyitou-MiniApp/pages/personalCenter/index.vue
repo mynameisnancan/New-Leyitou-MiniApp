@@ -82,7 +82,13 @@
 		{
 			name: '商品列表',
 			icon: 't-icon icon-shangpin',
-			path: '/sub_page/pages/pages/commodityList/index',
+			path: '/sub_page/pages/commodityList/index',
+			permission: ''
+		},
+		{
+			name: '素材管理',
+			icon: 't-icon icon-sucai',
+			path: '/sub_page/pages/videoManage/index',
 			permission: ''
 		},
 	])

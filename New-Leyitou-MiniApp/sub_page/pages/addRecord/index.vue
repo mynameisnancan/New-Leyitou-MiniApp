@@ -2,7 +2,7 @@
 	<view>
 
 		<z-paging ref="paging" use-virtual-list @scroll="paginScroll" :force-close-inner-list="true"
-			:virtual-list-col="2" @virtualListChange="virtualListChange" @query="queryList" auto-show-back-to-top
+			:virtual-list-col="1" @virtualListChange="virtualListChange" @query="queryList" auto-show-back-to-top
 			auto-show-system-loading loading-more-no-more-text="没有更多数据了~" preload-page="50" showScrollbar>
 
 			<template #top>
@@ -39,7 +39,8 @@
 
 			<view class="uni-w-full uni-h-full">
 				<view>
-					<wd-card v-for="(item,index) in listData" :key="index" title="" custom-class="card-custom-class">
+					<wd-card v-for="(item,index) in listData" :key="item.zp_index" :id="`zp-id-${item.zp_index}`"
+						title="" custom-class="card-custom-class">
 						<view class="uni-flex uni-items-center uni-justify-between uni-mt-lg">
 							<view>订单ID</view>
 							<view @click="copyStr(item.orderId)" class="uni-font-color-black">
@@ -58,7 +59,8 @@
 						<view class="uni-flex uni-items-center uni-justify-between uni-mt-lg">
 							<view>追投信息</view>
 							<view>
-								<view class="uni-font-color-black">追加预算：<wd-text type="error" :text="`${item.addAmount || '--'}元`"></wd-text></view>
+								<view class="uni-font-color-black">追加预算：<wd-text type="error"
+										:text="`${item.addAmount || '--'}元`"></wd-text></view>
 								<view class="uni-font-color-black">投放预算：<wd-text type="error"
 										:text="`${item.addDeliveryTime || '--'} ${getTimeUnit(item.timeUnit)}`"></wd-text>
 								</view>

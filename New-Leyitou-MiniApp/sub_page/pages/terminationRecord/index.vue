@@ -38,7 +38,8 @@
 
 			<view class="uni-w-full uni-h-full">
 				<view>
-					<wd-card v-for="(item,index) in listData" :key="index" title="" custom-class="card-custom-class">
+					<wd-card v-for="(item,index) in listData" :key="item.zp_index" :id="`zp-id-${item.zp_index}`"
+						title="" custom-class="card-custom-class">
 						<view class="uni-flex uni-items-center uni-justify-between uni-mt-lg">
 							<view>订单ID</view>
 							<view @click="copyStr(item.orderId)" class="uni-font-color-black">

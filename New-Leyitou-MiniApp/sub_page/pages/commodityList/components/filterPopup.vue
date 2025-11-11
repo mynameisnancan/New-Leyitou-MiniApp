@@ -79,6 +79,19 @@
 		queryForm.value.awemeId = selectedData?.dyAuthorInfo?.uid
 	}
 	
+	const reset = () => {
+		queryForm.value = {
+			productId: undefined,
+			awemeId: undefined,
+			channelType:undefined
+		}
+		visible.value = false
+	}
+	
+	const confirm = () => {
+		visible.value = false
+	}
+	
 </script>
 
 <style lang="scss">

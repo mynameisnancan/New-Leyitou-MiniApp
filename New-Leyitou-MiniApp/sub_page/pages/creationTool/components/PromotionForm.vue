@@ -79,7 +79,8 @@
 	import {
 		ref,
 		toRefs,
-		onBeforeUnmount
+		onBeforeUnmount,
+		onMounted
 	} from 'vue'
 	
 	const formRef = ref()
@@ -199,6 +200,27 @@
 		selectedDouYin.value = {};
 	}
 	
+	onMounted(() => {
+		const toolsData = uni.getStorageSync('tools-data')
+		if (toolsData) {
+			if (toolsData.productId) {
+				formData.value.product_id = String(toolsData.productId);
+				selectedProduct.value =
+					toolsData.dyProductInfo?.title || '暂无商品名称';
+			}
+	
+			// 确保存在抖音号信息,再赋值表单
+			if (toolsData.awemeId && toolsData.advertiserId) {
+				formData.value.aweme_id = toolsData.awemeId;
+				formData.value.advertiser_id = String(toolsData.advertiserId);
+				selectedDouYin.value =
+					toolsData.dyAuthorInfo;
+				selectedProduct.value = toolsData;
+				selectedDouYin.value = toolsData;
+			}
+		}
+	})
+	
 	// 允许当前文件样式穿透
 	defineOptions({
 		options: {
@@ -208,6 +230,7 @@
 	
 	onBeforeUnmount(() => {
 		uni.removeStorageSync("affirm-data")
+		uni.removeStorageSync("tools-data")
 	})
 </script>
 
