@@ -36,42 +36,46 @@
 				<wd-loadmore state="loading" :loading-props="{size:'40rpx'}" />
 			</template>
 
-			<view class="uni-w-full uni-h-full uni-p-lg">
-				<view class="commoditys-item" v-for="(item,index) in listData" :key="item.zp_index"
-					:id="`zp-id-${item.zp_index}`">
-					<view class="uni-flex uni-justify-between">
-						<view class="accout-img uni-flex  uni-items-center author-info">
-							<image :src="item.dyAuthorInfo?.avatar" class="image" />
-							<text class="user-name">{{item.dyAuthorInfo?.nickName}}</text>
-							<text class="user-name">运营人:
-								{{item.dyAuthorInfo?.userInfo?.nickName}}</text>
+			<view class="uni-w-full uni-h-full">
+				<view class="uni-px-lg">
+					<view class="commoditys-item" v-for="(item,index) in listData" :key="item.zp_index"
+						:id="`zp-id-${item.zp_index}`">
+						<view class="uni-flex uni-justify-between">
+							<view class="accout-img uni-flex  uni-items-center author-info">
+								<image :src="item.dyAuthorInfo?.avatar" class="image" />
+								<text class="user-name">{{item.dyAuthorInfo?.nickName}}</text>
+								<text class="user-name">运营人:
+									{{item.dyAuthorInfo?.userInfo?.nickName}}</text>
+							</view>
+							<view @click="put(item)" class="uni-flex uni-items-center">
+								<wd-icon name="link" size="30rpx" custom-class="link-custom-class"></wd-icon>
+								<wd-text text="投放" type="primary" size="26rpx"></wd-text>
+							</view>
 						</view>
-						<view @click="put(item)"><wd-text text="投放"  type="primary"  size="26rpx"></wd-text></view>
-					</view>
-					
-					<view class="data-top">
-						<view class="uni-flex  uni-justify-between uni-w-full">
-							<image v-if="item.dyProductInfo?.cover" :src="item.dyProductInfo?.cover" class="image">
-							</image>
-							<view v-else class="hidden-message-img">图片已隐藏</view>
-							<view class="title-item">
-								<view class="title">{{item.dyProductInfo?.title}}</view>
-								<view class="remark uni-text-warp-2">
-									不可投广的原因：{{item.grayReason}}
-								</view>
-								<view class="uni-flex uni-items-center">
-									<view class="order-code">
-										账户ID：{{item.advertiserId}}
+
+						<view class="data-top">
+							<view class="uni-flex  uni-justify-between uni-w-full">
+								<image v-if="item.dyProductInfo?.cover" :src="item.dyProductInfo?.cover" class="image">
+								</image>
+								<view v-else class="hidden-message-img">图片已隐藏</view>
+								<view class="title-item">
+									<view class="title">{{item.dyProductInfo?.title}}</view>
+									<view class="remark uni-text-warp-2">
+										不可投广的原因：{{item.grayReason}}
 									</view>
-									<view class="uni-ml-sm uni-border-radius-sm uni-p-sm">
-										<baseTag :options="sxt_channel_type" :value="item.channelType"></baseTag>
+									<view class="uni-flex uni-items-center">
+										<view class="order-code">
+											账户ID：{{item.advertiserId}}
+										</view>
+										<view class="uni-ml-sm uni-border-radius-sm uni-p-sm">
+											<baseTag :options="sxt_channel_type" :value="item.channelType"></baseTag>
+										</view>
 									</view>
 								</view>
 							</view>
 						</view>
 					</view>
 				</view>
-
 			</view>
 
 		</z-paging>
@@ -173,15 +177,15 @@
 	}
 
 	// 调整到投放工具模块 并携带参数
-	const put = (item:QcUniProductVo) => {
-		uni.setStorageSync('tools-data',item)
+	const put = (item : QcUniProductVo) => {
+		uni.setStorageSync('tools-data-commodity', item)
 		uni.navigateTo({
 			url: '/sub_page/pages/creationTool/index',
 			animationType: 'slide-in-right'
 		})
 	}
-	
-	
+
+
 	watch(() => filterQuery.value, () => {
 		filterConfirm()
 	}, {
@@ -196,6 +200,7 @@
 		border-radius: 10rpx;
 		padding: 10rpx;
 		margin-top: 20rpx;
+
 
 		.accout-img {
 			padding-bottom: 10rpx;
@@ -276,6 +281,10 @@
 		border-bottom-right-radius: 20rpx;
 		box-shadow: 0 4px 5px #e4e8fc4d;
 		padding: 10rpx 20rpx;
+	}
+
+	.link-custom-class {
+		color: var(--wot-text-primary-color, var(--wot-color-theme, #4d80f0));
 	}
 
 	page {

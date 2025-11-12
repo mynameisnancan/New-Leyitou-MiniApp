@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-		<view class="uni-h-300 uni-w-full header">
+		<view class="uni-h-380 uni-w-full header">
 			<view class="head-portrait uni-flex uni-items-center">
 				<wd-img v-if="userData.avatar" width="140rpx" height="140rpx" round mode="" :src="userData.avatar" />
 				<wd-img v-else width="140rpx" height="140rpx" round mode=""
@@ -48,6 +48,9 @@
 	import {
 		getToken
 	} from '@/utils/auth.ts'
+	import {
+		setThemeColor
+	}from '@/utils/utils'
 	const userStore = useUserStore();
 
 	const userData = ref<SysUserVo>({})
@@ -110,10 +113,11 @@
 
 
 	onShow(() => {
+		setThemeColor()
 		if (getToken()) {
 			userData.value = uni.getStorageSync('userInfo')
 		} else {
-
+			userData.value={}
 		}
 	})
 	onLoad(() => {
@@ -157,7 +161,15 @@
 </style>
 
 <style lang="scss">
+	
 	page {
 		background-color: #f6f7fb;
+	}
+	// 设置黑夜模式下的样式
+	.wot-theme-dark{
+		.content{
+			height: 100vh;
+			background-color: #1d1e1f !important;
+		}
 	}
 </style>

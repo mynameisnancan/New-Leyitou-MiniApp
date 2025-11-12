@@ -45,11 +45,13 @@
 							<text class="user-name">运营人: {{item.dyAuthorInfo?.userInfo?.nickName}}</text>
 						</view>
 						<view class="uni-flex  uni-items-center">
-							<view @click="remove(item)">
+							<view @click="remove(item)" class="uni-flex uni-items-center">
+								<wd-icon name="delete1" size="26rpx" custom-class="delete-custom-class"></wd-icon>
 								<wd-text text="删除" type="error" size="26rpx"></wd-text>
 							</view>
-							<view @click="put(item)" class="uni-ml-lg">
-								<wd-text text="投放" type="success" size="26rpx"></wd-text>
+							<view @click="put(item)" class="uni-ml-lg uni-flex uni-items-center">
+								<wd-icon name="link" size="30rpx" custom-class="link-custom-class"></wd-icon>
+								<wd-text text="投放" type="primary" size="26rpx"></wd-text>
 							</view>
 						</view>
 					</view>
@@ -263,7 +265,7 @@
 			})
 	}
 	const put = (item : getVideoData) => {
-		uni.setStorageSync('tools-data', item)
+		uni.setStorageSync('tools-data-live', item)
 		uni.navigateTo({
 			url: '/sub_page/pages/creationTool/index?tab=1',
 			animationType: 'slide-in-right'
@@ -415,7 +417,15 @@
 		box-shadow: 0 4px 5px #e4e8fc4d;
 		padding: 10rpx 20rpx;
 	}
-
+	
+	.delete-custom-class{
+		color: var(--wot-text-error-color, var(--wot-color-danger, #fa4350)) ;
+	}
+	
+	.link-custom-class{
+		color: var(--wot-text-primary-color, var(--wot-color-theme, #4d80f0)) ;
+	}
+	
 	page {
 		background-color: #f6f7fb;
 	}

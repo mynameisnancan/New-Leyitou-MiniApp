@@ -95,6 +95,9 @@
 	import {
 		goBack
 	} from '@/utils/utils.ts'
+	import {
+		setThemePageBgColor
+	} from '@/utils/utils.ts'
 
 	const message = useMessage('wd-message-box-slot')
 	const store = useUserStore()
@@ -179,16 +182,23 @@
 	}
 
 
-	onShow(() => {})
+	onShow(() => {
+		uni.setBackgroundColor({
+			backgroundColorTop:'#1b1b1b',
+			backgroundColor: '#1b1b1b',
+		});
+		setThemePageBgColor()
+	})
 </script>
 
-<style lang="scss">
-	page {
+<style lang="scss" >
+	.content{
 		background-color: #ecf3ff;
 		background-image: url(https://www.doulaoban.com/assets/bg.03067133.png);
 		background-repeat: no-repeat;
 		background-position: center top;
 		background-size: 100% 50%;
+		height: 100vh;
 	}
 
 	.agreement {
@@ -216,6 +226,10 @@
 	.wot-theme-dark {
 		.logo {
 			color: var(--wot-dark-theme-color, #000);
+		}
+		.content{
+			background-color: #1d1e1f !important;
+			background-image:none;
 		}
 	}
 

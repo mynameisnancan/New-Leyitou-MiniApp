@@ -5,7 +5,7 @@
 		closable>
 		<view class="uni-p-lg uni-mt-lg">
 			<wd-cell-group border>
-				<wd-cell title="数据时间" title-width="180rpx" value="数据时间" @click="openSelectDate" ellipsis is-link />
+				<wd-cell title="数据时间" title-width="180rpx" :value="queryForm.timeStart ? `${queryForm.timeStart} 至 ${queryForm.timeEnd}` :'数据时间'" @click="openSelectDate" ellipsis is-link />
 				<wd-cell title="运营人" title-width="180rpx" :value="selectedUser?.nickName" @click="openSelectUser" ellipsis is-link />	
 				<wd-cell title="抖音号" title-width="180rpx" :value="selectedDouYin?.dyAuthorInfo?.nickName"
 					@click="openSelectDouYin" ellipsis is-link />

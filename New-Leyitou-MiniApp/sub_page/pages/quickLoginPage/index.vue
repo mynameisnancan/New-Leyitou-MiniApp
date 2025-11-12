@@ -244,6 +244,9 @@
 		.password-login{
 			color: var(--wot-dark-theme-color, #000);
 		}
+		.content{
+			background-color: #1d1e1f !important;
+		}
 	}
 	
 

@@ -378,6 +378,7 @@
 				animationType: 'slide-in-right'
 			})
 		} catch (error : any) {
+			console.log(error)
 			toast.error(error[key][0].message);
 		}
 	}
@@ -481,7 +482,7 @@
 	getAwemeList()
 
 	onMounted(() => {
-		const toolsData = uni.getStorageSync('tools-data')
+		const toolsData = uni.getStorageSync('tools-data-live')
 		if (toolsData && toolsData.dyAuthorInfo) {
 			console.log(toolsData)
 			radioDouYinValue.value = {
@@ -496,7 +497,7 @@
 
 	onBeforeUnmount(() => {
 		uni.removeStorageSync("liveAffirm-data")
-		uni.removeStorageSync("tools-data")
+		uni.removeStorageSync("tools-data-live")
 	})
 
 	// 允许当前文件样式穿透

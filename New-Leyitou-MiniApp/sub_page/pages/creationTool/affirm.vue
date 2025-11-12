@@ -43,8 +43,10 @@
 		<view class="uni-flex uni-justify-between">
 			<view>抖音号信息</view>
 			<view class="uni-flex uni-items-center uni-font-color-theme uni-text-bold">
-				<wd-img v-if="douYinData?.dyAuthorInfo?.avatar" width="50rpx" height="50rpx" round :src="douYinData?.dyAuthorInfo?.avatar" />
-				<wd-img v-else width="50rpx" height="50rpx" round  src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
+				<wd-img v-if="douYinData?.dyAuthorInfo?.avatar" width="50rpx" height="50rpx" round
+					:src="douYinData?.dyAuthorInfo?.avatar" />
+				<wd-img v-else width="50rpx" height="50rpx" round
+					src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
 				<view class="uni-ml-lg">
 					{{ douYinData?.dyAuthorInfo?.nickName }}
 				</view>
@@ -59,12 +61,14 @@
 			</view>
 		</view>
 	</wd-card>
-	
-	<view class="uni-flex uni-justify-around uni-mt-lg">
-		<wd-button @click="goBack" custom-class="uni-w-1-4" type="info">取消</wd-button>
-		<wd-button @click="submit" custom-class="uni-w-1-4">确定</wd-button>
+
+	<view class="buttom-btn">
+		<view class="uni-flex uni-justify-around uni-mt-lg">
+			<wd-button @click="goBack" custom-class="uni-w-1-4" type="info">取消</wd-button>
+			<wd-button @click="submit" custom-class="uni-w-1-4">确定</wd-button>
+		</view>
 	</view>
-	
+
 	<wd-toast />
 </template>
 
@@ -72,14 +76,14 @@
 	import type {
 		QcUniProductVo,
 		DyAuthorAuthVo
-	}from '@/api/index/types'
+	} from '@/api/index/types'
 	import type {
 		CreateOrderQuery,
 		CreateSxtUniOrderInfoVo
 	} from '@/sub_page/api/creationTool/types'
 	import {
 		createUniOrder
-	}from '@/sub_page/api/creationTool/index'
+	} from '@/sub_page/api/creationTool/index'
 	import {
 		onLoad
 	} from '@dcloudio/uni-app'
@@ -93,7 +97,7 @@
 	} from '@/utils/dict'
 	import {
 		goBack
-	}from '@/utils/utils'
+	} from '@/utils/utils'
 	import dayjs from 'dayjs'
 
 	const createData = ref<CreateSxtUniOrderInfoVo>({
@@ -117,44 +121,54 @@
 	const toast = useToast()
 	const douYinData = ref<DyAuthorAuthVo>()
 	const productData = ref<QcUniProductVo[]>([])
-	
+
 	const { sxt_order_bid_type } = toRefs(useDict(['sxt_order_bid_type']))
 	const { sxt_order_delivery_time } = toRefs(useDict(['sxt_order_delivery_time'], true))
-	
+
 	const handleClickLeft = () => {
 		uni.navigateBack()
 	}
-	
+
 	const submit = async () => {
 		createOrderQuery.value.uniList = [createData.value];
-		try{
+		try {
 			const res = await createUniOrder(createOrderQuery.value)
 			toast.success(res.msg || '操作成功');
 			setTimeout(() => {
 				goBack()
-			},500)		
-		}catch{}
+			}, 500)
+		} catch { }
 	}
 
 	onLoad(() => {
 		const storageData = uni.getStorageSync('affirm-data')
-		if(storageData){
+		if (storageData) {
 			createData.value = storageData.formData
 			createOrderQuery.value = storageData.createOrderQuery
-			douYinData.value =  storageData?.douYinData
+			douYinData.value = storageData?.douYinData
 			productData.value = [storageData?.productData]
 		}
-		
+
 	})
 </script>
 <style scoped lang="scss">
-	
+	.buttom-btn {
+		width: 100%;
+		position: fixed;
+		left: 0px;
+		bottom: 0%;
+		background-color: white;
+		padding: 20rpx;
+		z-index: 99;
+	}
 </style>
 <style lang="scss">
-	page{
+	page {
 		background-color: #f6f7fb;
 	}
-	.card-custom-class{
+
+	.card-custom-class {
 		padding-bottom: 20rpx !important;
+		margin-top: 20rpx !important;
 	}
 </style>

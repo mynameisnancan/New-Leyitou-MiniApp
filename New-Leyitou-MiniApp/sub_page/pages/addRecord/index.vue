@@ -224,7 +224,7 @@
 
 	.card-custom-class {
 		padding: 10rpx 20rpx !important;
-		margin-top: 20rpx !important;
+		margin: 20rpx !important;
 	}
 
 	page {

@@ -359,6 +359,12 @@
 				border-radius: 50rpx;
 			}
 		}
-
+	}
+	
+	// 设置黑夜模式下的样式
+	.wot-theme-dark{
+		.commoditys-item{
+			background-color: #1d1e1f !important;
+		}
 	}
 </style>

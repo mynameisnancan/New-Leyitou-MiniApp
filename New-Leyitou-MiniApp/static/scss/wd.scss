@@ -14,15 +14,15 @@
 }
 
 .wot-theme-dark{
-	.content{
-		height: 100vh;
-		background-color: #1d1e1f !important;
-	}
+
 	.wd-search{
 		background-color: #131313 !important;
 		.wd-search__block{
 			background-color: #1d1e1f !important;
 		}
+	}
+	.wd-navbar.is-border::after{
+		background: #1d1e1f !important;
 	}
 }
 

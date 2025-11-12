@@ -1,7 +1,7 @@
 <template>
 	<wd-navbar title="投放工具" left-arrow @click-left="handleClickLeft" placeholder fixed safeAreaInsetTop></wd-navbar>
 	<view>
-		<wd-tabs v-model="tabValue">
+		<wd-tabs v-model="tabValue" @change="change">
 			<wd-tab title="全域推广">
 				<view class="content">
 					<PromotionForm />

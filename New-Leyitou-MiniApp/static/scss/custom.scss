@@ -1,0 +1,19 @@
+.back-top{
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+	background-color: rgba(255, 255, 255,0.5);
+	padding: 6px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border:1px solid white;
+	.wd-icon{
+		font-size: 38rpx;
+		color:#4d80f0;
+	}
+}
+
+.font-theme-color{
+	color: var(--wot-text-primary-color, var(--wot-color-theme, #4d80f0)) ;
+}

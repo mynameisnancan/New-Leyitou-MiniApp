@@ -3,6 +3,38 @@ import {
 	computed,
 	ref
 } from 'vue'
+import {
+	useThemeStore
+} from '@/store/useTheme'
+const themeStore = useThemeStore();
+const themes = themeStore.themeSetting;
+
+// 从缓存中获取主题色并应用
+export const setThemeColor = () => {
+	const theme = uni.getStorageSync('theme')
+	if (theme) {
+		themeStore.updateTheme(theme.theme)
+		themeStore.updateColorTheme(theme.themeVars.colorTheme)
+		uni.setTabBarItem({
+			index:0,
+			selectedIconPath:`static/img/selectDingdan${theme.themeVars.colorTheme}.png`,
+		})
+		uni.setTabBarItem({
+			index:1,
+			selectedIconPath:`static/img/personalCenter${theme.themeVars.colorTheme}.png`,
+		})
+		uni.setTabBarStyle({
+			selectedColor:theme.themeVars.colorTheme,
+			backgroundColor:  theme.theme == 'light' ? '#ffffff' : '#1b1b1b'
+		})
+	}
+}
+export const setThemePageBgColor = () => {
+	uni.setBackgroundColor({
+		backgroundColorTop: themeStore.theme == 'light' ? '#144fe9' : '#1b1b1b',
+		backgroundColor: themeStore.theme == 'light' ? '#f6f7fb' : '#1b1b1b',
+	});
+}
 
 // 根据value获取label
 export const getLabelByValue = (data : any, value : any) => {
@@ -351,7 +383,7 @@ export const formatAudience = (audience : any) => {
 	} else {
 		audience_string += '年龄：';
 		if (audience.age) {
-			audience.age.forEach((age:any) => {
+			audience.age.forEach((age : any) => {
 				audience_string += `${age_list[age]}，`;
 			});
 		}

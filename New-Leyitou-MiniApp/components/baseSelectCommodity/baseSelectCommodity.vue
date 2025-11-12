@@ -11,7 +11,7 @@
 		<view>
 			<view class="uni-flex uni-justify-between uni-text-lg">
 				<view @click="cancel" class="uni-font-color-gray">取消</view>
-				<view @click="confirm" class="uni-font-color-blue">确定</view>
+				<view @click="confirm" class="font-theme-color">确定</view>
 			</view>
 			<wd-search 
 				v-model="searchValue" 

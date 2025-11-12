@@ -98,14 +98,15 @@
 		</view>
 	</wd-card>
 
-
-	<view class="uni-flex uni-justify-around uni-mt-lg">
-		<wd-button @click="goBack" custom-class="uni-w-1-4" type="info">取消</wd-button>
-		<wd-button @click="submit" :loading="submitLoading" custom-class="uni-w-1-4">确定</wd-button>
+	<view class="buttom-btn">
+		<view class="uni-flex uni-justify-around uni-mt-lg">
+			<wd-button @click="goBack" custom-class="uni-w-1-4" type="info">取消</wd-button>
+			<wd-button @click="submit" :loading="submitLoading" custom-class="uni-w-1-4">确定</wd-button>
+		</view>
 	</view>
-	
+
 	<wd-toast />
-	
+
 </template>
 
 <script setup lang="ts">
@@ -137,13 +138,13 @@
 	} from '@/sub_page/api/creationTool/index'
 	import dayjs from 'dayjs'
 	import { useToast } from 'wot-design-uni'
-		
+
 	const {
 		leyitou_order_setting
 	} = toRefs(useDict(['leyitou_order_setting']))
 	console.log(leyitou_order_setting)
 	const toast = useToast()
-	
+
 	const formData = ref<CreateOrderInfoVo>({
 		advertiser_id: undefined,
 		aweme_id: undefined,
@@ -191,27 +192,27 @@
 	const handleClickLeft = () => {
 		uni.navigateBack()
 	}
-	
+
 	// 检查设置
-	const checkSetting = (orderSetting: any) => {
-	  if (formData.value.marketing_goal === 'VIDEO_PROM_GOODS') {
-	    delete orderSetting.delivery_setting.liveroom_heat_mode;
-	  }
-	
-	  if (formData.value.delivery_setting?.bid_type === 'AUTO_BID') {
-	    delete orderSetting.delivery_setting.roi_goal;
-	    delete orderSetting.delivery_setting.cpa_bid;
-	  }
-	
-	  if (formData.value.delivery_setting?.bid_mode === 'PRICING_PLAY') {
-	    delete orderSetting.delivery_setting.bid_type;
-	  }
-	
-	  formData.value.delivery_setting?.external_action === 'AD_CONVERT_TYPE_LIVE_ROI'
-	    ? delete orderSetting.delivery_setting.cpa_bid
-	    : delete orderSetting.delivery_setting.roi_goal;
+	const checkSetting = (orderSetting : any) => {
+		if (formData.value.marketing_goal === 'VIDEO_PROM_GOODS') {
+			delete orderSetting.delivery_setting.liveroom_heat_mode;
+		}
+
+		if (formData.value.delivery_setting?.bid_type === 'AUTO_BID') {
+			delete orderSetting.delivery_setting.roi_goal;
+			delete orderSetting.delivery_setting.cpa_bid;
+		}
+
+		if (formData.value.delivery_setting?.bid_mode === 'PRICING_PLAY') {
+			delete orderSetting.delivery_setting.bid_type;
+		}
+
+		formData.value.delivery_setting?.external_action === 'AD_CONVERT_TYPE_LIVE_ROI'
+			? delete orderSetting.delivery_setting.cpa_bid
+			: delete orderSetting.delivery_setting.roi_goal;
 	};
-	
+
 	const submit = () => {
 
 		submitLoading.value = true;
@@ -301,7 +302,7 @@
 		}).catch(() => {
 			toast.error('任务提交失败');
 		}).finally(() => {
-		  submitLoading.value = false;
+			submitLoading.value = false;
 		});
 	}
 
@@ -318,6 +319,18 @@
 	})
 </script>
 
+<style scoped lang="scss">
+	.buttom-btn {
+		width: 100%;
+		position: fixed;
+		left: 0px;
+		bottom: 0%;
+		background-color: white;
+		padding: 20rpx;
+		z-index: 99;
+	}
+</style>
+
 <style lang="scss">
 	page {
 		background-color: #f6f7fb;
@@ -325,5 +338,6 @@
 
 	.card-custom-class {
 		padding-bottom: 20rpx !important;
+		margin-top: 20rpx !important;
 	}
 </style>

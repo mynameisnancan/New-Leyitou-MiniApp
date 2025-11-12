@@ -4,7 +4,7 @@
 			"path": "pages/index/index", // 首页
 			"style": {
 				"navigationBarTitleText": "",
-				"navigationBarBackgroundColor": "#144fe9",
+				// "navigationBarBackgroundColor": "#144fe9",
 				"navigationStyle":"custom",
 				"enablePullDownRefresh": true,
 				"backgroundColorTop": "#144fe9"
@@ -144,7 +144,7 @@
 						// 图标路径
 						"iconPath": "static/img/dingdan.png",
 						// 选中图标路径
-						"selectedIconPath": "static/img/selectDingdan.png"
+						"selectedIconPath": "static/img/selectDingdan#4d80f0.png"
 					},
 					{
 						"pagePath": "pages/personalCenter/index",
@@ -152,7 +152,7 @@
 						// 图标路径
 						"iconPath": "static/img/personalCenter.png",
 						// 选中图标路径
-						"selectedIconPath": "static/img/selectPersonalCenter.png"
+						"selectedIconPath": "static/img/personalCenter#4d80f0.png"
 					}
 				]
 	}
