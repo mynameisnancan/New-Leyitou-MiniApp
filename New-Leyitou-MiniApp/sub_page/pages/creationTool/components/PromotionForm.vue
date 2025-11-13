@@ -2,9 +2,23 @@
 	<wd-form ref="formRef" :model="formData">
 		<wd-cell-group border>
 			<wd-cell title="付款抖音号" title-width="180rpx" :value="selectedDouYin?.dyAuthorInfo?.nickName"
-				@click="openSelectDouYin" ellipsis is-link />
+				@click="openSelectDouYin" ellipsis is-link >
+				<view v-if="selectedDouYin?.dyAuthorInfo?.nickName" class="uni-text-left">
+					{{ selectedDouYin?.dyAuthorInfo?.nickName }}
+				</view>
+				<view v-else class="wd-cell-placeholder">
+					请选择
+				</view>
+			</wd-cell>
 			<wd-cell title="目标商品" title-width="180rpx" :value="selectedProduct?.dyProductInfo?.title"
-				@click="openSelectCommodity" ellipsis is-link />
+				@click="openSelectCommodity" ellipsis is-link >
+				<view v-if="selectedProduct?.dyProductInfo?.title" class="uni-text-left">
+					{{ selectedProduct?.dyProductInfo?.title}}
+				</view>
+				<view v-else class="wd-cell-placeholder">
+					请选择
+				</view>
+			</wd-cell>
 			<wd-cell title="出价类型" title-width="180rpx">
 				<view class="custom-radio">
 					<wd-radio-group v-model="formData.delivery_setting.bid_type" inline shape="dot">
@@ -58,7 +72,6 @@
 		@confirm="commodityConfirm"></baseSelectCommodity>
 
 	<wd-toast />
-
 </template>
 
 <script setup lang="ts">

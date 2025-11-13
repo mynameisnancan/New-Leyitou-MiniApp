@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view class="page-class">
 		<z-paging ref="paging" use-virtual-list @scroll="paginScroll" :force-close-inner-list="true"
 			@virtualListChange="virtualListChange" @query="queryList" auto-show-back-to-top auto-show-system-loading
 			loading-more-no-more-text="没有更多数据了~" showScrollbar preload-page="50">
@@ -287,7 +287,16 @@
 		color: var(--wot-text-primary-color, var(--wot-color-theme, #4d80f0));
 	}
 
-	page {
+	.page-class {
 		background-color: #f6f7fb;
+		min-height: 100vh;
+	}
+
+	 // 设置黑夜模式下的样式
+	.wot-theme-dark {
+		.commoditys-item {
+			background-color: #1b1b1b !important;
+			color: var(--wot-dark-color3, rgba(232, 230, 227, .8));
+		}
 	}
 </style>

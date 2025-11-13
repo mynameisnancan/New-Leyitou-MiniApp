@@ -2,7 +2,14 @@
 	<wd-form ref="formRef" :model="formData">
 		<wd-cell-group>
 			<wd-cell title="付款抖音号" title-width="180rpx" :value="radioDouYinValue?.dyAuthorInfo?.nickName"
-				@click="openSelectDouYin" ellipsis is-link border />
+				@click="openSelectDouYin" ellipsis is-link border >
+				<view v-if="radioDouYinValue?.dyAuthorInfo?.nickName" class="uni-text-left">
+					{{ radioDouYinValue?.dyAuthorInfo?.nickName }}
+				</view>
+				<view v-else class="wd-cell-placeholder">
+					请选择
+				</view>
+			</wd-cell>
 			<wd-cell title="添加方式" title-width="180rpx" border>
 				<view class="custom-radio">
 					<wd-radio-group v-model="awemeItemSource" shape="button" inline>
@@ -112,7 +119,7 @@
 			</wd-transition>
 
 		</wd-cell-group>
-		<view class="uni-flex uni-justify-center uni-mt-lg">
+		<view class="uni-flex uni-justify-center uni-my-lg">
 			<wd-button @click="createOrder" custom-class="uni-w-3-4">创建订单</wd-button>
 		</view>
 	</wd-form>
@@ -508,8 +515,8 @@
 	})
 </script>
 
-<style lang="scss">
-	page {
+<style lang="scss" scoped>
+	.page-class {
 		padding-bottom: 100rpx;
 	}
 

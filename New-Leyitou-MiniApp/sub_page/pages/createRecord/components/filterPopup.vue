@@ -9,10 +9,24 @@
 					label-width="180rpx" />
 				<wd-picker :columns="createStatusOptions" label="创建状态" v-model="queryForm.createStatus" clearable
 					label-width="180rpx" />
-				<wd-cell title="付款抖音号" title-width="180rpx" :value="selectedDouYin?.dyAuthorInfo?.nickName"
-					@click="openSelectDouYin" ellipsis is-link />
-				<wd-cell title="订单商品" title-width="180rpx" :value="selectedProduct?.dyProductInfo?.title"
-					@click="openSelectCommodity" ellipsis is-link />
+				<wd-cell title="付款抖音号" title-width="180rpx" :value="selectedDouYin?.dyAuthorInfo?.nickName|| '请选择'"
+					@click="openSelectDouYin" ellipsis is-link>
+					<view v-if="selectedDouYin?.dyAuthorInfo?.nickName" class="uni-text-left">
+						{{ selectedDouYin?.dyAuthorInfo?.nickName }}
+					</view>
+					<view v-else class="wd-cell-placeholder">
+						请选择
+					</view>
+				</wd-cell>
+				<wd-cell title="订单商品" title-width="180rpx" :value="selectedProduct?.dyProductInfo?.title|| '请选择'"
+					@click="openSelectCommodity" ellipsis is-link>
+					<view v-if="selectedProduct?.dyProductInfo?.title" class="uni-text-left">
+						{{ selectedProduct?.dyProductInfo?.title}}
+					</view>
+					<view v-else class="wd-cell-placeholder">
+						请选择
+					</view>
+				</wd-cell>
 			</wd-cell-group>
 			<view class="uni-flex uni-justify-around uni-mt-lg">
 				<wd-button type="info" @click="reset">重置</wd-button>
@@ -115,6 +129,8 @@
 			marketingGoal: undefined,
 			createStatus: undefined,
 		}
+		selectedDouYin.value = {}
+		selectedProduct.value = {}
 		visible.value = false
 	}
 

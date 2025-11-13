@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view class="page-class">
 		<z-paging ref="paging" use-virtual-list @scroll="paginScroll" :force-close-inner-list="true"
 			:virtual-list-col="2" @virtualListChange="virtualListChange" @query="queryList" auto-show-back-to-top
 			auto-show-system-loading loading-more-no-more-text="没有更多数据了~" preload-page="50" showScrollbar>
@@ -206,7 +206,7 @@
 	}, { deep: true })
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" >
 	.filter {
 		border-bottom-left-radius: 20rpx;
 		border-bottom-right-radius: 20rpx;
@@ -300,10 +300,27 @@
 		justify-content: center;
 		border: 1px solid white;
 	}
-</style>
 
-<style lang="scss">
-	page {
+	.page-class {
 		background-color: #f6f7fb;
+		min-height: 100vh;
+	}
+
+	// 设置黑夜模式下的样式
+	.wot-theme-dark {
+		.filter {
+			background: #131313 !important;
+		}
+
+	
+
+		.record-item {
+			background-color: #1b1b1b !important;
+			color: var(--wot-dark-color3, rgba(232, 230, 227, .8));
+		}
+
+		.data-top {
+			border-top: 1px solid var(--wot-dark-color3, rgba(232, 230, 227, .8));
+		}
 	}
 </style>

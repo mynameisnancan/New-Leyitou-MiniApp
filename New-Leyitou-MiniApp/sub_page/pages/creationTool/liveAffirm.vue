@@ -1,111 +1,114 @@
 <template>
-	<wd-navbar title="投放信息确认" left-arrow @click-left="handleClickLeft" placeholder fixed safeAreaInsetTop></wd-navbar>
-	<wd-card title="投放设置" custom-class="card-custom-class uni-mt-lg">
-		<view class="uni-flex uni-justify-between">
-			<view>营销目标</view>
-			<view class="uni-font-color-theme uni-text-bold">
-				{{getLabelByValue(leyitou_order_setting,formData.marketing_goal)}}
-			</view>
-		</view>
-		<view class="uni-flex uni-justify-between">
-			<view>优化目标</view>
-			<view class="uni-font-color-theme uni-text-bold">
-				{{getLabelByValue(leyitou_order_setting,formData.delivery_setting?.external_action)}}
-			</view>
-		</view>
-		<view class="uni-flex uni-justify-between">
-			<view>投放时长</view>
-			<view class="uni-font-color-theme uni-text-bold">
-				{{formData.delivery_setting?.delivery_time || 0}}小时
-			</view>
-		</view>
-		<view class="uni-flex uni-justify-between">
-			<view>出价模式</view>
-			<view class="uni-font-color-theme uni-text-bold">
-				{{getLabelByValue(leyitou_order_setting,formData.delivery_setting?.bid_mode)}}
-			</view>
-		</view>
-		<view class="uni-flex uni-justify-between">
-			<view>出价类型</view>
-			<view class="uni-font-color-theme uni-text-bold">
-				{{getLabelByValue(leyitou_order_setting,formData.delivery_setting?.bid_type)}}
-			</view>
-		</view>
-		<view class="uni-flex uni-justify-between">
-			<view>优化目标出价</view>
-			<view class="uni-font-color-theme uni-text-bold">
-				{{formData.delivery_setting?.cpa_bid}}
-			</view>
-		</view>
-		<view class="uni-flex uni-justify-between">
-			<view>目标支付ROI</view>
-			<view class="uni-font-color-theme uni-text-bold">
-				{{formData.delivery_setting?.roi_goal || 0}}
-			</view>
-		</view>
-		<view class="uni-flex uni-justify-between">
-			<view>单笔投放金额</view>
-			<view class="uni-font-color-theme uni-text-bold">
-				￥{{formData.delivery_setting?.amount}}
-			</view>
-		</view>
-	</wd-card>
-	<wd-card title="投放信息" custom-class="card-custom-class">
-		<view class="uni-flex uni-justify-between">
-			<view>付款抖音号</view>
-			<view class="uni-flex uni-items-center uni-font-color-theme uni-text-bold">
-				<wd-img v-if="douYin?.dyAuthorInfo?.avatar" width="50rpx" height="50rpx" round
-					:src="douYin?.dyAuthorInfo?.avatar" />
-				<wd-img v-else width="150rpx" height="150rpx" round
-					src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
-				<view class="uni-ml-lg">
-					{{ douYin?.dyAuthorInfo?.nickName }}
+	<view class="page-class">
+		<wd-navbar title="投放信息确认" left-arrow @click-left="handleClickLeft" placeholder fixed
+			safeAreaInsetTop></wd-navbar>
+		<wd-card title="投放设置" custom-class="card-custom-class uni-mt-lg">
+			<view class="uni-flex uni-justify-between">
+				<view>营销目标</view>
+				<view class="uni-font-color-theme uni-text-bold">
+					{{getLabelByValue(leyitou_order_setting,formData.marketing_goal)}}
 				</view>
 			</view>
-		</view>
-		<view class="uni-flex uni-justify-between">
-			<view>已选视频</view>
-			<view class="uni-font-color-theme uni-text-bold">
-				{{vedio.length}}个
+			<view class="uni-flex uni-justify-between">
+				<view>优化目标</view>
+				<view class="uni-font-color-theme uni-text-bold">
+					{{getLabelByValue(leyitou_order_setting,formData.delivery_setting?.external_action)}}
+				</view>
 			</view>
-		</view>
-	</wd-card>
-	<wd-card title="投放规则" custom-class="card-custom-class">
-		<view class="uni-flex uni-justify-between">
-			<view>投放笔数</view>
-			<view class="uni-font-color-theme uni-text-bold">
-				{{func.createCount}} 笔
+			<view class="uni-flex uni-justify-between">
+				<view>投放时长</view>
+				<view class="uni-font-color-theme uni-text-bold">
+					{{formData.delivery_setting?.delivery_time || 0}}小时
+				</view>
 			</view>
-		</view>
-		<view class="uni-flex uni-justify-between">
-			<view>创建方式</view>
-			<view class="uni-font-color-theme uni-text-bold">
-				{{ func.createWay === 0 ? '立即创建' : func.createWay === 1 ? '定时创建' : '分批创建'}}
+			<view class="uni-flex uni-justify-between">
+				<view>出价模式</view>
+				<view class="uni-font-color-theme uni-text-bold">
+					{{getLabelByValue(leyitou_order_setting,formData.delivery_setting?.bid_mode)}}
+				</view>
 			</view>
-		</view>
-		<view class="uni-flex uni-justify-between">
-			<view>创建时间</view>
-			<view class="uni-font-color-theme uni-text-bold">
-				{{func.createTime}}
+			<view class="uni-flex uni-justify-between">
+				<view>出价类型</view>
+				<view class="uni-font-color-theme uni-text-bold">
+					{{getLabelByValue(leyitou_order_setting,formData.delivery_setting?.bid_type)}}
+				</view>
 			</view>
-		</view>
-		<view class="uni-mt-lg uni-font-color-theme uni-text-bold">
-			预计投放订单
-			<wd-text type="error" :text="`${func.createCount * vedio.length}笔`"></wd-text>
-			，预计投放金额
-			<wd-text type="error"
-				:text="`￥${ func.createCount * vedio.length * formData.delivery_setting.amount}笔`"></wd-text>
-		</view>
-	</wd-card>
+			<view class="uni-flex uni-justify-between">
+				<view>优化目标出价</view>
+				<view class="uni-font-color-theme uni-text-bold">
+					{{formData.delivery_setting?.cpa_bid}}
+				</view>
+			</view>
+			<view class="uni-flex uni-justify-between">
+				<view>目标支付ROI</view>
+				<view class="uni-font-color-theme uni-text-bold">
+					{{formData.delivery_setting?.roi_goal || 0}}
+				</view>
+			</view>
+			<view class="uni-flex uni-justify-between">
+				<view>单笔投放金额</view>
+				<view class="uni-font-color-theme uni-text-bold">
+					￥{{formData.delivery_setting?.amount}}
+				</view>
+			</view>
+		</wd-card>
+		<wd-card title="投放信息" custom-class="card-custom-class">
+			<view class="uni-flex uni-justify-between">
+				<view>付款抖音号</view>
+				<view class="uni-flex uni-items-center uni-font-color-theme uni-text-bold">
+					<wd-img v-if="douYin?.dyAuthorInfo?.avatar" width="50rpx" height="50rpx" round
+						:src="douYin?.dyAuthorInfo?.avatar" />
+					<wd-img v-else width="150rpx" height="150rpx" round
+						src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
+					<view class="uni-ml-lg">
+						{{ douYin?.dyAuthorInfo?.nickName }}
+					</view>
+				</view>
+			</view>
+			<view class="uni-flex uni-justify-between">
+				<view>已选视频</view>
+				<view class="uni-font-color-theme uni-text-bold">
+					{{vedio.length}}个
+				</view>
+			</view>
+		</wd-card>
+		<wd-card title="投放规则" custom-class="card-custom-class">
+			<view class="uni-flex uni-justify-between">
+				<view>投放笔数</view>
+				<view class="uni-font-color-theme uni-text-bold">
+					{{func.createCount}} 笔
+				</view>
+			</view>
+			<view class="uni-flex uni-justify-between">
+				<view>创建方式</view>
+				<view class="uni-font-color-theme uni-text-bold">
+					{{ func.createWay === 0 ? '立即创建' : func.createWay === 1 ? '定时创建' : '分批创建'}}
+				</view>
+			</view>
+			<view class="uni-flex uni-justify-between">
+				<view>创建时间</view>
+				<view class="uni-font-color-theme uni-text-bold">
+					{{func.createTime}}
+				</view>
+			</view>
+			<view class="uni-mt-lg uni-font-color-theme uni-text-bold">
+				预计投放订单
+				<wd-text type="error" :text="`${func.createCount * vedio.length}笔`"></wd-text>
+				，预计投放金额
+				<wd-text type="error"
+					:text="`￥${ func.createCount * vedio.length * formData.delivery_setting.amount}笔`"></wd-text>
+			</view>
+		</wd-card>
 
-	<view class="buttom-btn">
-		<view class="uni-flex uni-justify-around uni-mt-lg">
-			<wd-button @click="goBack" custom-class="uni-w-1-4" type="info">取消</wd-button>
-			<wd-button @click="submit" :loading="submitLoading" custom-class="uni-w-1-4">确定</wd-button>
+		<view class="buttom-btn">
+			<view class="uni-flex uni-justify-around uni-mt-lg">
+				<wd-button @click="goBack" custom-class="uni-w-1-4" type="info">取消</wd-button>
+				<wd-button @click="submit" :loading="submitLoading" custom-class="uni-w-1-4">确定</wd-button>
+			</view>
 		</view>
+
+		<wd-toast />
 	</view>
-
-	<wd-toast />
 
 </template>
 
@@ -332,12 +335,20 @@
 </style>
 
 <style lang="scss">
-	page {
+	.page-class {
 		background-color: #f6f7fb;
+		min-height: 100vh;
 	}
 
 	.card-custom-class {
 		padding-bottom: 20rpx !important;
 		margin-top: 20rpx !important;
+	}
+
+	// 设置黑夜模式下的样式
+	.wot-theme-dark {
+		.buttom-btn {
+			background: #1d1e1f !important;
+		}
 	}
 </style>

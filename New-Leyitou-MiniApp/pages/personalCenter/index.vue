@@ -169,7 +169,7 @@
 	.wot-theme-dark{
 		.content{
 			height: 100vh;
-			background-color: #1d1e1f !important;
+			background-color: #000000 !important;
 		}
 	}
 </style>

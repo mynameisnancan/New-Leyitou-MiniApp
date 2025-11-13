@@ -30,7 +30,12 @@
 				<wd-radio :value="item.userId"  v-for="(item,index) in listData"  :key="index" shape="dot">
 					<view class="uni-flex  uni-items-center underline uni-w-full">
 						<view>
-							<wd-img  v-if="item.avatar" width="120rpx" height="120rpx" round  :src="config.baseUrl+item.avatar" />
+							<wd-img  v-if="item.avatar" width="150rpx" height="150rpx" round  :src="config.baseUrl+item.avatar">
+								<template #error>
+									<view class="uni-w-full uni-h-full uni-flex-center uni-font-color-gray error-wrap">加载失败
+									</view>
+								</template>
+							</wd-img>
 							<wd-img  v-else width="150rpx" height="150rpx" round  src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
 						</view>
 						<view class="uni-ml-lg uni-text-left uni-w-4-5 uni-font-color-black">

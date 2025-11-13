@@ -1,6 +1,5 @@
 <template>
-	<view>
-
+	<view class="page-class">
 		<z-paging ref="paging" use-virtual-list @scroll="paginScroll" :force-close-inner-list="true"
 			:virtual-list-col="1" @virtualListChange="virtualListChange" @query="queryList" auto-show-back-to-top
 			auto-show-system-loading loading-more-no-more-text="没有更多数据了~" preload-page="50" showScrollbar>
@@ -227,7 +226,8 @@
 		margin: 20rpx !important;
 	}
 
-	page {
+	.page-class {
 		background-color: #f6f7fb;
+		min-height: 100vh;
 	}
 </style>

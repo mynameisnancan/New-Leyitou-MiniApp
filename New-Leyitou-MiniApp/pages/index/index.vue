@@ -347,10 +347,11 @@
 			refreshList()
 		}
 	})
-
-	onLoad(() => {
+	
+	onShow(() => {
 		setThemeColor()
 	})
+
 </script>
 
 <style lang="scss">
@@ -492,6 +493,7 @@
 
 	.page-class {
 		background-color: #f6f7fb;
+		min-height: 100vh;
 	}
 
 	// 设置黑夜模式下的样式
@@ -536,11 +538,6 @@
 			color: var(--wot-dark-color3, rgba(232, 230, 227, .8));
 		}
 
-		.page-class {
-			background-color: #1d1e1f !important;
-			min-height: 100vh;
-		}
-
 		.tab-content {
 			background-color: #1b1b1b !important;
 		}
@@ -548,6 +545,10 @@
 		.commoditys-item {
 			background-color: #1b1b1b !important;
 			color: var(--wot-dark-color3, rgba(232, 230, 227, .8));
+
+			.data-top {
+				border-top: 1px solid var(--wot-dark-color3, rgba(232, 230, 227, .8));
+			}
 		}
 	}
 </style>

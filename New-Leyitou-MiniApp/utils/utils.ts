@@ -13,6 +13,11 @@ const themes = themeStore.themeSetting;
 export const setThemeColor = () => {
 	const theme = uni.getStorageSync('theme')
 	if (theme) {
+		uni.setTabBarStyle({
+			selectedColor:theme.themeVars.colorTheme,
+			backgroundColor:  theme.theme == 'light' ? '#ffffff' : '#1b1b1b'
+		})
+		
 		themeStore.updateTheme(theme.theme)
 		themeStore.updateColorTheme(theme.themeVars.colorTheme)
 		uni.setTabBarItem({
@@ -23,10 +28,7 @@ export const setThemeColor = () => {
 			index:1,
 			selectedIconPath:`static/img/personalCenter${theme.themeVars.colorTheme}.png`,
 		})
-		uni.setTabBarStyle({
-			selectedColor:theme.themeVars.colorTheme,
-			backgroundColor:  theme.theme == 'light' ? '#ffffff' : '#1b1b1b'
-		})
+	
 	}
 }
 export const setThemePageBgColor = () => {

@@ -8,7 +8,14 @@
 				<wd-input type="number" label="商品ID" prop="productId" clearable v-model="queryForm.productId"
 					placeholder="请输入商品ID" :maxlength="19" label-width="180rpx" />
 				<wd-cell title="抖音号" title-width="180rpx" :value="selectedDouYin?.dyAuthorInfo?.nickName"
-					@click="openSelectDouYin" ellipsis is-link />
+					@click="openSelectDouYin" ellipsis is-link >
+					<view v-if="selectedDouYin?.dyAuthorInfo?.nickName" class="uni-text-left">
+						{{ selectedDouYin?.dyAuthorInfo?.nickName }}
+					</view>
+					<view v-else class="wd-cell-placeholder">
+						请选择
+					</view>
+				</wd-cell>
 				<wd-picker :columns="sxt_channel_type" label="订单类型" v-model="queryForm.channelType" clearable
 					label-width="180rpx" />
 			</wd-cell-group>
@@ -85,6 +92,7 @@
 			awemeId: undefined,
 			channelType:undefined
 		}
+		selectedDouYin.value = {}
 		visible.value = false
 	}
 	

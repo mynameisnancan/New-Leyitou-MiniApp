@@ -102,7 +102,6 @@
 				}
 			}
 		)
-	
 		toast.success('修改成功')
 	}
 
@@ -123,5 +122,11 @@
 	.content {
 		background-color: #f6f7fb;
 		height: 100vh;
+	}
+	// 设置黑夜模式下的样式
+	.wot-theme-dark{
+		.content{
+			background-color:#000000
+		}
 	}
 </style>

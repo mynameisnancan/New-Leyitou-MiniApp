@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view class="page-class">
 		<z-paging ref="paging" use-virtual-list @scroll="paginScroll" :force-close-inner-list="true"
 			:virtual-list-col="2" @virtualListChange="virtualListChange" @query="queryList" auto-show-back-to-top
 			auto-show-system-loading loading-more-no-more-text="没有更多数据了~" preload-page="50" showScrollbar>
@@ -417,16 +417,25 @@
 		box-shadow: 0 4px 5px #e4e8fc4d;
 		padding: 10rpx 20rpx;
 	}
-	
-	.delete-custom-class{
-		color: var(--wot-text-error-color, var(--wot-color-danger, #fa4350)) ;
+
+	.delete-custom-class {
+		color: var(--wot-text-error-color, var(--wot-color-danger, #fa4350));
 	}
-	
-	.link-custom-class{
-		color: var(--wot-text-primary-color, var(--wot-color-theme, #4d80f0)) ;
+
+	.link-custom-class {
+		color: var(--wot-text-primary-color, var(--wot-color-theme, #4d80f0));
 	}
-	
-	page {
+
+	.page-class {
 		background-color: #f6f7fb;
+		min-height: 100vh;
+	}
+
+	// 设置黑夜模式下的样式
+	.wot-theme-dark {
+		.commoditys-item {
+			background-color: #1b1b1b !important;
+			color: var(--wot-dark-color3, rgba(232, 230, 227, .8));
+		}
 	}
 </style>
