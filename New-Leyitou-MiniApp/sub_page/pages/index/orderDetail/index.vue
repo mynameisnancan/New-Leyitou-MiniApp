@@ -504,7 +504,8 @@
 		message
 			.confirm({
 				closeOnClickModal: false,
-				title: '追加订单预算'
+				title: '追加订单预算',
+				zIndex:210
 			})
 			.then(() => {
 				orderAddBudgetApi()

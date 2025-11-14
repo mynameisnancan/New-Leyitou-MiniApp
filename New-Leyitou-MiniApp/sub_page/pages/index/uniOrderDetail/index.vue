@@ -327,7 +327,8 @@
 		message
 			.confirm({
 				closeOnClickModal: false,
-				title: '追加订单预算'
+				title: '追加订单预算',
+				zIndex:210
 			})
 			.then(() => {
 				orderAddUniBudgetApi()
@@ -383,6 +384,9 @@
 	}
 </style>
 <style lang="scss">
+	page{
+		background-color: #f6f7fb;
+	}
 	.page-class {
 		background-color: #f6f7fb;
 	}
