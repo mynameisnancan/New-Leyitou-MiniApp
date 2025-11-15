@@ -1,13 +1,13 @@
 <template>
 	<view class="page-class">
 		<wd-navbar title="投放工具" left-arrow @click-left="handleClickLeft" placeholder fixed safeAreaInsetTop></wd-navbar>
-		<wd-tabs v-model="tabValue" @change="change">
-			<wd-tab title="全域推广">
+		<wd-tabs v-model="tabValue" >
+			<wd-tab title="全域推广" v-if="lookPermissions('leyitou:sxt_uni_order:create')">
 				<view class="content">
 					<PromotionForm />
 				</view>
 			</wd-tab>
-			<wd-tab title="直播推广">
+			<wd-tab title="直播推广" v-if="lookPermissions('leyitou:sxt_order:create')">
 				<view class="content">
 					<LiveForm />
 				</view>
@@ -23,6 +23,9 @@
 		ref,
 		onMounted
 	} from 'vue'
+	import {
+		lookPermissions
+	} from '@/utils/utils'
 	import { onLoad } from '@dcloudio/uni-app'
 
 	const tabValue = ref<number>(0)

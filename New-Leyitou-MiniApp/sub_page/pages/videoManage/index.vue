@@ -45,11 +45,11 @@
 							<text class="user-name">运营人: {{item.dyAuthorInfo?.userInfo?.nickName}}</text>
 						</view>
 						<view class="uni-flex  uni-items-center">
-							<view @click="remove(item)" class="uni-flex uni-items-center">
+							<view v-if="lookPermissions('leyitou:sxt_video:delete')" @click="remove(item)" class="uni-flex uni-items-center">
 								<wd-icon name="delete1" size="26rpx" custom-class="delete-custom-class"></wd-icon>
 								<wd-text text="删除" type="error" size="26rpx"></wd-text>
 							</view>
-							<view @click="put(item)" class="uni-ml-lg uni-flex uni-items-center">
+							<view v-if="lookPermissions('leyitou:sxt_order:create')" @click="put(item)" class="uni-ml-lg uni-flex uni-items-center">
 								<wd-icon name="link" size="30rpx" custom-class="link-custom-class"></wd-icon>
 								<wd-text text="投放" type="primary" size="26rpx"></wd-text>
 							</view>
@@ -142,6 +142,9 @@
 		toRefs,
 		watch
 	} from 'vue'
+	import {
+		lookPermissions,
+	} from '@/utils/utils.ts'
 	import { useMessage, useToast } from 'wot-design-uni'
 	import filterPopup from './components/filterPopup.vue'
 

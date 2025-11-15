@@ -47,7 +47,7 @@
 								<text class="user-name">运营人:
 									{{item.dyAuthorInfo?.userInfo?.nickName}}</text>
 							</view>
-							<view @click="put(item)" class="uni-flex uni-items-center">
+							<view v-if="lookPermissions('leyitou:sxt_uni_order:create')" @click="put(item)" class="uni-flex uni-items-center">
 								<wd-icon name="link" size="30rpx" custom-class="link-custom-class"></wd-icon>
 								<wd-text text="投放" type="primary" size="26rpx"></wd-text>
 							</view>
@@ -95,7 +95,8 @@
 		useDict
 	} from '@/utils/dict'
 	import {
-		copyStr
+		copyStr,
+		lookPermissions
 	} from '@/utils/utils'
 	import {
 		ref,

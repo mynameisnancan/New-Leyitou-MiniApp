@@ -72,8 +72,8 @@
 					<view class="options">
 						<view class="item-container">
 							<template v-for="(item,index) in optionsItems" :key="index">
-								<view @click="skipModule(item.path)" class="options-item"
-									v-if="lookPermissions(item.permission)">
+								<view v-if="lookPermissions(item.permission)" @click="skipModule(item.path)"
+									class="options-item">
 									<view class="icon">
 										<text :class="item.icon"></text>
 									</view>
@@ -138,7 +138,7 @@
 		lookPermissions,
 		sumRoiFun,
 		setThemeColor,
-		setThemePageBgColor
+		setThemePageBgColor,
 	} from '@/utils/utils.ts'
 
 	import tableQuery from './components/uniOrderList/tableQuery.vue'
@@ -197,25 +197,25 @@
 			name: '投放记录',
 			icon: 't-icon icon-shangpinliebiao',
 			path: '/sub_page/pages/createRecord/index',
-			permission: ''
+			permission: 'leyitou:sxt_order_create_record:list'
 		},
 		{
 			name: '追投记录',
 			icon: 't-icon icon-jilu',
 			path: '/sub_page/pages/addRecord/index',
-			permission: ''
+			permission: 'leyitou:sxt_order_add_record:list'
 		},
 		{
 			name: '终止记录',
 			icon: 't-icon icon-zhongzhiguanli',
 			path: '/sub_page/pages/terminationRecord/index',
-			permission: ''
+			permission: 'leyitou:sxt_order_termination_record:list'
 		},
 		{
 			name: '商品列表',
 			icon: 't-icon icon-shangpin',
 			path: '/sub_page/pages/commodityList/index',
-			permission: ''
+			permission: 'leyitou:qc_uni_product:list'
 		},
 	]
 	// 筛选弹窗
@@ -347,11 +347,10 @@
 			refreshList()
 		}
 	})
-	
+
 	onShow(() => {
 		setThemeColor()
 	})
-
 </script>
 
 <style lang="scss">
@@ -446,18 +445,15 @@
 				position: relative;
 				display: flex;
 				flex-wrap: nowrap;
-				justify-content: space-around;
 			}
 		}
 
 		.options-item {
-			flex-grow: 1;
-			flex-shrink: 0;
-			// margin: 0rpx 10rpx;
+			// flex-grow: 1;
+			// flex-shrink: 0;
 			text-align: center;
 			padding: 5px 0px;
-			max-width: 130rpx;
-			width: 130rpx;
+			width: 20%;
 
 			.icon {
 				font-size: 50rpx;

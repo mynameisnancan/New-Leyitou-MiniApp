@@ -157,7 +157,7 @@ export const lookPermissions = computed(() => {
 		const permissions = uni.getStorageSync('permissions');
 		if (permissions == '*:*:*') return true;
 		if (permissions && permission) {
-			let str = `system:${permission}`
+			let str = permission
 			if (permissions.indexOf(str) != -1) {
 				return true
 			} else {

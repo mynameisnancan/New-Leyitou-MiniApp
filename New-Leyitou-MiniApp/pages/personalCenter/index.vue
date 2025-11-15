@@ -17,13 +17,15 @@
 		<view class="uni-pt-xl">
 			<wd-card title="我的菜单" custom-title-class="uni-text-sm uni-text-bold">
 				<view class="uni-flex-wrap">
-					<view v-for="(item,index) in manageList" :key="index" @click="skipPage(item.path)"
-						class="uni-p-sm uni-flex-column uni-items-center">
-						<view class="icon">
-							<text :class="item.icon"></text>
+					<template v-for="(item,index) in manageList" :key="index">
+						<view  v-if="lookPermissions(item.permission)" @click="skipPage(item.path)"
+							class="uni-p-sm uni-flex-column uni-items-center">
+							<view class="icon">
+								<text :class="item.icon"></text>
+							</view>
+							<view class="uni-font-color-black">{{item.name}}</view>
 						</view>
-						<view class="uni-font-color-black">{{item.name}}</view>
-					</view>
+					</template>
 				</view>
 				<template #footer></template>
 			</wd-card>
@@ -49,7 +51,8 @@
 		getToken
 	} from '@/utils/auth.ts'
 	import {
-		setThemeColor
+		setThemeColor,
+		lookPermissions
 	}from '@/utils/utils'
 	const userStore = useUserStore();
 
@@ -68,31 +71,31 @@
 			name: '投放记录',
 			icon: 't-icon icon-shangpinliebiao',
 			path: '/sub_page/pages/createRecord/index',
-			permission: ''
+			permission: 'leyitou:sxt_order_create_record:list'
 		},
 		{
 			name: '追投记录',
 			icon: 't-icon icon-jilu',
 			path: '/sub_page/pages/addRecord/index',
-			permission: ''
+			permission: 'leyitou:sxt_order_add_record:list'
 		},
 		{
 			name: '终止记录',
 			icon: 't-icon icon-zhongzhiguanli',
 			path: '/sub_page/pages/terminationRecord/index',
-			permission: ''
+			permission: 'leyitou:sxt_order_termination_record:list'
 		},
 		{
 			name: '商品列表',
 			icon: 't-icon icon-shangpin',
 			path: '/sub_page/pages/commodityList/index',
-			permission: ''
+			permission: 'leyitou:qc_uni_product:list'
 		},
 		{
 			name: '素材管理',
 			icon: 't-icon icon-sucai',
 			path: '/sub_page/pages/videoManage/index',
-			permission: ''
+			permission: 'leyitou:sxt_video:list'
 		},
 	])
 
