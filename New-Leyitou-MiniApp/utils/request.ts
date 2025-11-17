@@ -2,7 +2,7 @@ import config from '@/config.ts'
 import {
 	getToken
 } from '@/utils/auth'
-import errorCode from '@/utils/errorCode.ts'
+import { errorCode } from '@/utils/errorCode.ts'
 import {
 	toast,
 	showConfirm,
@@ -65,7 +65,7 @@ const request = (config:any):Promise<any> => {
 				data: config.data,
 				header: config.header,
 				dataType: 'json'
-			}).then(response => {
+			}).then((response:any) => {
 				/* let [error, res] = response
 				 if (error) {
 				   toast('后端接口连接异常')
@@ -77,7 +77,7 @@ const request = (config:any):Promise<any> => {
 				const code = res.data.code || 200
 				const msg = errorCode[code] || res.data.msg || errorCode['default']
 				if (code === 401) {
-					showConfirm('登录状态已过期，您可以继续留在该页面，或者重新登录?').then(res => {
+					showConfirm('登录状态已过期，您可以继续留在该页面，或者重新登录?').then((res:any) => {
 						console.log(userStore)
 						if (res.confirm) {
 							userStore.logOut().then(res => {

@@ -58,3 +58,29 @@ export function logout() {
     method: 'post'
   });
 }
+
+// 小程序登录
+export function wxLogin(data:any){
+	return request({
+		url: `/wx/xcx/user/${data.appId}/login`,
+		method: 'get',
+		data
+	})
+}
+
+// 绑定微信 
+export function wxBind(data:any){
+	return request({
+		url: `/auth/bind/xcx?xcxBindCode=${data.xcxBindCode}&wxNickName=${data.wxNickName}&wxAvatar=${data.wxAvatar}`,
+		method:'get'
+	})
+}
+
+// 根据手机号获取验证码
+export function getPhoneCode(data:any){
+	return request({
+		url: '/auth/login/code/send',
+		method: 'get',
+		data:data
+	})
+}

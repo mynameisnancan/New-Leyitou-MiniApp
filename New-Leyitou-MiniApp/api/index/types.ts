@@ -118,6 +118,32 @@ export interface SxtUniOrderMergeVo {
 }
 
 /**
+ * 订单统计数据对象
+ */
+export interface SxtOrderStatisticsVO {
+    /**
+     * "累计投放金额")
+     */
+    allAmount?: number;
+    /**
+     * 投放订单号
+     */
+    allOrderNum?: number;
+    /**
+     * "成交订单金额")
+     */
+    allPayOrderAmount?: number;
+    /**
+     * "成交订单数")
+     */
+    allPayOrderCount?: number;
+    /**
+     * "累计消耗金额")
+     */
+    allStatCost?: number;
+}
+
+/**
  * 续费信息
  *
  * AddAmountInfoVo

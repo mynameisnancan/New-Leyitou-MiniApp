@@ -39,12 +39,12 @@
 			<template v-else>
 				<view class="custom-input">
 					<wd-input v-model="loginForm.username" type="text" :no-border="true"
-						placeholder="请输入用户名"></wd-input>
+						placeholder="请输入手机号"></wd-input>
 				</view>
 				<view class="custom-input">
 					<wd-input v-model="loginForm.code" type="text" :no-border="true" placeholder="请输入验证码">
 						<template #suffix>
-							<view v-if="showGetCode" class="get-code" @click="getPhoneCode">获取验证码</view>
+							<view v-if="showGetCode" class="get-code" @click="getPhoneCodeApi">获取验证码</view>
 							<wd-count-down v-else ref="countDownRef" :time="60000" format="ss" @finish="onFinish" />
 						</template>
 					</wd-input>
@@ -64,6 +64,9 @@
 				</template>
 			</view>
 		</view>
+
+		<wd-toast />
+
 	</view>
 </template>
 
@@ -78,10 +81,19 @@
 		useUserStore
 	} from "@/store/user.ts";
 	import {
-		getCode
+		getCode,
+		wxBind,
+		getPhoneCode
 	} from '@/api/login'
+	import {
+		uploadAvatar
+	} from '@/api/personalCenter/index'
 	import { LoginData } from '@/api/types';
 	import { goBack } from '@/utils/utils.ts'
+	import { useToast } from 'wot-design-uni'
+
+	const toast = useToast()
+
 	const userStore = useUserStore();
 
 	const loginMode = ref("account");
@@ -92,29 +104,90 @@
 		password: "",
 		code: "",
 		tenantId: '000000',
-		uuid: ''
+		uuid: '',
 	});
+	const wxbindData = ref({
+		xcxBindCode: null,
+		wxNickName: '',
+		wxAvatar: ''
+	})
 	const codeUrl = ref();
 	// 记住密码
 	const rememberPwd = ref<boolean>(true)
 	//登录
 	async function login() {
+		const flag = await formValidate()
+		if (!flag) return;
+		loginForm.value.loginType = loginMode.value == 'account' ? 2 :1;
 		const res = await userStore.login(loginForm.value);
 		if (res) {
-			const userInfo = await userStore.getInfo();
-			uni.setStorageSync('username',loginForm.value.username)
-			if(rememberPwd.value){
-				uni.setStorageSync('pwd',loginForm.value.password)
-			}else{
-				uni.removeStorageSync('pwd')
-			}
-			if (userInfo) {
-				uni.reLaunch({
-					url: '/pages/index/index'
-				})
-			}
-
+			loginSuccess()
 		}
+	}
+
+	// 登录后的操作
+	const loginSuccess = async () => {
+		const userInfo = await userStore.getInfo();
+		console.log(wxbindData.value)
+		// 判断是否有wx绑定码，有则调用授权接口
+		if (wxbindData.value.xcxBindCode) {
+			wxBind(wxbindData.value).then(res => {
+				toast.success('绑定成功')
+				if (wxbindData.value.wxAvatar) {
+					uploadAvatarApi(loginForm.value.wxAvatar)
+				}
+			})
+		}
+		uni.setStorageSync('username', loginForm.value.username)
+		// 是否记住密码 缓存在本地
+		if (rememberPwd.value) {
+			uni.setStorageSync('pwd', loginForm.value.password)
+		} else {
+			uni.removeStorageSync('pwd')
+		}
+		if (userInfo) {
+			uni.reLaunch({
+				url: '/pages/index/index'
+			})
+		}
+	}
+
+	// 校验表单
+	const formValidate = () => {
+		return new Promise((resolve) => {
+			if (loginMode.value === 'account') {
+				if (!loginForm.value.username) {
+					toast.warning('请输入用户名')
+					return;
+				} else if (!loginForm.value.password) {
+					toast.warning('请输入密码')
+					return;
+				} else if (!loginForm.value.code) {
+					toast.warning('请输入验证码')
+					return;
+				}
+			} else {
+				if (!loginForm.value.username) {
+					toast.warning('请输入手机号')
+					return;
+				} else if (!loginForm.value.code) {
+					toast.warning('请输入验证码')
+					return;
+				}
+			}
+			resolve(true)
+		})
+	}
+
+	const uploadAvatarApi = (url) => {
+		uploadAvatar({
+			filePath: url,
+			name: 'avatarfile',
+		}).then(res => {
+			const syncUserInfo = uni.getStorageSync('userInfo')
+			syncUserInfo.avatar = res.imgUrl
+			uni.setStorageSync('userInfo', syncUserInfo)
+		})
 	}
 
 	// 获取图形验证码
@@ -137,9 +210,13 @@
 	}
 
 	//获取手机验证码
-	function getPhoneCode() {
-		showGetCode.value = false;
-		countDownRef.value.start();
+	function getPhoneCodeApi() {
+		getPhoneCode({
+			phoneNumber: loginForm.value.username
+		}).then(res => {
+			showGetCode.value = false;
+			countDownRef.value.start();
+		})
 	}
 
 	//验证码倒计时结束
@@ -148,11 +225,20 @@
 	}
 
 
-	onLoad(() => {
-		getCodeApi()
+	onLoad((data) => {
 		const pwd = uni.getStorageSync('pwd')
 		const username = uni.getStorageSync('username')
-		if(pwd) {
+		loginMode.value = data.type;
+		// 登录方式为账号密码登录则获取验证码
+		if (loginMode.value === 'account') {
+			getCodeApi()
+		}
+		if (data.xcxBindCode) {
+			wxbindData.value.xcxBindCode = data.xcxBindCode
+			wxbindData.value.wxNickName = data.wxNickName
+			wxbindData.value.wxAvatar = data.wxAvatar
+		}
+		if (pwd) {
 			loginForm.value.username = username
 			loginForm.value.password = pwd
 		}
@@ -162,14 +248,16 @@
 <style scoped lang="scss">
 	.password-login {
 		padding: 40rpx 40rpx 0rpx 40rpx;
-		:first-child{
-			 font-size: 25px;
-			 letter-spacing:2px;
+
+		:first-child {
+			font-size: 25px;
+			letter-spacing: 2px;
 		}
-		:last-child{
-			 font-size: 13px;
-			 color: #9ca0ab;
-			 letter-spacing:2px;
+
+		:last-child {
+			font-size: 13px;
+			color: #9ca0ab;
+			letter-spacing: 2px;
 		}
 	}
 
@@ -204,51 +292,21 @@
 		color: #838496;
 	}
 
-
-
-
-	// .wot-theme-dark .wd-icon-eye-close {
-	// 	background-color: #fff !important;
-	// }
-
-	// .wot-theme-dark .wd-icon-view{
-	// 	background-color: #fff !important;
-	// }
-
-	// :deep(.wd-input-custom){
-	// 	background-color: #f6f7fb !important;
-	// }
-
-	// :deep(.wd-icon-eye-close) {
-	// 	background-color: #f6f7fb;
-	// }
-
-	// :deep(.wd-icon-view) {
-	// 	background-color: #f6f7fb ;
-	// }
-
-	// :deep(.wd-count-down) {
-	// 	color: #4d80f0;
-	// }
-
-	// :deep(.wot-theme-dark .wd-input-custom) {
-	// 	background-color: #1b1b1b !important;
-	// }
-
 	.content {
 		height: 100vh;
 		background-color: #ecf3ff;
 	}
-	
-	.wot-theme-dark{
-		.password-login{
+
+	.wot-theme-dark {
+		.password-login {
 			color: var(--wot-dark-theme-color, #000);
 		}
-		.content{
+
+		.content {
 			background-color: #1d1e1f !important;
 		}
 	}
-	
+
 
 	.code-image {
 		width: 120rpx;

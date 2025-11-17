@@ -2,7 +2,7 @@
 	<view class="content">
 		<view class="uni-h-380 uni-w-full header">
 			<view class="head-portrait uni-flex uni-items-center">
-				<wd-img v-if="userData.avatar" width="140rpx" height="140rpx" round mode="" :src="userData.avatar" />
+				<wd-img v-if="userData.avatar" width="140rpx" height="140rpx" round mode="" :src="config.baseUrl+userData.avatar" />
 				<wd-img v-else width="140rpx" height="140rpx" round mode=""
 					src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
 				<view class="uni-ml-lg">
@@ -34,6 +34,7 @@
 </template>
 
 <script setup lang="ts">
+	import  config from '@/config'
 	import type {
 		SysUserVo
 	} from '@/api/user/types'

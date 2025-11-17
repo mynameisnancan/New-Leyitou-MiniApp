@@ -22,46 +22,10 @@
 				<swiper class="swiper" :indicator-dots="false" indicator-active-color="#5f9ffe">
 					<swiper-item class="swiper-item">
 						<view class="money">
-							<view class="money-item">
-								<view class="uni-text-26">投放中订单数</view>
+							<view v-for="(item,index) in getStatisticsConfig()" :key="index" class="money-item">
+								<view class="uni-text-26">{{item.label}}</view>
 								<view class="uni-text-bold uni-text-36">
-									<wd-count-to :endVal="Number(statisticsData.allOrderNum) || 0"
-										color="#ffffff"></wd-count-to>
-								</view>
-							</view>
-							<view class="money-item">
-								<view class="uni-text-26">累计投放金额</view>
-								<view class="uni-text-bold uni-text-36">
-									<wd-count-to :endVal="Number(statisticsData.allAmount) || 0"
-										color="#ffffff"></wd-count-to>
-								</view>
-							</view>
-							<view class="money-item">
-								<view class="uni-text-26">累计消耗金额</view>
-								<view class="uni-text-bold uni-text-36">
-									<wd-count-to :endVal="Number(statisticsData.allStatCost) || 0"
-										color="#ffffff"></wd-count-to>
-								</view>
-							</view>
-							<view class="money-item">
-								<view class="uni-text-26">成交订单数</view>
-								<view class="uni-text-bold uni-text-36">
-									<wd-count-to :endVal="Number(statisticsData.allPayOrderCount) || 0"
-										color="#ffffff"></wd-count-to>
-								</view>
-							</view>
-							<view class="money-item">
-								<view class="uni-text-26">成交订单金额</view>
-								<view class="uni-text-bold uni-text-36">
-									<wd-count-to :endVal="Number(statisticsData.allPayOrderAmount) || 0"
-										color="#ffffff"></wd-count-to>
-								</view>
-							</view>
-							<view class="money-item">
-								<view class="uni-text-26">成交ROI</view>
-								<view class="uni-text-bold uni-text-36">
-									<wd-count-to
-										:endVal="sumRoiFun(statisticsData.allAmount||0,statisticsData.allStatCost||0)"
+									<wd-count-to :endVal="getStatisticsValue(item.prop) || 0"
 										color="#ffffff"></wd-count-to>
 								</view>
 							</view>
@@ -88,7 +52,7 @@
 
 		<!-- 列表类型切换 -->
 		<view class="tab-content uni-m-lg uni-px-sm uni-flex uni-items-center  uni-border-radius-lg">
-			<wd-tabs v-model="listType" @change="listTabChange">
+			<wd-tabs v-model="listType" @change="getStatisticeData">
 				<wd-tab title="商品全域" name="uniOrder">
 				</wd-tab>
 				<wd-tab title="直播带货" name="order">
@@ -124,16 +88,18 @@
 	import type {
 		SxtUinOrderQuery,
 		SxtUniOrderStatisticsVo,
-		SxtOrderQuery
+		SxtOrderQuery,
+		SxtOrderStatisticsVO
 	} from '@/api/index/types'
 	import {
-		getUniOrderStatistics
+		getUniOrderStatistics,
+		getOrderStatistics
 	} from '@/api/index/index'
-	import { onShow, onPullDownRefresh, onLoad } from '@dcloudio/uni-app'
+	import { onShow, onPullDownRefresh, onLoad, onReachBottom } from '@dcloudio/uni-app'
 	import {
 		getRect
 	} from 'wot-design-uni/components/common/util'
-	import { ref, onMounted, nextTick } from 'vue'
+	import { ref, onMounted, nextTick, computed } from 'vue'
 	import {
 		lookPermissions,
 		sumRoiFun,
@@ -178,13 +144,77 @@
 		timeStart: undefined,
 		timeEnd: undefined
 	})
-	const statisticsData = ref<SxtUniOrderStatisticsVo>({
+	// 随心推全域订单汇总统计数据
+	const uniOrderStatisticsData = ref<SxtUniOrderStatisticsVo>({
+		allAmount: 0,
+		allOrderNum: 0,
+		statCostForRoi2: 0,
+		totalPayOrderCountForRoi2: 0,
+		totalPayOrderGmvForRoi2: 0,
+	})
+	// 订单统计数据
+	const orderStatisticsData = ref<SxtOrderStatisticsVO>({
 		allOrderNum: 0,
 		allAmount: 0,
 		allStatCost: 0,
 		allPayOrderAmount: 0,
 		allPayOrderCount: 0
 	})
+	// 全域订单统计prop配置
+	const uniOrderSwiperConfig = [
+		{
+			prop:'allAmount',
+			label:'投放中订单数'
+		},
+		{
+			prop:'allOrderNum',
+			label:'累计投放金额'
+		},
+		{
+			prop:'statCostForRoi2',
+			label:'累计消耗金额'
+		},
+		{
+			prop:'totalPayOrderCountForRoi2',
+			label:'成交订单数'
+		},
+		{
+			prop:'totalPayOrderGmvForRoi2',
+			label:'成交订单金额'
+		},
+		{
+			prop:'roi',
+			label:'成交ROI'
+		},
+	]
+	// 订单统计prop配置
+	const orderSwiperConfig = [
+		{
+			prop:'allOrderNum',
+			label:'投放中订单数'
+		},
+		{
+			prop:'allAmount',
+			label:'累计投放金额'
+		},
+		{
+			prop:'allStatCost',
+			label:'累计消耗金额'
+		},
+		{
+			prop:'allPayOrderAmount',
+			label:'成交订单数'
+		},
+		{
+			prop:'allPayOrderCount',
+			label:'成交订单金额'
+		},
+		{
+			prop:'roi',
+			label:'成交ROI'
+		},
+	]
+
 	// 快捷入口页面
 	const optionsItems = [
 		{
@@ -223,6 +253,36 @@
 	const offsetTop = ref<number>(0)
 	// 列表类型
 	const listType = ref<'uniOrder' | 'order'>('uniOrder')
+	// 计算ROI
+	const sumRoi = computed(() => {
+		if (listType.value === 'uniOrder') {
+			return sumRoiFun(
+				uniOrderStatisticsData.value.totalPayOrderGmvForRoi2 || 0,
+				uniOrderStatisticsData.value.statCostForRoi2 || 0,
+			);
+		}
+		return sumRoiFun(
+			orderStatisticsData.value.allAmount || 0,
+			orderStatisticsData.value.allStatCost || 0,
+		);
+	});
+	// 获取统计数据配置
+	const getStatisticsConfig = () => {
+		if (listType.value === 'uniOrder') {
+			return uniOrderSwiperConfig
+		} else {
+			return orderSwiperConfig
+		}
+	}
+	// 获取统计数据
+	const getStatisticsValue = (prop : string) => {
+		if(prop === 'roi') return sumRoi.value
+		if (listType.value === 'uniOrder') {
+			return Number(uniOrderStatisticsData.value[prop as keyof SxtUniOrderStatisticsVo]) || 0
+		} else if (listType.value === 'order') {
+			return Number(orderStatisticsData.value[prop as keyof SxtOrderStatisticsVO]) || 0
+		}
+	}
 
 	// 时间tab修改事件
 	const dateTabChange = (date : any) => {
@@ -237,15 +297,15 @@
 				timeEnd: date[0]
 			}
 		}
-
+		getStatisticeData()
 	}
 
 	// 列表类型修改事件
-	const listTabChange = (event : any) => {
-		if (event.name === '商品全域') {
-			// uniOrderListRef.value?.loadData()
-		} else if (event.name === '直播带货') {
-			// orderListRef.value?.loadData()
+	const getTabsDataList = () => {
+		if (listType.value === 'uniOrder') {
+			uniOrderListRef.value?.loadData()
+		} else if (listType.value === 'order') {
+			orderListRef.value?.loadData()
 		}
 	}
 
@@ -300,12 +360,33 @@
 	}
 
 	// 获取统计数据
+	const getStatisticeData = () => {
+		if (listType.value === 'uniOrder') {
+			getUniOrderStatisticsApi()
+		} else {
+			getOrderStatisticsApi()
+		}
+	}
+
+	// 查询随心推全域订单汇总统计数据
 	const getUniOrderStatisticsApi = () => {
 		getUniOrderStatistics({
 			sort: 1,
-			...queryForm.value
+			...queryForm.value,
+			...timeQuery.value
 		}).then(res => {
-			statisticsData.value = res.data
+			uniOrderStatisticsData.value = res.data
+		})
+	}
+
+	// 查询订单统计数据
+	const getOrderStatisticsApi = () => {
+		getOrderStatistics({
+			sort: 1,
+			...queryForm.value,
+			...timeQuery.value
+		}).then(res => {
+			orderStatisticsData.value = res.data
 		})
 	}
 
@@ -317,7 +398,7 @@
 			userId: undefined,
 			authorId: undefined,
 		}
-		getUniOrderStatisticsApi()
+		getStatisticeData()
 	}
 
 	const skipModule = (path : string) => {
@@ -331,11 +412,14 @@
 		if (uni.getStorageSync('userInfo')) {
 			showLogin.value = uni.getStorageSync('userInfo').userName ? false : true
 			uniOrderListRef.value?.loadData()
-			getUniOrderStatisticsApi()
+			getStatisticeData()
 		}
 		setThemePageBgColor()
 	})
 
+	onReachBottom(() => {
+		getTabsDataList()
+	})
 
 	onMounted(() => {
 		const { statusBarHeight } = uni.getSystemInfoSync()

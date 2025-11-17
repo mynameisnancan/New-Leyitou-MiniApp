@@ -8,7 +8,8 @@ import type {
 	DyAuthorAuthListQuery,
 	DyAuthorAuthVo,
 	SxtOrderQuery,
-	SxtOrderVo
+	SxtOrderVo,
+	SxtOrderStatisticsVO
 }from './types'
 
 // 获取全域订单列表
@@ -37,6 +38,16 @@ export const getUniOrderStatistics = (data:SxtUinOrderQuery) :Promise<ResultType
 		data
 	})
 }
+
+// 查询订单统计数据
+export const getOrderStatistics = (data:SxtOrderQuery):Promise<ResultType<SxtOrderStatisticsVO>> => {
+	return request({
+		url: '/leyitou/sxt/order/statistics/query',
+		method: 'post',
+		data
+	})
+}
+
 
 // 抖音达人授权信息列表
 export const getDyAuthorList = (data:DyAuthorAuthListQuery) :Promise<ResultType<DyAuthorAuthVo>> => {

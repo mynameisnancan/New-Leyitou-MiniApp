@@ -98,6 +98,7 @@
 	import {
 		setThemePageBgColor
 	} from '@/utils/utils.ts'
+	import { removeToken } from '@/utils/auth.ts'
 
 	const message = useMessage('wd-message-box-slot')
 	const store = useUserStore()
@@ -111,6 +112,8 @@
 	const authorizationStatus = ref(true) // 当前微信是否授权过， true是，false否
 	const showPrivacyPolicy = ref(false)
 	const agreementValue = ref(false)
+	// 小程序绑定code
+	const xcxBindCode = ref<string>()
 
 	const showUserServiceAgreement = ref(false)
 	const agreementShow = ref(false)
@@ -123,20 +126,67 @@
 		focus.value = false
 		uni.login({
 			provider: 'weixin', //使用微信登录
-			success: function(loginRes) {
-
+			success: function (loginRes) {
+				store.wxLogin({
+					appId: 'wxfcede23054b38a47', // 爱豆甄选小程序的appid
+					code: loginRes.code
+				}).then(res => {
+					console.log(res)
+					// 通过xcxBindCode校验当前wx是否注册过, xcxBindCode为null 则注册过 直接跳转index页面
+					if (res.data.xcxBindCode) {
+						// 清除token
+						removeToken()
+						store.token = ''
+						xcxBindCode.value = res.data.xcxBindCode
+						showConfirm('当前微信尚未绑定账号,请先使用账号密码登录').then(valid => {
+							if (valid.confirm) {
+								accountLogin('account')
+							}
+						})
+					} else {
+						store.getInfo().then((res) => {
+							uni.reLaunch({
+								url: '/pages/index/index'
+							})
+						})
+					}
+				})
 			}
 		});
 	}
 
+	// 判断当前微信有没有授权
+	const authorizationJudge = () => {
+		uni.login({
+			provider: 'weixin', //使用微信登录
+			success: function (loginRes) {
+				store.wxLogin({
+					appId: 'wxfcede23054b38a47', // 爱豆甄选小程序appid
+					code: loginRes.code
+				}).then(res => {
+					console.log(res)
+					// 清除token
+					removeToken()
+					store.token = ''
+					if (res.data.xcxBindCode) {
+						xcxBindCode.value = res.data.xcxBindCode
+						authorizationStatus.value = false
+					} else {
+						authorizationStatus.value = true
+					}
+				})
+			}
+		});
+	}
 
-	function accountLogin(type:string, xcxBindCode?:string) {
+	function accountLogin(type : string) {
 		if (!agreementValue.value) {
 			verifyCheck()
 			return;
 		}
+		console.log(xcxBindCode)
 		uni.navigateTo({
-			url: `/sub_page/pages/quickLoginPage/index`,
+			url: `/sub_page/pages/quickLoginPage/index?type=${type}&xcxBindCode=${xcxBindCode.value || ''}&wxNickName=${nickname.value}&wxAvatar=${avatarUrl.value}`,
 			animationType: 'slide-in-right'
 		})
 	}
@@ -183,16 +233,17 @@
 
 
 	onShow(() => {
-		uni.setBackgroundColor({
-			backgroundColorTop:'#1b1b1b',
-			backgroundColor: '#1b1b1b',
-		});
+		authorizationJudge()
+		// uni.setBackgroundColor({
+		// 	backgroundColorTop: '#1b1b1b',
+		// 	backgroundColor: '#1b1b1b',
+		// });
 		setThemePageBgColor()
 	})
 </script>
 
-<style lang="scss" >
-	.content{
+<style lang="scss">
+	.content {
 		background-color: #ecf3ff;
 		background-image: url(https://www.doulaoban.com/assets/bg.03067133.png);
 		background-repeat: no-repeat;
@@ -227,9 +278,10 @@
 		.logo {
 			color: var(--wot-dark-theme-color, #000);
 		}
-		.content{
+
+		.content {
 			background-color: #1d1e1f !important;
-			background-image:none;
+			background-image: none;
 		}
 	}
 
@@ -275,7 +327,8 @@
 			font-size: 12px;
 			margin: 7px 0px;
 			color: var(--wot-text-primary-color, var(--wot-color-theme, #4d80f0));
-			.t-icon{
+
+			.t-icon {
 				font-size: 40rpx;
 				color: var(--wot-text-primary-color, var(--wot-color-theme, #4d80f0));
 			}
@@ -290,5 +343,4 @@
 	.under-line-color {
 		color: #2a2a2c;
 	}
-	
 </style>

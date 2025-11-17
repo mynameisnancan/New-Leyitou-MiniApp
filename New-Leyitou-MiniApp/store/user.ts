@@ -4,7 +4,7 @@ import type {
 import { defineStore } from 'pinia';
 import { setToken ,removeToken} from '@/utils/auth';
 import {LoginData, LoginResult} from '@/api/types';
-import {login as loginApi,getInfo as getUserInfo,logout as logoutApi} from '@/api/login.ts'
+import {login as loginApi,getInfo as getUserInfo,logout as logoutApi , wxLogin} from '@/api/login.ts'
 import { useThemeStore } from './useTheme';
 
 const themeStore = useThemeStore()
@@ -51,15 +51,15 @@ export const useUserStore = defineStore('user', {
 		    }
 		    return Promise.reject(false);
 		},
-		wxLogin(data){
+		wxLogin(data:any){
 			return new Promise((resolve) => {
-				// wxLogin(data).then(res => {
-				// 	if(res.data.token){
-				// 		this.token =  res.data.token;
-				// 		setToken(res.data.token)
-				// 	}
-				// 	resolve(res)
-				// })
+				wxLogin(data).then(res => {
+					if(res.data.token){
+						this.token =  res.data.token;
+						setToken(res.data.token)
+					}
+					resolve(res)
+				})
 			})
 		},
 		getInfo(){
