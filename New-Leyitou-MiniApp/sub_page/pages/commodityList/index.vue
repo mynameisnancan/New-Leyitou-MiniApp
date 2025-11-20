@@ -55,19 +55,18 @@
 
 						<view class="data-top">
 							<view class="uni-flex  uni-justify-between uni-w-full">
-								<image v-if="item.dyProductInfo?.cover" :src="item.dyProductInfo?.cover" class="image">
+								<image :src="item.dyProductInfo?.cover" class="image">
 								</image>
-								<view v-else class="hidden-message-img">图片已隐藏</view>
-								<view class="title-item">
+								<view class="title-item uni-h-130">
 									<view class="title">{{item.dyProductInfo?.title}}</view>
-									<view class="remark uni-text-warp-2">
-										不可投广的原因：{{item.grayReason}}
+									<view v-if="item.grayReason" class="remark uni-text-warp-2">
+										<wd-text type="error" :text="`不可投广的原因：${item.grayReason}`"></wd-text>
 									</view>
 									<view class="uni-flex uni-items-center">
 										<view class="order-code">
 											账户ID：{{item.advertiserId}}
 										</view>
-										<view class="uni-ml-sm uni-border-radius-sm uni-p-sm">
+										<view class="uni-ml-sm uni-border-radius-sm ">
 											<baseTag :options="sxt_channel_type" :value="item.channelType"></baseTag>
 										</view>
 									</view>
@@ -230,8 +229,8 @@
 			padding: 5px 0px;
 
 			.image {
-				width: 120rpx;
-				height: 120rpx;
+				width: 130rpx;
+				height: 130rpx;
 				border-radius: 5px;
 			}
 
@@ -249,8 +248,9 @@
 
 			.title-item {
 				display: flex;
-				flex-wrap: wrap;
-				width: calc(100% - 120rpx);
+				flex-direction: column;
+				justify-content: space-between;
+				width: calc(100% - 130rpx);
 				padding-left: 5px;
 
 				.title {

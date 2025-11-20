@@ -36,23 +36,36 @@
 			</template>
 			<view class="uni-w-full uni-h-full">
 				<view class="uni-px-lg">
-					<view class="record-item" v-for="(item,index) in listData"
-						:key="item.zp_index" :id="`zp-id-${item.zp_index}`">
-						<view class="uni-flex uni-justify-between">
-							<view class="uni-flex uni-items-center author-info uni-text-26 uni-font-color-gray uni-pb-sm">
-								<view>抖音达人：</view>
-								<image v-if="item.dyAuthorInfo?.avatar" :src="item.dyAuthorInfo?.avatar" class="image" />
+					<view class="record-item" v-for="(item,index) in listData" :key="item.zp_index"
+						:id="`zp-id-${item.zp_index}`">
+						<view class="uni-flex uni-justify-between uni-items-center uni-pb-sm">
+							<view
+								class="uni-flex uni-items-center author-info uni-text-26 uni-font-color-gray ">
+								<view>被推广达人：</view>
+								<image v-if="item.dyAuthorInfo?.avatar" :src="item.dyAuthorInfo?.avatar"
+									class="image" />
 								<image v-else src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
 									class="image" />
 								<text class="user-name">{{item.dyAuthorInfo?.nickName || '暂无'}}</text>
 								<text class="user-name">运营人: {{item.dyAuthorInfo?.userInfo?.nickName || '暂无'}}</text>
 							</view>
-							<view v-if="lookPermissions('leyitou:sxt_order_create_record:retry')" @click="retry(item)" class="uni-flex uni-items-center">
-								<wd-icon name="swap" size="30rpx" custom-class="link-custom-class"></wd-icon>
-								<wd-text text="重试" type="primary" size="26rpx"></wd-text>
+							<view class="uni-flex uni-items-center">
+								<view
+									v-if="lookPermissions('leyitou:sxt_order_create_record:retry') && item.createStatus === 3"
+									@click="retry(item)" class="uni-flex uni-items-center">
+									<wd-icon name="swap" size="30rpx" custom-class="link-custom-class"></wd-icon>
+									<wd-text text="重试" type="primary" size="26rpx"></wd-text>
+								</view>
+								<view
+									v-if="lookPermissions('leyitou:sxt_order_create_record:cancel') && item.createStatus === 0"
+									@click="cancel(item)" class="uni-flex uni-items-center uni-ml-sm">
+									<wd-icon name="close-bold" size="30rpx" custom-class="link-custom-class"></wd-icon>
+									<wd-text text="取消" type="primary" size="26rpx"></wd-text>
+								</view>
 							</view>
+
 						</view>
-						<view  @click.stop="toMessage(item)" class="data-top">
+						<view @click.stop="toMessage(item)" class="data-top">
 							<view class="uni-flex  uni-justify-between uni-w-9-10">
 								<image v-if="item?.dyProductInfo?.cover" :src="item?.dyProductInfo?.cover"
 									class="image"></image>
@@ -100,7 +113,7 @@
 		<filterPopup v-model:visible="filterVisible" v-model:queryForm="filterQuery" @confirm="filterConfirm" />
 		<wd-message-box></wd-message-box>
 		<wd-toast />
-		
+
 	</view>
 
 
@@ -113,7 +126,8 @@
 	} from '@/sub_page/api/createRecord/types'
 	import {
 		getCreateRecordList,
-		retryCreate
+		retryCreate,
+		retryCancel
 	} from '@/sub_page/api/createRecord/index'
 	import {
 		ref,
@@ -127,12 +141,12 @@
 		getNavHeight,
 		lookPermissions
 	} from '@/utils/utils'
-	import { useMessage,useToast } from 'wot-design-uni'
+	import { useMessage, useToast } from 'wot-design-uni'
 	import filterPopup from './components/filterPopup'
 
 	const message = useMessage()
 	const toast = useToast()
-		
+
 	const pageParams = ref({
 		pageNum: 1,
 		pageSize: 10,
@@ -215,26 +229,47 @@
 			animationType: 'slide-in-right'
 		})
 	}
-	
+
 	// 重试
-	const retry = (item: SxtOrderCreateRecordVo) => {
+	const retry = (item : SxtOrderCreateRecordVo) => {
 		message
-		    .confirm({
-		      msg: '你确认要重试订单创建吗？',
-		      title: '提示'
-		    })
-		    .then(() => {
+			.confirm({
+				msg: '你确认要重试订单创建吗？',
+				title: '提示'
+			})
+			.then(() => {
 				retryCreate(item.id).then(res => {
-					if(res.code === 200){
+					if (res.code === 200) {
 						toast.success(res.msg)
 						filterConfirm()
-					}else{
+					} else {
 						toast.error(res.msg)
 					}
 				})
-		    })
-		    .catch(() => {
-		    })
+			})
+			.catch(() => {
+			})
+	}
+
+	// 取消
+	const cancel = (item : SxtOrderCreateRecordVo) => {
+		message
+			.confirm({
+				msg: '你确认要取消订单吗？',
+				title: '提示'
+			})
+			.then(() => {
+				retryCancel(item.id).then(res => {
+					if (res.code === 200) {
+						toast.success(res.msg)
+						filterConfirm()
+					} else {
+						toast.error(res.msg)
+					}
+				})
+			})
+			.catch(() => {
+			})
 	}
 
 	watch(() => filterQuery.value, () => {
@@ -242,14 +277,14 @@
 	}, { deep: true })
 </script>
 
-<style lang="scss" >
+<style lang="scss">
 	.filter {
 		border-bottom-left-radius: 20rpx;
 		border-bottom-right-radius: 20rpx;
 		box-shadow: 0 4px 5px #e4e8fc4d;
 		padding: 10rpx 20rpx;
 	}
-	
+
 	.link-custom-class {
 		color: var(--wot-text-primary-color, var(--wot-color-theme, #4d80f0));
 	}
@@ -352,7 +387,7 @@
 			background: #131313 !important;
 		}
 
-	
+
 
 		.record-item {
 			background-color: #1b1b1b !important;

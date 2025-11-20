@@ -264,14 +264,14 @@
 			padding: 5px 0px;
 
 			.image {
-				width: 100rpx;
-				height: 100rpx;
+				width: 110rpx;
+				height: 110rpx;
 				border-radius: 5px;
 			}
 
 			.hidden-message-img {
-				width: 100rpx;
-				height: 100rpx;
+				width: 110rpx;
+				height: 110rpx;
 				border-radius: 5px;
 				display: flex;
 				justify-content: center;
@@ -284,8 +284,9 @@
 			.title-item {
 				display: flex;
 				flex-wrap: wrap;
-				width: calc(100% - 100rpx);
-				height: 80rpx;
+				justify-content: space-between;
+				width: calc(100% - 110rpx);
+				height: 110rpx;
 				padding-left: 5px;
 
 				.title {

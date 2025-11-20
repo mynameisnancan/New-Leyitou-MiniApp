@@ -12,9 +12,9 @@
 		<view :style="{paddingTop:offsetTop+'px'}" class="sticky-content">
 			<wd-sticky :offset-top="offsetTop" custom-class="uni-w-full">
 				<!-- 日期筛选 -->
-				<baseTabs sticky class="base-wd-tabs uni-w-full" @change="dateTabChange" slidable="always"
+				<dateTabs sticky class="base-wd-tabs uni-w-full" @change="dateTabChange" slidable="always"
 					inactiveColor="#acd9fe" color="#ffffff">
-				</baseTabs>
+				</dateTabs>
 			</wd-sticky>
 		</view>
 		<view class="body">
@@ -110,6 +110,7 @@
 	import tableQuery from './components/uniOrderList/tableQuery.vue'
 	import uniOrderList from './components/uniOrderList/uniOrderList.vue'
 	import orderList from './components/orderList/orderList.vue'
+	import dateTabs from './components/dateTabs/index.vue'
 
 	// 是否显示 未登录弹出框
 	const showLogin = ref<boolean>(true)
@@ -163,55 +164,55 @@
 	// 全域订单统计prop配置
 	const uniOrderSwiperConfig = [
 		{
-			prop:'allAmount',
-			label:'投放中订单数'
+			prop: 'allAmount',
+			label: '投放中订单数'
 		},
 		{
-			prop:'allOrderNum',
-			label:'累计投放金额'
+			prop: 'allOrderNum',
+			label: '累计投放金额'
 		},
 		{
-			prop:'statCostForRoi2',
-			label:'累计消耗金额'
+			prop: 'statCostForRoi2',
+			label: '累计消耗金额'
 		},
 		{
-			prop:'totalPayOrderCountForRoi2',
-			label:'成交订单数'
+			prop: 'totalPayOrderCountForRoi2',
+			label: '成交订单数'
 		},
 		{
-			prop:'totalPayOrderGmvForRoi2',
-			label:'成交订单金额'
+			prop: 'totalPayOrderGmvForRoi2',
+			label: '成交订单金额'
 		},
 		{
-			prop:'roi',
-			label:'成交ROI'
+			prop: 'roi',
+			label: '成交ROI'
 		},
 	]
 	// 订单统计prop配置
 	const orderSwiperConfig = [
 		{
-			prop:'allOrderNum',
-			label:'投放中订单数'
+			prop: 'allOrderNum',
+			label: '投放中订单数'
 		},
 		{
-			prop:'allAmount',
-			label:'累计投放金额'
+			prop: 'allAmount',
+			label: '累计投放金额'
 		},
 		{
-			prop:'allStatCost',
-			label:'累计消耗金额'
+			prop: 'allStatCost',
+			label: '累计消耗金额'
 		},
 		{
-			prop:'allPayOrderAmount',
-			label:'成交订单数'
+			prop: 'allPayOrderAmount',
+			label: '成交订单数'
 		},
 		{
-			prop:'allPayOrderCount',
-			label:'成交订单金额'
+			prop: 'allPayOrderCount',
+			label: '成交订单金额'
 		},
 		{
-			prop:'roi',
-			label:'成交ROI'
+			prop: 'roi',
+			label: '成交ROI'
 		},
 	]
 
@@ -276,7 +277,7 @@
 	}
 	// 获取统计数据
 	const getStatisticsValue = (prop : string) => {
-		if(prop === 'roi') return sumRoi.value
+		if (prop === 'roi') return sumRoi.value
 		if (listType.value === 'uniOrder') {
 			return Number(uniOrderStatisticsData.value[prop as keyof SxtUniOrderStatisticsVo]) || 0
 		} else if (listType.value === 'order') {
@@ -420,6 +421,7 @@
 	onReachBottom(() => {
 		getTabsDataList()
 	})
+
 
 	onMounted(() => {
 		const { statusBarHeight } = uni.getSystemInfoSync()

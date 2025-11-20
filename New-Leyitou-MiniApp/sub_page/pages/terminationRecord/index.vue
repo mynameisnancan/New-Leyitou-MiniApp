@@ -69,11 +69,11 @@
 						</view>
 						<view class="uni-flex uni-items-center uni-justify-between uni-mt-lg">
 							<view>已终止订单数</view>
-							<view class="uni-font-color-black">{{item.terminateQuotaUsed}}</view>
+							<view class="uni-font-color-black">{{item.terminateQuotaUsed || '--'}}</view>
 						</view>
 						<view class="uni-flex uni-items-center uni-justify-between uni-mt-lg">
 							<view>终止订单配额</view>
-							<view class="uni-font-color-black">{{item.terminateQuotaSum}}</view>
+							<view class="uni-font-color-black">{{item.terminateQuotaSum || '--'}}</view>
 						</view>
 						<view class="uni-flex uni-items-center uni-justify-between uni-mt-lg">
 							<view>操作类型</view>

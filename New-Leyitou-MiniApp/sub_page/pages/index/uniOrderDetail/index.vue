@@ -91,31 +91,31 @@
 						<view class="uni-text-bold uni-text-lg">订单详情</view>
 					</template>
 					<view class="uni-font-color-black uni-text-26">
-						<view class="uni-flex uni-justify-between">
+						<view class="uni-flex uni-justify-between uni-mt-sm">
 							<view>出价类型</view>
 							<view>
 								<baseTag :options="sxt_order_bid_type" :value="orderData?.deliverySetting?.bid_type">
 								</baseTag>
 							</view>
 						</view>
-						<view class="uni-flex uni-justify-between">
+						<view class="uni-flex uni-justify-between uni-mt-sm">
 							<view>支付ROI</view>
 							<view class='uni-text-bold'>{{ orderData.deliverySetting?.roi_goal || '--' }}</view>
 						</view>
-						<view class="uni-flex uni-justify-between">
+						<view class="uni-flex uni-justify-between uni-mt-sm">
 							<view>投放时长</view>
 							<view>
 								<baseTag :options="sxt_order_delivery_time"
 									:value="orderData?.deliverySetting?.delivery_time"></baseTag>
 							</view>
 						</view>
-						<view class="uni-flex uni-justify-between">
+						<view class="uni-flex uni-justify-between uni-mt-sm">
 							<view>投放金额</view>
 							<view class='uni-text-bold'>
 								{{ orderData.deliverySetting?.amount || '--' }} 元
 							</view>
 						</view>
-						<view class="uni-flex uni-justify-between">
+						<view class="uni-flex uni-justify-between uni-mt-sm">
 							<view>是否开启智能优惠券</view>
 							<view class='uni-text-bold'>
 								{{
@@ -159,8 +159,7 @@
 					</view>
 				</wd-card>
 			</view>
-
-			<view class="buttom-btn">
+			<view class="buttom-btn" v-if="orderData.status === 'DELIVERY_OK'">
 				<view class="uni-flex uni-justify-center uni-mt-lg">
 					<wd-button @click="addBudgetOrder" custom-class="uni-w-3-4">追投</wd-button>
 				</view>
@@ -176,7 +175,7 @@
 							placeholder="请输入追投金额" :min="100" :max="500000" :step="100" />
 					</wd-cell>
 					<wd-picker :columns="sxt_order_delivery_time" label="追投时长" v-model="addBudQuery.addDeliveryTime"
-						clearable root-portal :z-index="100" />
+						clearable root-portal :z-index="1000" />
 				</view>
 			</wd-message-box>
 
@@ -209,13 +208,13 @@
 	import {
 		getNavHeight,
 		copyStr,
-		setThemePageBgColor 
+		setThemePageBgColor
 	} from '@/utils/utils'
 	import {
 		getTodayDate
 	} from '@/utils/date'
 	import dayjs from 'dayjs'
-	import { onLoad, onPageScroll,onShow } from '@dcloudio/uni-app'
+	import { onLoad, onPageScroll, onShow } from '@dcloudio/uni-app'
 	import uniorderEchart from './components/uniorderEchart'
 	import {
 		getMaxDate,
@@ -314,7 +313,7 @@
 			init()
 		}
 	})
-	
+
 	onShow(() => {
 		setThemePageBgColor()
 	})
@@ -328,7 +327,7 @@
 			.confirm({
 				closeOnClickModal: false,
 				title: '追加订单预算',
-				zIndex:210
+				zIndex: 210
 			})
 			.then(() => {
 				orderAddUniBudgetApi()
@@ -384,9 +383,10 @@
 	}
 </style>
 <style lang="scss">
-	page{
+	page {
 		background-color: #f6f7fb;
 	}
+
 	.page-class {
 		background-color: #f6f7fb;
 	}

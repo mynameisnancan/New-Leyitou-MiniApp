@@ -28,7 +28,7 @@
 							请选择
 						</view>
 					</wd-cell>
-					<wd-cell title="付款抖音号" title-width="180rpx" :value="selectedDouYin?.dyAuthorInfo?.nickName"
+					<!-- <wd-cell title="付款抖音号" title-width="180rpx" :value="selectedDouYin?.dyAuthorInfo?.nickName"
 						@click="openSelectDouYin" ellipsis is-link>
 						<view v-if="selectedDouYin?.dyAuthorInfo?.nickName" class="uni-text-left">
 							{{ selectedDouYin?.dyAuthorInfo?.nickName }}
@@ -36,7 +36,7 @@
 						<view v-else class="wd-cell-placeholder">
 							请选择
 						</view>
-					</wd-cell>
+					</wd-cell> -->
 					<wd-cell v-if="queryType === 'order'" title="被投抖音号" title-width="180rpx"
 						:value="selectedByDouYin?.dyAuthorInfo?.nickName" @click="openSelectByDouYin" ellipsis is-link>
 						<view v-if="selectedByDouYin?.dyAuthorInfo?.nickName" class="uni-text-left">
@@ -212,10 +212,11 @@
 	}
 	// 抖音账号选择弹出框确认事件
 	const douYinConfirm = (selectedData : any) => {
-		if (douYinType.value === 'selectedDouYin' && 'advertiserId' in props.queryForm) {
-			selectedDouYin.value = selectedData
-			props.queryForm.advertiserId = selectedData.advertiserId
-		} else if (douYinType.value === 'selectedByDouYin' && 'uid' in props.queryForm) {
+		// if (douYinType.value === 'selectedDouYin' && 'advertiserId' in props.queryForm) {
+		// 	selectedDouYin.value = selectedData
+		// 	props.queryForm.advertiserId = selectedData.qcPcAdvertiserId
+		// } else
+		 if (douYinType.value === 'selectedByDouYin' && 'uid' in props.queryForm) {
 			selectedByDouYin.value = selectedData
 			props.queryForm.uid = selectedData.authorId
 		}

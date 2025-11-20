@@ -2,7 +2,7 @@
 	<wd-form ref="formRef" :model="formData">
 		<wd-cell-group border>
 			<wd-cell title="付款抖音号" title-width="180rpx" :value="selectedDouYin?.dyAuthorInfo?.nickName"
-				@click="openSelectDouYin" ellipsis is-link >
+				@click="openSelectDouYin" ellipsis is-link>
 				<view v-if="selectedDouYin?.dyAuthorInfo?.nickName" class="uni-text-left">
 					{{ selectedDouYin?.dyAuthorInfo?.nickName }}
 				</view>
@@ -11,7 +11,7 @@
 				</view>
 			</wd-cell>
 			<wd-cell title="目标商品" title-width="180rpx" :value="selectedProduct?.dyProductInfo?.title"
-				@click="openSelectCommodity" ellipsis is-link >
+				@click="openSelectCommodity" ellipsis is-link>
 				<view v-if="selectedProduct?.dyProductInfo?.title" class="uni-text-left">
 					{{ selectedProduct?.dyProductInfo?.title}}
 				</view>
@@ -28,18 +28,21 @@
 					</wd-radio-group>
 				</view>
 			</wd-cell>
-			<wd-cell title="支付ROI" title-width="180rpx">
+			<wd-cell v-if="formData.delivery_setting.bid_type === 'MANUAL_BID'" title="支付ROI" title-width="180rpx">
 				<wd-input-number v-model="formData.delivery_setting.roi_goal" :min="0.01" :max="10000" :step="0.01"
-					:precision="2" />
+					:precision="2" input-width="200rpx" />
 			</wd-cell>
 			<wd-picker :columns="sxt_order_delivery_time" label="投放时间" v-model="formData.delivery_setting.delivery_time"
 				label-key="label" value-key="value" />
 			<wd-cell title="投放金额" title-width="180rpx">
-				<wd-input-number v-model="formData.delivery_setting.amount" :min="100" :max="100000" :step="10" />
+				<wd-input-number v-model="formData.delivery_setting.amount" :min="100" :max="100000" :step="10"
+					input-width="200rpx" step-strictly />
 			</wd-cell>
 			<wd-cell title="智能优惠劵" title-width="180rpx">
-				<wd-switch v-model="formData.delivery_setting.qcpx_mode" active-value="QCPX_MODE_ON"
-					inactive-value="QCPX_MODE_OFF" size="40rpx" />
+				<view class='uni-flex uni-items-center'>
+					<wd-switch v-model="formData.delivery_setting.qcpx_mode" active-value="QCPX_MODE_ON"
+						inactive-value="QCPX_MODE_OFF" size="40rpx" />
+				</view>
 			</wd-cell>
 			<wd-cell title="创建方式" title-width="150rpx">
 				<view class="custom-radio">
@@ -255,7 +258,7 @@
 <style lang="scss">
 	.custom-radio {
 		.wd-radio {
-			line-height: unset;
+			line-height: unset !important;
 		}
 	}
 </style>

@@ -5,6 +5,7 @@
 			@change="change"
 			@click="tabClick"
 			:sticky="sticky"
+			:slidable-num="7"
 			:offsetTop="offsetTop"
 			:swipeable="swipeable"
 			:autoLineWidth="autoLineWidth"
@@ -151,9 +152,18 @@
 		}
 	}
 	
+	// 允许当前文件样式穿透
+	defineOptions({
+		options: {
+			styleIsolation: 'shared'
+		}
+	})
+	
 </script>
 
 
 <style lang="scss" >
-
+	.wd-tabs__nav-item{
+		padding: 0 30rpx !important;
+	}
 </style>

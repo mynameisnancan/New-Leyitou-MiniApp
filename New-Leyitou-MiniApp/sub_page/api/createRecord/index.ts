@@ -21,3 +21,12 @@ export const retryCreate = (id : number) => {
 		params: { id }
 	})
 }
+
+// 随心推订单创建取消
+export const retryCancel = (id : number) => {
+	return request({
+		method: 'get',
+		url: '/leyitou/sxt/order/create_record/cancel',
+		params: { id }
+	})
+}

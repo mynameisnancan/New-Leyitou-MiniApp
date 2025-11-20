@@ -123,12 +123,9 @@
 
 	const {
 		sxt_add_type,
-		sxt_opt_type
-	} = toRefs(useDict(['sxt_add_type', 'sxt_opt_type'], true))
-
-	const {
+		sxt_opt_type,
 		sxt_req_success
-	} = toRefs(useDict(['sxt_req_success']))
+	} = toRefs(useDict(['sxt_add_type', 'sxt_opt_type','sxt_req_success'], true))
 
 	const pageParams = ref({
 		pageNum: 1,

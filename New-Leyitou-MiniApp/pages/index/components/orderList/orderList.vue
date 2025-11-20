@@ -70,7 +70,8 @@
 				</view>-->
 	</view>
 	<wd-loadmore v-if="loading" state="loading" :loading-props="{size:'40rpx'}" />
-	<wd-loadmore v-if="noData && list.length>0" state="finished" :loading-props="{size:'40rpx'}" finished-text="没有更多数据了~"/>
+	<wd-loadmore v-if="noData && list.length>0" state="finished" :loading-props="{size:'40rpx'}"
+		finished-text="没有更多数据了~" />
 	<template v-if="list.length==0 && !loading">
 		<view class="uni-pt-xl uni-pb-xl">
 			<wd-status-tip image="content" tip="暂无数据" />
@@ -260,14 +261,14 @@
 			padding-top: 5px;
 
 			.image {
-				width: 100rpx;
-				height: 100rpx;
+				width: 110rpx;
+				height: 110rpx;
 				border-radius: 5px;
 			}
 
 			.hidden-message-img {
-				width: 100rpx;
-				height: 100rpx;
+				width: 110rpx;
+				height: 110rpx;
 				border-radius: 5px;
 				display: flex;
 				justify-content: center;
@@ -280,8 +281,10 @@
 			.title-item {
 				display: flex;
 				flex-wrap: wrap;
-				width: calc(100% - 100rpx);
+				width: calc(100% - 110rpx);
 				padding-left: 5px;
+				justify-content: space-between;
+				height: 110rpx;
 
 				.title {
 					font-weight: 500;
