@@ -75,6 +75,11 @@
 						</view>
 					</view>
 				</view>
+				<template v-if="listData.length==0 && !loading">
+					<view class="uni-pt-xl uni-pb-xl">
+						<wd-status-tip image="content" tip="暂无数据" />
+					</view>
+				</template>
 			</view>
 
 		</z-paging>
@@ -126,8 +131,9 @@
 	}
 
 	const scrollTop = ref<number>(0)
-
+	// 列表筛选条件是否显示
 	const filterVisible = ref<boolean>(false)
+	const loading = ref<boolean>(false)
 
 	function paginScroll(e : any) {
 		scrollTop.value = e.detail.scrollTop
@@ -143,6 +149,7 @@
 	function queryList(pageNo : number, pageSize : number) {
 		pageParams.value.pageNum = pageNo
 		pageParams.value.pageSize = pageSize
+		loading.value = true
 		getUniProductList({
 			...pageParams.value,
 			...filterQuery.value,
@@ -151,6 +158,8 @@
 			// 当前行用于小程序提交审核 避免数据出现违规。
 			if (uni.getStorageSync('userInfo').userName == '14888888888') return;
 			paging.value.completeByTotal(res.rows, res.total)
+		}).finally(() => {
+			loading.value = false
 		})
 	}
 

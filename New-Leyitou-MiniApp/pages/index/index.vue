@@ -436,6 +436,12 @@
 
 	onShow(() => {
 		setThemeColor()
+
+		uni.showShareMenu({
+			success: () => {
+				console.log('分享成功')
+			}
+		})
 	})
 </script>
 

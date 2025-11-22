@@ -19,6 +19,24 @@
 					请选择
 				</view>
 			</wd-cell>
+			<wd-cell v-if="selectedProduct">
+				<view class="uni-flex uni-justify-end">
+					<wd-button type="error" @click="cleanProduct" size="small">移除商品</wd-button>
+				</view>
+				<view class="uni-flex">
+					<view class="uni-w-170 uni-h-170">
+						<image :src="selectedProduct.dyProductInfo?.cover" class="image uni-border-radius-sm"></image>
+					</view>
+					<view class="uni-flex uni-justify-between uni-flex-column uni-h-170 uni-ml-sm">
+						<view class="uni-text-lg uni-text-bold">{{ selectedProduct.dyProductInfo?.title }}</view>
+						<view>{{ selectedProduct.dyShopInfo?.shopName || '暂无店铺名称' }}</view>
+						<view class="uni-flex uni-justify-between">
+							<wd-text type="error" :text="`￥${selectedProduct.dyProductInfo?.price}`"></wd-text>
+							<view>库存：{{selectedProduct.dyProductInfo?.productStock}}</view>
+						</view>
+					</view>
+				</view>
+			</wd-cell>
 			<wd-cell title="出价类型" title-width="180rpx">
 				<view class="custom-radio">
 					<wd-radio-group v-model="formData.delivery_setting.bid_type" inline shape="dot">
@@ -196,6 +214,13 @@
 		})
 	}
 
+	// 移除商品
+	const cleanProduct = () => {
+		selectedProduct.value = null;
+		formData.value.product_id = undefined
+		commoditySelectedValue.value = undefined
+	}
+
 	const initData = () => {
 		formData.value = {
 			marketing_goal: 'VIDEO_PROM_GOODS',
@@ -260,5 +285,11 @@
 		.wd-radio {
 			line-height: unset !important;
 		}
+	}
+</style>
+<style scoped lang="scss">
+	.image {
+		width: 170rpx;
+		height: 170rpx;
 	}
 </style>

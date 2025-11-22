@@ -112,6 +112,12 @@
 					"navigationStyle": "custom"
 					// "navigationBarTitleText": ""
 				}
+			},
+			{
+				"path": "pages/updatePassWord/index", // 修改密码
+				"style": {
+					"navigationStyle": "custom"
+				}
 			}
 		]
 	}],

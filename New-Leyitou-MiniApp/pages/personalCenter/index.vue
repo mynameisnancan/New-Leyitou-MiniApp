@@ -10,7 +10,7 @@
 				</view>
 			</view>
 			<view class="uni-border-radius-lg setting uni-flex uni-items-center">
-				<wd-icon name="shezhi" size="35rpx"></wd-icon>
+				<wd-icon name="setting1" size="35rpx"></wd-icon>
 				<view class="uni-text-lg  uni-ml-5" @click="skipPage('/sub_page/pages/centerSetting/index')">设置</view>
 			</view>
 		</view>
@@ -123,6 +123,12 @@
 		} else {
 			userData.value={}
 		}
+		
+		uni.showShareMenu({
+			success: () => {
+				console.log('分享成功')
+			}
+		})
 	})
 	onLoad(() => {
 		// userInfo.value = uni.getStorageSync('userInfo')

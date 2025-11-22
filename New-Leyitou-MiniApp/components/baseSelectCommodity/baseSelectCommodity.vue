@@ -32,7 +32,7 @@
 						<view>
 							<wd-img width="150rpx" height="150rpx" :radius="10" :src="item?.dyProductInfo?.cover" />
 						</view>
-						<view class="uni-ml-lg uni-text-left  ">
+						<view class="uni-ml-lg uni-text-left uni-h-150 uni-flex uni-justify-between uni-flex-column">
 							<view class="uni-text-warp-2 uni-font-color-black">
 								{{item?.dyProductInfo?.title}}
 							</view>

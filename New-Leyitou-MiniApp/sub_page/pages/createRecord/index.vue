@@ -39,8 +39,7 @@
 					<view class="record-item" v-for="(item,index) in listData" :key="item.zp_index"
 						:id="`zp-id-${item.zp_index}`">
 						<view class="uni-flex uni-justify-between uni-items-center uni-pb-sm">
-							<view
-								class="uni-flex uni-items-center author-info uni-text-26 uni-font-color-gray ">
+							<view class="uni-flex uni-items-center author-info uni-text-26 uni-font-color-gray ">
 								<view>被推广达人：</view>
 								<image v-if="item.dyAuthorInfo?.avatar" :src="item.dyAuthorInfo?.avatar"
 									class="image" />
@@ -107,6 +106,11 @@
 						</view>
 					</view>
 				</view>
+				<template v-if="listData.length==0 && !loading">
+					<view class="uni-pt-xl uni-pb-xl">
+						<wd-status-tip image="content" tip="暂无数据" />
+					</view>
+				</template>
 			</view>
 		</z-paging>
 
@@ -165,8 +169,9 @@
 	} = toRefs(useDict(['sxt_bud_marketing_goal']))
 
 	const scrollTop = ref<number>(0)
-
+	// 列表筛选条件是否显示
 	const filterVisible = ref<boolean>(false)
+	const loading = ref<boolean>(false)
 
 	function paginScroll(e : any) {
 		scrollTop.value = e.detail.scrollTop
@@ -180,7 +185,7 @@
 	function queryList(pageNo : number, pageSize : number) {
 		pageParams.value.pageNum = pageNo
 		pageParams.value.pageSize = pageSize
-		console.log(filterQuery.value)
+		loading.value = true
 		getCreateRecordList({
 			...pageParams.value,
 			...filterQuery.value,
@@ -189,6 +194,8 @@
 			// 当前行用于小程序提交审核 避免数据出现违规。
 			if (uni.getStorageSync('userInfo').userName == '14888888888') return;
 			paging.value.completeByTotal(res.rows, res.total)
+		}).finally(() => {
+			loading.value = false
 		})
 	}
 

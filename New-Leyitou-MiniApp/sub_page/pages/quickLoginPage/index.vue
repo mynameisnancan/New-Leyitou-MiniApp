@@ -72,7 +72,8 @@
 
 <script setup lang="ts">
 	import {
-		onLoad
+		onLoad,
+		onShow
 	} from '@dcloudio/uni-app'
 	import {
 		ref
@@ -242,6 +243,14 @@
 			loginForm.value.username = username
 			loginForm.value.password = pwd
 		}
+	})
+	
+	onShow(() => {
+		uni.showShareMenu({
+			success: () => {
+				console.log('分享成功')
+			}
+		})
 	})
 </script>
 

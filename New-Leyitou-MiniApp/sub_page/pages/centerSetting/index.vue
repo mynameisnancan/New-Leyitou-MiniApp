@@ -1,11 +1,23 @@
 <template>
 	<wd-navbar @click-left="goBack" title="设置" :bordered="false" left-arrow fixed placeholder
 		safeAreaInsetTop></wd-navbar>
+
 	<view class="content uni-p-30">
+
 		<wd-cell-group>
+			<wd-cell title="昵称" @click="updateName" :value="userData.nickName" is-link />
+		</wd-cell-group>
+
+		<wd-cell-group custom-class="uni-mt-lg">
+			<wd-cell title="微信绑定" title-width="180rpx" :value="wxBind ? '当前账号已绑定微信' : '当前账号未绑定微信'" is-link></wd-cell>
+			<wd-cell @click="updatePassWord" title="登录密码" title-width="180rpx" value="******" is-link></wd-cell>
+		</wd-cell-group>
+		
+		<wd-cell-group custom-class="uni-mt-lg">
 			<wd-cell title="主题色设置" clickable @click="setTheme" />
 		</wd-cell-group>
-		<wd-button type="error" @click="loginOut" custom-class="uni-w-full uni-mt-20">退出登录</wd-button>
+
+		<wd-button @click="loginOut" custom-class="uni-w-full uni-mt-20">退出登录</wd-button>
 	</view>
 
 	<wd-message-box />
@@ -33,21 +45,61 @@
 </template>
 
 <script setup lang="ts">
+	import { SysUserVo } from "@/api/user/types";
 	import { onLoad } from '@dcloudio/uni-app'
 	import { useMessage, useToast } from 'wot-design-uni'
 	import { useUserStore } from '@/store/user';
 	import { goBack } from '@/utils/utils.ts'
 	import { useThemeStore } from '@/store/useTheme'
 	import { ref } from 'vue'
+	import {
+		updateUserProfile
+	} from '@/sub_page/api/centerSetting/index'
 	const userStore = useUserStore();
-	const message = useMessage()
-	const toast = useToast()
+	const message = useMessage();
+	const toast = useToast();
 	const themeStore = useThemeStore();
 	const themes = themeStore.themeSetting;
 	//深色
 	const themeChecked = ref<string>();
 	//主题色
 	const checkColor = ref<string>('')
+	// 是否微信绑定
+	const wxBind = ref<boolean>(false)
+	const userData = ref<SysUserVo>({})
+
+
+	// 修改个人信息
+	const updateUserProfileApi = () => {
+		updateUserProfile({
+			nickName:userData.value.nickName
+		}).then(res => {
+			if(res.code == 200){
+				toast.success(res.msg)
+			}else{
+				toast.error(res.msg||'修改失败')
+			}
+		})
+	}
+
+	// 修改昵称
+	const updateName = () => {
+		message.prompt({
+			title: '修改昵称',
+			inputValue: userData.value.nickName,
+		}).then(() => {
+			updateUserProfileApi()
+		}).catch((error) => {
+			console.log(error)
+		})
+	}
+
+	// 调整修改密码页面
+	const updatePassWord = () => {
+		uni.navigateTo({
+			url: '/sub_page/pages/updatePassWord/index'
+		})
+	}
 
 	//退出登录
 	const loginOut = () => {
@@ -102,12 +154,13 @@
 				}
 			}
 		)
-		toast.success('修改成功')
 	}
 
 	onLoad(() => {
 		themeChecked.value = themeStore.theme
 		checkColor.value = themeStore.themeVars.colorTheme
+		
+		userData.value =  uni.getStorageSync('userInfo')
 	})
 </script>
 
@@ -121,12 +174,14 @@
 <style lang="scss" scoped>
 	.content {
 		background-color: #f6f7fb;
-		height: 100vh;
+		max-height: 100vh;
+		min-height: 100vh;
 	}
+
 	// 设置黑夜模式下的样式
-	.wot-theme-dark{
-		.content{
-			background-color:#000000
+	.wot-theme-dark {
+		.content {
+			background-color: #000000
 		}
 	}
 </style>

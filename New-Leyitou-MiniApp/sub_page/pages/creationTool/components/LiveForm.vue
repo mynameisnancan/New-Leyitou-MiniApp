@@ -2,7 +2,7 @@
 	<wd-form ref="formRef" :model="formData">
 		<wd-cell-group>
 			<wd-cell title="付款抖音号" title-width="180rpx" :value="radioDouYinValue?.dyAuthorInfo?.nickName"
-				@click="openSelectDouYin" ellipsis is-link border >
+				@click="openSelectDouYin" ellipsis is-link border>
 				<view v-if="radioDouYinValue?.dyAuthorInfo?.nickName" class="uni-text-left">
 					{{ radioDouYinValue?.dyAuthorInfo?.nickName }}
 				</view>
@@ -62,10 +62,12 @@
 				</view>
 			</wd-cell>
 			<wd-cell v-if="isROI && !manualBidDisiable" title="目标支付ROI" title-width="180rpx" border>
-				<wd-input-number v-model="formData.delivery_setting.roi_goal" :min="0.01" :max="100" :step="0.1" />
+				<wd-input-number v-model="formData.delivery_setting.roi_goal" :min="0.01" :max="100" :step="0.1"
+					input-width="200rpx" />
 			</wd-cell>
 			<wd-cell title="单笔投放金额" title-width="180rpx" border>
-				<wd-input-number v-model="formData.delivery_setting.amount" :min="100" :max="5000000" :step="100" />
+				<wd-input-number v-model="formData.delivery_setting.amount" :min="100" :max="5000000" :step="100"
+					input-width="200rpx" />
 			</wd-cell>
 
 			<wd-cell title="定向设置" title-width="180rpx" border>

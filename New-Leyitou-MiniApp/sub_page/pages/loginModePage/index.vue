@@ -55,10 +55,10 @@
 	</wd-popup>
 
 	<!-- 隐私政策 -->
-	<!-- <privacyPolicy v-model:open="showPrivacyPolicy"/> -->
+	<privacyPolicy v-model:open="showPrivacyPolicy"/>
 
 	<!-- 用户服务协议 -->
-	<!-- <userServiceAgreement v-model:open="showUserServiceAgreement" /> -->
+	<userServiceAgreement v-model:open="showUserServiceAgreement" />
 
 	<wd-message-box selector="wd-message-box-slot">
 		<template>
@@ -99,6 +99,8 @@
 		setThemePageBgColor
 	} from '@/utils/utils.ts'
 	import { removeToken } from '@/utils/auth.ts'
+	import privacyPolicy from './components/privacyPolicy.vue'
+	import userServiceAgreement from './components/userServiceAgreement.vue'
 
 	const message = useMessage('wd-message-box-slot')
 	const store = useUserStore()
@@ -239,6 +241,12 @@
 		// 	backgroundColor: '#1b1b1b',
 		// });
 		setThemePageBgColor()
+		
+		uni.showShareMenu({
+			success: () => {
+				console.log('分享成功')
+			}
+		})
 	})
 </script>
 
